@@ -1,14 +1,14 @@
 /**
  * Multi Air Conditioner Card
- * v1.1 Designed by @doanlong1412 from 🇻🇳 Vietnam
+ * v1.1 Designed by @doanlong1412 from Vietnam
  * HACS-compatible Web Component
  *
  * ─── What's new in v1.1 ───────────────────────────────────────────────────────
  *  10 languages — full editor + card UI translation
  *  16 background gradient presets (same as Gate Card)
- *  Visual Editor similar to Gate Card: ha-entity-picker, accordion,
+ *  Visual Editor y hệt Gate Card: ha-entity-picker, accordion,
  *      color picker 3-layer, CSS-only toggle, bg preset grid
- *  Fixed focus issue — text inputs don't lose focus while typing
+ *  Focus fix — text inputs không mất focus khi gõ
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
@@ -35,8 +35,8 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Tốc độ quạt', swingLabel: 'Hướng gió',
     allOff: 'Tắt tất cả', allOffSub: 'Nhấn để tắt mọi phòng',
     tapOff: 'Nhấn để tắt', tapOn: 'Nhấn để bật',
-    confirmOff: 'Turn all off?', confirmSub: function(n) { return 'Sẽ tắt ' + n + ' điều hòa cùng lúc'; },
-    cancel: 'Hủy', doOff: 'Turn all off',
+    confirmOff: '⚠ Tắt tất cả?', confirmSub: function(n) { return 'Sẽ tắt ' + n + ' điều hòa cùng lúc'; },
+    cancel: 'Hủy', doOff: '⏻ Tắt hết',
     overlayOn: 'ĐANG BẬT', overlayOff: 'TẮT',
     modes: { cool:'Làm lạnh', heat:'Sưởi', dry:'Hút ẩm', fan_only:'Quạt', off:'Tắt' },
     fans:   ['Tự động','Thấp','Vừa','Cao'],
@@ -56,22 +56,22 @@ const AC_TRANSLATIONS = {
     color1: 'Màu 1 (trên trái)', color2: 'Màu 2 (dưới phải)',
     edLang: 'Ngôn ngữ',
     edEntities: 'Thực thể (Entity)',
-    edOwnerName: 'Display name (Smart Home)',
+    edOwnerName: 'Tên hiển thị (Smart Home)',
     edRoomCountLabel: function(n) { return 'Số lượng phòng (1–8, mặc định 4)'; },
     edRoomsHeader: function(n) { return 'Điều hòa (' + n + ' phòng)'; },
     edRooms: 'Điều hòa',
     edSensors: 'Cảm biến môi trường',
     edColors: 'Màu sắc',
     edBg: 'Màu nền',
-    edAcEntity: 'AC entity (climate.*)',
-    edAcName: 'Display name',
-    edAcIcon: 'Icon (MDI)',
-    edPm25: 'PM2.5',
-    edOutdoorTemp: 'Outdoor temperature',
-    edHumidity: 'Outdoor humidity',
-    edPower: 'Power consumption (kW)',
+    edAcEntity: 'Entity điều hòa (climate.*)',
+    edAcName: 'Tên hiển thị',
+    edAcIcon: 'Icon (emoji)',
+    edPm25: 'Bụi mịn PM2.5',
+    edOutdoorTemp: 'Nhiệt độ ngoài trời',
+    edHumidity: 'Độ ẩm ngoài trời',
+    edPower: 'Tiêu thụ điện (kW)',
     rooms: ['Phòng khách','Phòng ngủ','Phòng ăn','Văn phòng'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   en: {
     lang: 'English', flag: 'gb',
@@ -94,8 +94,8 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Fan speed', swingLabel: 'Airflow',
     allOff: 'Turn all off', allOffSub: 'Tap to turn off all rooms',
     tapOff: 'Tap to turn off', tapOn: 'Tap to turn on',
-    confirmOff: 'Turn all off?', confirmSub: function(n) { return 'Will turn off ' + n + ' AC units at once'; },
-    cancel: 'Cancel', doOff: 'Turn all off',
+    confirmOff: '⚠ Turn all off?', confirmSub: function(n) { return 'Will turn off ' + n + ' AC units at once'; },
+    cancel: 'Cancel', doOff: '⏻ Turn all off',
     overlayOn: 'ON', overlayOff: 'OFF',
     modes: { cool:'Cool', heat:'Heat', dry:'Dry', fan_only:'Fan', off:'Off' },
     fans:   ['Auto','Low','Medium','High'],
@@ -124,13 +124,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Background',
     edAcEntity: 'AC entity (climate.*)',
     edAcName: 'Display name',
-    edAcIcon: 'Icon (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Icon (emoji)',
+    edPm25: 'Fine dust PM2.5',
     edOutdoorTemp: 'Outdoor temperature',
     edHumidity: 'Outdoor humidity',
     edPower: 'Power consumption (kW)',
     rooms: ['Living room','Bedroom','Dining room','Office'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   de: {
     lang: 'Deutsch', flag: 'de',
@@ -183,13 +183,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Hintergrund',
     edAcEntity: 'Klimaanlage-Entity (climate.*)',
     edAcName: 'Anzeigename',
-    edAcIcon: 'Icon (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Symbol (Emoji)',
+    edPm25: 'Feinstaub PM2.5',
     edOutdoorTemp: 'Außentemperatur',
     edHumidity: 'Außenluftfeuchtigkeit',
     edPower: 'Stromverbrauch (kW)',
     rooms: ['Wohnzimmer','Schlafzimmer','Esszimmer','Büro'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   fr: {
     lang: 'Français', flag: 'fr',
@@ -242,13 +242,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Arrière-plan',
     edAcEntity: 'Entité clim. (climate.*)',
     edAcName: 'Nom affiché',
-    edAcIcon: 'Icône (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Icône (emoji)',
+    edPm25: 'Particules fines PM2.5',
     edOutdoorTemp: 'Température extérieure',
     edHumidity: 'Humidité extérieure',
     edPower: 'Consommation (kW)',
     rooms: ['Salon','Chambre','Salle à manger','Bureau'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   nl: {
     lang: 'Nederlands', flag: 'nl',
@@ -301,13 +301,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Achtergrond',
     edAcEntity: 'AC-entiteit (climate.*)',
     edAcName: 'Weergavenaam',
-    edAcIcon: 'Pictogram (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Pictogram (emoji)',
+    edPm25: 'Fijnstof PM2.5',
     edOutdoorTemp: 'Buitentemperatuur',
     edHumidity: 'Buitenvochtigheid',
     edPower: 'Stroomverbruik (kW)',
     rooms: ['Woonkamer','Slaapkamer','Eetkamer','Kantoor'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   pl: {
     lang: 'Polski', flag: 'pl',
@@ -360,13 +360,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Tło',
     edAcEntity: 'Encja klimatyzatora (climate.*)',
     edAcName: 'Nazwa wyświetlana',
-    edAcIcon: 'Ikona (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Ikona (emoji)',
+    edPm25: 'Pył zawieszony PM2.5',
     edOutdoorTemp: 'Temperatura zewnętrzna',
     edHumidity: 'Wilgotność zewnętrzna',
     edPower: 'Zużycie energii (kW)',
     rooms: ['Salon','Sypialnia','Jadalnia','Biuro'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   sv: {
     lang: 'Svenska', flag: 'se',
@@ -419,13 +419,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Bakgrund',
     edAcEntity: 'AC-entitet (climate.*)',
     edAcName: 'Visningsnamn',
-    edAcIcon: 'Ikon (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Ikon (emoji)',
+    edPm25: 'Fint damm PM2.5',
     edOutdoorTemp: 'Utomhustemperatur',
     edHumidity: 'Utomhusfuktighet',
     edPower: 'Elförbrukning (kW)',
     rooms: ['Vardagsrum','Sovrum','Matsal','Kontor'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   hu: {
     lang: 'Magyar', flag: 'hu',
@@ -478,13 +478,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Háttér',
     edAcEntity: 'Légkondicionáló entitás (climate.*)',
     edAcName: 'Megjelenítési név',
-    edAcIcon: 'Ikon (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Ikon (emoji)',
+    edPm25: 'Finom por PM2.5',
     edOutdoorTemp: 'Kültéri hőmérséklet',
     edHumidity: 'Kültéri páratartalom',
     edPower: 'Energiafogyasztás (kW)',
     rooms: ['Nappali','Hálószoba','Étkező','Iroda'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   cs: {
     lang: 'Čeština', flag: 'cz',
@@ -537,13 +537,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Pozadí',
     edAcEntity: 'Entita klimatizace (climate.*)',
     edAcName: 'Zobrazovaný název',
-    edAcIcon: 'Ikona (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Ikona (emoji)',
+    edPm25: 'Jemný prach PM2.5',
     edOutdoorTemp: 'Venkovní teplota',
     edHumidity: 'Venkovní vlhkost',
     edPower: 'Spotřeba energie (kW)',
     rooms: ['Obývací pokoj','Ložnice','Jídelna','Kancelář'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
   it: {
     lang: 'Italiano', flag: 'it',
@@ -596,13 +596,13 @@ const AC_TRANSLATIONS = {
     edBg: 'Sfondo',
     edAcEntity: 'Entità condizionatore (climate.*)',
     edAcName: 'Nome visualizzato',
-    edAcIcon: 'Icona (MDI)',
-    edPm25: 'PM2.5',
+    edAcIcon: 'Icona (emoji)',
+    edPm25: 'Polvere fine PM2.5',
     edOutdoorTemp: 'Temperatura esterna',
     edHumidity: 'Umidità esterna',
     edPower: 'Consumo energetico (kW)',
     rooms: ['Soggiorno','Camera da letto','Sala da pranzo','Ufficio'],
-    roomIcons: ['mdi:sofa','mdi:bed','mdi:food','mdi:laptop'],
+    roomIcons: ['','','',''],
   },
 };
 
@@ -623,19 +623,19 @@ const AC_BG_PRESETS = [
   { id: 'slate',   label: 'Slate',    c1: '#101820', c2: '#445566' },
   { id: 'rose',    label: 'Rose',     c1: '#1a0808', c2: '#ee6688' },
   { id: 'teal',    label: 'Teal',     c1: '#001818', c2: '#00aa88' },
-  { id: 'custom',  label: '✏ Custom', c1: null,      c2: null       },
+  { id: 'custom',  label: 'Custom', c1: null,      c2: null       },
 ];
 
 function acPresetGradient(preset, c1, c2) {
   const p = AC_BG_PRESETS.find(x => x.id === preset) || AC_BG_PRESETS[0];
-    const gc1 = (preset === 'custom' ? c1 : p.c1) || '#001e2b';
-    const gc2 = (preset === 'custom' ? c2 : p.c2) || '#12c6f3';
+  const gc1 = (preset === 'custom' ? c1 : p.c1) || '#001e2b'; 
+    const gc2 = (preset === 'custom' ? c2 : p.c2) || '#12c6f3'; 
   return 'linear-gradient(135deg, ' + gc1 + 'bb 0%, ' + gc2 + '44 100%)';
 }
 
 const AC_DEFAULT_CONFIG = {
   language: 'vi',
-    background_preset: 'default',
+  background_preset: 'default',
   bg_color1: '#001e2b',
   bg_color2: '#12c6f3',
   accent_color: '#00ffcc',
@@ -645,7 +645,7 @@ const AC_DEFAULT_CONFIG = {
     show_avg_temp: true,
     show_welcome: true,
     show_eco: true,
-      modes: { cool: true, heat: true, dry: true, fan_only: true },
+    modes: { cool: true, heat: true, dry: true, fan_only: true },
     show_airflow: true,
     show_fav: true,
     show_clean: true,
@@ -669,14 +669,14 @@ const ROOM_IMAGES = [
 ];
 
 const ROOMS_DEFAULT = [
-  { id: 'climate.dieu_hoa_living',         label: 'Ph\xf2ng kh\xe1ch', area: '25 m\xb2', icon: 'mdi:sofa' },
-  { id: 'climate.bed_air_conditioning',     label: 'Ph\xf2ng ng\u1ee7',  area: '18 m\xb2', icon: 'mdi:bed' },
-  { id: 'climate.kitchen_air_conditioning', label: 'Ph\xf2ng \u0103n',   area: '20 m\xb2', icon: 'mdi:food' },
-  { id: 'climate.dieu_hoa_office',          label: 'V\u0103n ph\xf2ng',  area: '15 m\xb2', icon: 'mdi:laptop' },
-  { id: 'climate.dieu_hoa_bathroom',        label: 'Ph\xf2ng t\u1eafm',  area: '8 m\xb2',  icon: '\ud83d\udec1' },
-  { id: 'climate.dieu_hoa_kids',            label: 'Ph\xf2ng tr\u1ebb',  area: '14 m\xb2', icon: '\ud83e\uddf8' },
-  { id: 'climate.dieu_hoa_gym',             label: 'Ph\xf2ng gym',       area: '20 m\xb2', icon: '\ud83c\udfcb' },
-  { id: 'climate.dieu_hoa_utility',         label: 'Kho',                area: '10 m\xb2', icon: '\ud83d\udce6' },
+  { id: 'climate.dieu_hoa_living',         label: 'Ph\xf2ng kh\xe1ch', area: '25 m\xb2', icon: '' },
+  { id: 'climate.bed_air_conditioning',     label: 'Ph\xf2ng ng\u1ee7',  area: '18 m\xb2', icon: '' },
+  { id: 'climate.kitchen_air_conditioning', label: 'Ph\xf2ng \u0103n',   area: '20 m\xb2', icon: '' },
+  { id: 'climate.dieu_hoa_office',          label: 'V\u0103n ph\xf2ng',  area: '15 m\xb2', icon: '' },
+  { id: 'climate.dieu_hoa_bathroom',        label: 'Ph\xf2ng t\u1eafm',  area: '8 m\xb2',  icon: '' },
+  { id: 'climate.dieu_hoa_kids',            label: 'Ph\xf2ng tr\u1ebb',  area: '14 m\xb2', icon: '' },
+  { id: 'climate.dieu_hoa_gym',             label: 'Ph\xf2ng gym',       area: '20 m\xb2', icon: '' },
+  { id: 'climate.dieu_hoa_utility',         label: 'Kho',                area: '10 m\xb2', icon: '' },
 ];
 var ROOMS = ROOMS_DEFAULT.slice(0, 4);
 
@@ -690,11 +690,11 @@ const GREET = function() {
 };
 
 const MODE_CFG = {
-  cool:     { lbl: 'L\xe0m l\u1ea1nh', icon: 'mdi:snowflake',      color: '#3b9eff', glow: 'rgba(59,158,255,0.55)'   },
-  heat:     { lbl: 'S\u01b0\u1edfi',   icon: 'mdi:fire',           color: '#ff7b3b', glow: 'rgba(255,123,59,0.55)'  },
-  dry:      { lbl: 'H\xfat \u1ea9m',   icon: 'mdi:water-percent',  color: '#a78bfa', glow: 'rgba(167,139,250,0.55)' },
-  fan_only: { lbl: 'Qu\u1ea1t',        icon: 'mdi:fan',            color: '#34d399', glow: 'rgba(52,211,153,0.55)'  },
-  off:      { lbl: 'T\u1eaft',         icon: 'mdi:power',          color: '#4b5563', glow: 'rgba(75,85,99,0.3)'     },
+  cool:     { lbl: 'L\xe0m l\u1ea1nh', icon: '',      color: '#3b9eff', glow: 'rgba(59,158,255,0.55)'   },
+  heat:     { lbl: 'S\u01b0\u1edfi',   icon: '', color: '#ff7b3b', glow: 'rgba(255,123,59,0.55)'  },
+  dry:      { lbl: 'H\xfat \u1ea9m',   icon: '', color: '#a78bfa', glow: 'rgba(167,139,250,0.55)' },
+  fan_only: { lbl: 'Qu\u1ea1t',        icon: '', color: '#34d399', glow: 'rgba(52,211,153,0.55)'  },
+  off:      { lbl: 'T\u1eaft',         icon: '',       color: '#4b5563', glow: 'rgba(75,85,99,0.3)'     },
 };
 
 const FAN_LEVELS  = ['auto','low','medium','high'];
@@ -1047,16 +1047,6 @@ class AcControllerCardV2 extends HTMLElement {
       : null;
   }
 
-  _renderIcon(icon) {
-    if (!icon && icon !== 0) return '';
-    try {
-      if (typeof icon === 'string' && icon.indexOf('mdi:') === 0) {
-        return '<ha-icon icon="' + icon + '"></ha-icon>';
-      }
-    } catch (e) {}
-    return icon;
-  }
-
   setConfig(c) {
     this._config = Object.assign({}, AC_DEFAULT_CONFIG, c);
     var lang = this._config.language || 'vi';
@@ -1102,10 +1092,10 @@ class AcControllerCardV2 extends HTMLElement {
   static getStubConfig() {
     return {
       entities: [
-        { entity_id: 'climate.dieu_hoa_living',         label: 'Phòng khách', area: '25 m²', icon: 'mdi:sofa' },
-        { entity_id: 'climate.bed_air_conditioning',     label: 'Phòng ngủ',   area: '18 m²', icon: 'mdi:bed' },
-        { entity_id: 'climate.kitchen_air_conditioning', label: 'Phòng ăn',    area: '20 m²', icon: 'mdi:food' },
-        { entity_id: 'climate.dieu_hoa_office',          label: 'Văn phòng',   area: '15 m²', icon: 'mdi:laptop' },
+        { entity_id: 'climate.dieu_hoa_living',         label: 'Phòng khách', area: '25 m²', icon: '' },
+        { entity_id: 'climate.bed_air_conditioning',     label: 'Phòng ngủ',   area: '18 m²', icon: '' },
+        { entity_id: 'climate.kitchen_air_conditioning', label: 'Phòng ăn',    area: '20 m²', icon: '' },
+        { entity_id: 'climate.dieu_hoa_office',          label: 'Văn phòng',   area: '15 m²', icon: '' },
       ],
       pm25_entity:      'sensor.pm25',
       outdoor_temp_entity: 'sensor.outdoor_temperature',
@@ -1326,7 +1316,7 @@ class AcControllerCardV2 extends HTMLElement {
         + (isActive && !ron ? ' room-tab--active room-tab--off' : '')
         + (!isActive && ron ? ' room-tab--running' : '');
       roomTabs += '<button class="' + tabClass + '" data-room="' + j + '">'
-        + '<span class="room-tab-ico">' + this._renderIcon(ROOMS[j].icon) + '</span>'
+        + '<span class="room-tab-ico">' + ROOMS[j].icon + '</span>'
         + '<span class="room-tab-info">'
         + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
         + (showRoomTemp ? ('  <span class="room-tab-temp">' + rTempStr + '</span>') : '')
@@ -1345,13 +1335,13 @@ class AcControllerCardV2 extends HTMLElement {
       var act = hvac === mk;
       var st  = act ? ('--bc:' + mc.color + ';--bg:' + mc.glow + ';') : '';
       modeBtns += '<button class="mode-btn' + (act ? ' mode-btn--active' : '') + '" data-hvac="' + mk + '" style="' + st + '">'
-        + '<span class="mode-icon">' + this._renderIcon(mc.icon) + '</span>'
+        + '<span class="mode-icon">' + mc.icon + '</span>'
         + '<span class="mode-lbl">' + mc.lbl + '</span>'
         + '</button>';
     }
 
     var comfortTxt = (hvac === 'cool' || hvac === 'heat') ? tr.comfortTemp(curTemp) : (tr.comfort[hvac] || '');
-    var modeChip = isOn ? ('<span class="ac-mode-chip">' + this._renderIcon(mode.icon) + ' ' + mode.lbl + '</span>') : '';
+    var modeChip = isOn ? ('<span class="ac-mode-chip">' + mode.icon + ' ' + mode.lbl + '</span>') : '';
 
     var pwClass = isOn ? 'pw-on' : 'pw-off';
     var entityState = this._hass && this._hass.states && this._hass.states[room.id] ? this._hass.states[room.id].state : 'unknown';
@@ -1388,9 +1378,9 @@ class AcControllerCardV2 extends HTMLElement {
     }
 
     // build header pieces
-    var hdrBrand = '<div class="hdr'>
-      + '  <div class="hdr-brand'>
-      + '    <div class="hdr-ico">' + this._renderIcon(mode.icon) + '</div>'
+    var hdrBrand = '<div class="hdr">'
+      + '  <div class="hdr-brand">'
+      + '    <div class="hdr-ico">' + mode.icon + '</div>'
       + '    <div><div class="hdr-title">' + tr.cardTitle + '</div><div class="hdr-sub">' + tr.cardSub + '</div></div>'
       + '  </div>'
       + '  <div class="hdr-icons">'
@@ -1409,7 +1399,7 @@ class AcControllerCardV2 extends HTMLElement {
         + '    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>'
         + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div>') : '')
         + '  </div>'
-        + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + this._renderIcon('mdi:leaf') + ' ' + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
+        + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
         + '</div>';
     } else {
       if (showAvg) {
@@ -1476,24 +1466,24 @@ class AcControllerCardV2 extends HTMLElement {
  + '</div>') : '')
 
  + '<div class="chips">'
-+ (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '"><ha-icon icon="mdi:leaf"></ha-icon> Eco</button>') : '')
-+ (showFav ? ('  <button class="chip chip--a"><ha-icon icon="mdi:star"></ha-icon> Fav</button>') : '')
-+ (showClean ? ('  <button class="chip chip--b"><ha-icon icon="mdi:broom"></ha-icon> Clean</button>') : '')
+ + (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">Eco</button>') : '')
+ + (showFav ? ('  <button class="chip chip--a">Fav</button>') : '')
+ + (showClean ? ('  <button class="chip chip--b">Clean</button>') : '')
  + '</div>'
 
- + '<div class="bottom-row'>
- + '<button class="power-row" id="btn-power">'
- + '  <div class="pw-btn ' + pwClass + '">' + this._renderIcon('mdi:power') + '</div>'
- + '  <div style="flex:1;min-width:0">'
- + '    <div class="pw-sub pw-sub--big">' + pwSub + '</div>'
- + '  </div>'
- + '  <span class="pw-arrow">&#8250;</span>'
- + '</button>'
- + '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + '" id="btn-timer">'
- + '  <span class="timer-ico">' + this._renderIcon('mdi:timer') + '</span>'
- + '  <span class="timer-lbl">' + tr.timerBtn + '</span>'
- + '  <span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
- + '</button>'
+ + '<div class="bottom-row">'
++ '<button class="power-row" id="btn-power">'
++ '  <div class="pw-btn ' + pwClass + '"></div>'
++ '  <div style="flex:1;min-width:0">'
++ '    <div class="pw-sub pw-sub--big">' + pwSub + '</div>'
++ '  </div>'
++ '  <span class="pw-arrow">&#8250;</span>'
++ '</button>'
++ '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + '" id="btn-timer">'
++ '  <span class="timer-ico"></span>'
++ '  <span class="timer-lbl">' + tr.timerBtn + '</span>'
++ '  <span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
++ '</button>'
 + '</div>'
 
 + '</div>'  // end .left
@@ -1521,16 +1511,16 @@ class AcControllerCardV2 extends HTMLElement {
 + '    ' + (showPm25 ? ('<div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>') : '')
 + '  </div>'
 + '  <div class="metrics">'
- + '    ' + (showMetricTemp ? ('<div class="met"><span class="met-ico">' + this._renderIcon('mdi:thermometer') + '</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>') : '')
- + '    ' + (showMetricHumidity ? ('<div class="met"><span class="met-ico">' + this._renderIcon('mdi:water-percent') + '</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>') : '')
- + '    ' + (showMetricPower ? ('<div class="met"><span class="met-ico">' + this._renderIcon('mdi:flash') + '</span><span class="met-val" id="met-power">' + powerVal + '</span></div>') : '')
++ '    ' + (showMetricTemp ? ('<div class="met"><span class="met-ico"></span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>') : '')
++ '    ' + (showMetricHumidity ? ('<div class="met"><span class="met-ico"></span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>') : '')
++ '    ' + (showMetricPower ? ('<div class="met"><span class="met-ico"></span><span class="met-val" id="met-power">' + powerVal + '</span></div>') : '')
 + '  </div>'
 + '</div>'
 
 + '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
 
 + '<button class="all-off-btn" id="btn-all-off">'
- + '  <div class="all-off-ico">' + this._renderIcon('mdi:power') + '</div>'
++ '  <div class="all-off-ico"></div>'
 + '  <div class="all-off-info">'
 + '    <div class="all-off-title">' + tr.allOff + '</div>'
 + '    <div class="all-off-sub">' + tr.allOffSub + '</div>'
@@ -1655,11 +1645,11 @@ class AcControllerCardV2 extends HTMLElement {
       cpop.style.bottom = (window.innerHeight - rect2.top + 10) + 'px';
       cpop.style.right  = (window.innerWidth  - rect2.right + 12) + 'px';
       var trPop = AC_TRANSLATIONS[(self._config && self._config.language) || 'vi'] || AC_TRANSLATIONS.vi;
-      cpop.innerHTML =
-        '<div class="cp-title">' + trPop.confirmOff + '</div>'
-        + '<div class="cp-sub">' + trPop.confirmSub(ROOMS.length) + '</div>'
-        + '<div class="cp-acts">'
-        + '<button class="cp-cancel" id="cp-cancel-btn">' + trPop.cancel + '</button>'
+        pop.innerHTML =
+          '<div class="tp-title">Hẹn giờ</div>'
+        + '<div class="tp-tabs">'
+        +   '<button class="tp-tab ' + (chosenMode==='off'?'tp-tab-off-sel':'') + '" id="tp-off">Hẹn tắt</button>'
+        +   '<button class="tp-tab ' + (chosenMode==='on'?'tp-tab-on-sel':'')   + '" id="tp-on" >Hẹn bật</button>'
         + '<button class="cp-ok" id="cp-ok-btn">' + trPop.doOff + '</button>'
         + '</div>';
       sr2.appendChild(cpop);
@@ -1820,10 +1810,10 @@ class AcControllerCardV2 extends HTMLElement {
       function renderPop() {
         var hasTimer = !!(self._timers[roomIdx] && self._timers[roomIdx].end);
         pop.innerHTML =
-          '<div class="tp-title">&#9200; H&#7865;n gi&#7901;</div>'
+          '<div class="tp-title">Hẹn giờ</div>'
         + '<div class="tp-tabs">'
-        +   '<button class="tp-tab ' + (chosenMode==='off'?'tp-tab-off-sel':'') + '" id="tp-off">&#9209; H&#7865;n t&#7855;t</button>'
-        +   '<button class="tp-tab ' + (chosenMode==='on'?'tp-tab-on-sel':'')   + '" id="tp-on" >&#9654; H&#7865;n b&#7853;t</button>'
+        +   '<button class="tp-tab ' + (chosenMode==='off'?'tp-tab-off-sel':'') + '" id="tp-off">Hẹn tắt</button>'
+        +   '<button class="tp-tab ' + (chosenMode==='on'?'tp-tab-on-sel':'')   + '" id="tp-on" >Hẹn bật</button>'
         + '</div>'
         + '<div class="tp-hours">'
         + HOURS.map(function(h, i) {
@@ -2086,10 +2076,10 @@ class MultiAcCardEditor extends HTMLElement {
     for (let i = 0; i < roomCount; i++) {
       const ent   = entities[i] || {};
       const defLbl = (t.rooms && t.rooms[i]) || ('Room ' + (i+1));
-      const defIco = (t.roomIcons && t.roomIcons[i]) || 'mdi:air-conditioner';
+      const defIco = (t.roomIcons && t.roomIcons[i]) || '';
       roomRows += `
 <div class="ac-row">
-  <div class="ac-row-title"><ha-icon icon="mdi:air-conditioner" style="vertical-align:middle;margin-right:8px"></ha-icon>${t.edRooms.replace(/^❄\s*/,'')} ${i+1} – ${defLbl}</div>
+  <div class="ac-row-title">${t.edRooms} ${i+1} – ${defLbl}</div>
   <div class="row">
     <label>${t.edAcEntity}</label>
     <ha-entity-picker data-room="${i}" data-domain="climate" allow-custom-entity></ha-entity-picker>
@@ -2110,12 +2100,9 @@ class MultiAcCardEditor extends HTMLElement {
     <label>${t.edAcName}</label>
     <input class="txt-inp" type="text" id="inp-room-label-${i}" placeholder="${defLbl}" value="${ent.label||''}"/>
   </div>
-  <div class="row" style="display:flex;align-items:center;gap:8px;">
-    <div style="flex:1">
-      <label>${t.edAcIcon}</label>
-      <input class="txt-inp" type="text" id="inp-room-icon-${i}" placeholder="${defIco}" value="${ent.icon||''}"/>
-    </div>
-    <div id="inp-room-icon-preview-${i}" style="width:36px;height:36px;display:flex;align-items:center;justify-content:center"></div>
+  <div class="row">
+    <label>${t.edAcIcon}</label>
+    <input class="txt-inp" type="text" id="inp-room-icon-${i}" placeholder="${defIco}" value="${ent.icon||''}"/>
   </div>
 </div>`;
     }
@@ -2190,9 +2177,9 @@ class MultiAcCardEditor extends HTMLElement {
   .ci-dot:hover { transform:scale(1.15); }
 </style>
 <div class="editor">
-  <div class="credit"><ha-icon icon="mdi:air-conditioner"></ha-icon> <strong>Multi Air Conditioner Card</strong>
-    <span style="color:var(--secondary-text-color);font-weight:400;">v1.1 Designed by @doanlong1412 from 🇻🇳 Vietnam</span>
-  </div>
+  <div class="credit"><strong>Multi Air Conditioner Card</strong>
+      <span style="color:var(--secondary-text-color);font-weight:400;">v1.1 Designed by @doanlong1412 from Vietnam</span>
+    </div>
 
   <!-- 0. Owner name -->
   <div class="row" style="margin-bottom:4px;">
@@ -2490,18 +2477,6 @@ class MultiAcCardEditor extends HTMLElement {
         ents[i] = { ...ents[i], icon: val };
         this._config = { ...this._config, entities: ents };
       });
-      const previewEl = sr.getElementById('inp-room-icon-preview-' + i);
-      const updatePreview = (v) => {
-        if (!previewEl) return;
-        if (v && v.indexOf && v.indexOf('mdi:') === 0) previewEl.innerHTML = '<ha-icon icon="' + v + '"></ha-icon>';
-        else previewEl.textContent = v || '';
-      };
-      if (previewEl) updatePreview(iconEl ? iconEl.value : (ent.icon||''));
-      if (iconEl) {
-        iconEl.addEventListener('input', () => updatePreview(iconEl.value));
-        iconEl.addEventListener('change', () => updatePreview(iconEl.value));
-        iconEl.addEventListener('blur', () => updatePreview(iconEl.value));
-      }
     }
 
     // ha-entity-picker: room entities (climate)
