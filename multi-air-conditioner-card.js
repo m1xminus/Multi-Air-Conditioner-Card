@@ -665,6 +665,11 @@ const AC_DEFAULT_CONFIG = {
     metric_temp: '',
     metric_humidity: '',
     metric_power: '',
+    header: '',
+    mode_cool: '',
+    mode_heat: '',
+    mode_dry: '',
+    mode_fan_only: '',
   },
 };
 
@@ -1185,6 +1190,11 @@ class AcControllerCardV2 extends HTMLElement {
     var metricTempIcon = icons.metric_temp || '';
     var metricHumidityIcon = icons.metric_humidity || '';
     var metricPowerIcon = icons.metric_power || '';
+    var headerIcon = icons.header || '';
+    var modeCoolIcon = icons.mode_cool || '';
+    var modeHeatIcon = icons.mode_heat || '';
+    var modeDryIcon = icons.mode_dry || '';
+    var modeFanOnlyIcon = icons.mode_fan_only || '';
     var featureModes = (features.modes && typeof features.modes === 'object') ? features.modes : { cool:true,heat:true,dry:true,fan_only:true };
 
     var room    = ROOMS[this._activeIdx];
@@ -1356,13 +1366,14 @@ class AcControllerCardV2 extends HTMLElement {
       var act = hvac === mk;
       var st  = act ? ('--bc:' + mc.color + ';--bg:' + mc.glow + ';') : '';
       modeBtns += '<button class="mode-btn' + (act ? ' mode-btn--active' : '') + '" data-hvac="' + mk + '" style="' + st + '">'
-        + '<span class="mode-icon">' + mc.icon + '</span>'
+        + '<span class="mode-icon">' + ((icons['mode_' + mk] || mc.icon) ? ('<ha-icon icon="' + (icons['mode_' + mk] || mc.icon) + '"></ha-icon>') : '') + '</span>'
         + '<span class="mode-lbl">' + mc.lbl + '</span>'
         + '</button>';
     }
 
     var comfortTxt = (hvac === 'cool' || hvac === 'heat') ? tr.comfortTemp(curTemp) : (tr.comfort[hvac] || '');
-    var modeChip = isOn ? ('<span class="ac-mode-chip">' + mode.icon + ' ' + mode.lbl + '</span>') : '';
+    var curModeIcon = icons['mode_' + hvac] || mode.icon || '';
+    var modeChip = isOn ? ('<span class="ac-mode-chip">' + (curModeIcon ? ('<ha-icon icon="' + curModeIcon + '"></ha-icon> ') : '') + mode.lbl + '</span>') : '';
 
     var pwClass = isOn ? 'pw-on' : 'pw-off';
     var entityState = this._hass && this._hass.states && this._hass.states[room.id] ? this._hass.states[room.id].state : 'unknown';
@@ -1401,7 +1412,7 @@ class AcControllerCardV2 extends HTMLElement {
     // build header pieces
     var hdrBrand = '<div class="hdr">'
       + '  <div class="hdr-brand">'
-      + '    <div class="hdr-ico">' + mode.icon + '</div>'
+      + '    <div class="hdr-ico">' + (headerIcon ? ('<ha-icon icon="' + headerIcon + '"></ha-icon>') : (mode.icon || '')) + '</div>'
       + '    <div><div class="hdr-title">' + tr.cardTitle + '</div><div class="hdr-sub">' + tr.cardSub + '</div></div>'
       + '  </div>'
       + '  <div class="hdr-icons">'
@@ -2342,6 +2353,32 @@ class MultiAcCardEditor extends HTMLElement {
             <span id="preview-icon-alloff" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
           </div>
         </div>
+        <div style="margin-top:8px;font-weight:700;color:var(--secondary-text-color);">Header & Mode icons</div>
+        <div class="row">
+          <label>Header icon</label>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-header" placeholder="mdi:home" value="${icons.header||''}"/>
+            <span id="preview-icon-header" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+          <div style="flex:1;min-width:160px;">
+            <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;display:block">Cool mode icon</label>
+            <div style="display:flex;align-items:center;gap:8px;"><input class="txt-inp" type="text" id="inp-icon-mode-cool" placeholder="mdi:snowflake" value="${icons.mode_cool||''}"/><span id="preview-icon-mode-cool" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span></div>
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;display:block">Heat mode icon</label>
+            <div style="display:flex;align-items:center;gap:8px;"><input class="txt-inp" type="text" id="inp-icon-mode-heat" placeholder="mdi:fire" value="${icons.mode_heat||''}"/><span id="preview-icon-mode-heat" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span></div>
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;display:block">Dry mode icon</label>
+            <div style="display:flex;align-items:center;gap:8px;"><input class="txt-inp" type="text" id="inp-icon-mode-dry" placeholder="mdi:water-off" value="${icons.mode_dry||''}"/><span id="preview-icon-mode-dry" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span></div>
+          </div>
+          <div style="flex:1;min-width:160px;">
+            <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;display:block">Auto/Fan mode icon</label>
+            <div style="display:flex;align-items:center;gap:8px;"><input class="txt-inp" type="text" id="inp-icon-mode-fan_only" placeholder="mdi:autorenew" value="${icons.mode_fan_only||''}"/><span id="preview-icon-mode-fan_only" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span></div>
+          </div>
+        </div>
         <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Metrics icons</div>
         <div class="row">
           <label>Temperature metric icon</label>
@@ -2669,6 +2706,7 @@ class MultiAcCardEditor extends HTMLElement {
     // Icons inputs
     const iconMapping = [
       ['eco','inp-icon-eco'],['fav','inp-icon-fav'],['clean','inp-icon-clean'],['power','inp-icon-power'],['timer','inp-icon-timer'],['all_off','inp-icon-alloff'],
+      ['header','inp-icon-header'],['mode_cool','inp-icon-mode-cool'],['mode_heat','inp-icon-mode-heat'],['mode_dry','inp-icon-mode-dry'],['mode_fan_only','inp-icon-mode-fan_only'],
       ['metric_temp','inp-icon-metric-temp'],['metric_humidity','inp-icon-metric-humidity'],['metric_power','inp-icon-metric-power']
     ];
     iconMapping.forEach(([key,id]) => {
