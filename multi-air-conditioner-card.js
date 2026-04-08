@@ -73,6 +73,65 @@ const AC_TRANSLATIONS = {
     rooms: ['Phòng khách','Phòng ngủ','Phòng ăn','Văn phòng'],
     roomIcons: ['','','',''],
   },
+  pt: {
+    lang: 'Português (PT)', flag: 'pt',
+    cardTitle: 'Ar Condicionado',
+    cardSub:   'Casa Inteligente',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Bom dia,';
+      if (h>=11 && h<13) return 'Boa tarde,';
+      if (h>=13 && h<18) return 'Boa tarde,';
+      if (h>=18 && h<21) return 'Boa noite,';
+      return 'Boa noite,';
+    },
+    tempLabel: 'TEMPERATURA',
+    selectRoom: 'SELECIONAR DIVISÃO',
+    statusLabel: 'ESTADO',
+    statusOn: 'A FUNCIONAR', statusOff: 'DESLIGADO',
+    airGood: 'Qualidade do ar boa', pressOn: 'Premir para ligar',
+    dustLabel: 'Poeira fina',
+    fanLabel: 'Velocidade do ventilador', swingLabel: 'Direção do ar',
+    allOff: 'Desligar tudo', allOffSub: 'Premir para desligar todas as divisões',
+    tapOff: 'Premir para desligar', tapOn: 'Premir para ligar',
+    confirmOff: '⚠ Desligar tudo?', confirmSub: function(n) { return 'Irá desligar ' + n + ' aparelhos de AC de uma só vez'; },
+    cancel: 'Cancelar', doOff: '⏻ Desligar tudo',
+    overlayOn: 'LIGADO', overlayOff: 'DESLIGADO',
+    modes: { cool:'Arrefecer', heat:'Aquecimento', dry:'Desumidificar', fan_only:'Ventilador', off:'Desligado' },
+    fans:   ['Auto','Baixo','Médio','Alto'],
+    swings: ['Fixo','Cima/Baixo','Esquerda/Direita','Todos'],
+    comfort: { dry:'Ar seco e confortável', fan_only:'Brisa ligeira e fresca', off:'Atualmente desligado' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Muito frio, vista mais roupa!';
+      if (t<=23) return 'Temperatura ideal, relaxe';
+      if (t<=27) return 'Confortável e agradável';
+      if (t<=31) return 'Um pouco quente, arrefecer mais';
+      return 'Demasiado quente! Ajuste a temperatura';
+    },
+    timerBtn: 'Temporizador',
+    bgLabel: 'Fundo em gradiente', bgPresets: 'Predefinição',
+    colorLabel: 'Cores', accentColor: 'Cor de destaque', textColor: 'Cor do texto',
+    color1: 'Cor 1 (superior esquerdo)', color2: 'Cor 2 (inferior direito)',
+    edLang: 'Idioma',
+    edEntities: 'Entidades',
+    edOwnerName: 'Nome exibido (Casa Inteligente)',
+    edRoomCountLabel: function(n) { return 'Número de divisões (1–8, padrão 4)'; },
+    edRoomsHeader: function(n) { return 'Aparelhos AC (' + n + ' divisões)'; },
+    edRooms: 'Aparelhos AC',
+    edSensors: 'Sensores ambientais',
+    edColors: 'Cores',
+    edBg: 'Fundo',
+    edAcEntity: 'Entidade AC (climate.*)',
+    edAcName: 'Nome exibido',
+    edAcIcon: 'Icon (mdi)',
+    edPm25: 'Poeira PM2.5',
+    edOutdoorTemp: 'Temperatura exterior',
+    edHumidity: 'Humidade exterior',
+    edPower: 'Consumo (kW)',
+    rooms: ['Sala','Quarto','Sala de jantar','Escritório'],
+    roomIcons: ['','','',''],
+  },
   en: {
     lang: 'English', flag: 'gb',
     cardTitle: 'Air Conditioning',
