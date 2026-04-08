@@ -1415,23 +1415,23 @@ class AcControllerCardV2 extends HTMLElement {
 + '  </div>'
 + '  <div class="mode-grid">' + modeBtns + '</div>'
 + ((cfg.features && (cfg.features.fan || cfg.features.swing)) ? (
-+   '<div class="fan-swing-row">'
-+   + (cfg.features && cfg.features.fan ? (
++   '<div class="fan-swing-row">' +
++   (cfg.features && cfg.features.fan ? (
 +     '<div class="fan-card">'
-+     + '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
-+     + '    <button class="fan-tap" id="btn-fan-cycle">'
-+     + '      <span class="fan-ico">' + fanIconSvg + '</span>'
-+     + '      <div class="fan-bars">' + fanBarHtml + '</div>'
-+     + '    </button>'
-+     + '  </div>'
-+   ) : '')
-+   + (cfg.features && cfg.features.swing ? (
++     '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
++     '    <button class="fan-tap" id="btn-fan-cycle">'
++     '      <span class="fan-ico">' + fanIconSvg + '</span>'
++     '      <div class="fan-bars">' + fanBarHtml + '</div>'
++     '    </button>'
++     '  </div>'
++   ) : '') +
++   (cfg.features && cfg.features.swing ? (
 +     '<div class="swing-card">'
-+     + '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
-+     + swingBtn
-+     + '  </div>'
-+   ) : '')
-+   + '</div>'
++     '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
+  + swingBtn
++     '  </div>'
++   ) : '') +
++   '</div>'
 + ) : '')
 + '</div>'
  
