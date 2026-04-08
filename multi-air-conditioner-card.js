@@ -475,44 +475,43 @@ const AC_TRANSLATIONS = {
     edRooms: '❄ Légkondicionáló',
     edSensors: '📡 Környezeti érzékelők',
     edColors: 'Színek',
-    edBg: 'Háttér',
-    edAcEntity: '❄ Légkondicionáló entitás (climate.*)',
-    edAcName: '🏷 Megjelenítési név',
-    edAcIcon: '🎨 Ikon (emoji)',
-    edPm25: '🌫 Finom por PM2.5',
-    edOutdoorTemp: '🌡 Kültéri hőmérséklet',
-    edHumidity: '💧 Kültéri páratartalom',
-    edPower: '⚡ Energiafogyasztás (kW)',
-    rooms: ['Nappali','Hálószoba','Étkező','Iroda'],
-    roomIcons: ['🛋','🛌','🍳','💼'],
-  },
-  cs: {
-    lang: 'Čeština', flag: 'cz',
-    cardTitle: 'Klimatizace',
-    cardSub:   'Chytrý Dům',
-    greet: function() {
-      var h = new Date().getHours();
-      if (h>=6  && h<11) return 'Dobré ráno,';
-      if (h>=11 && h<13) return 'Dobrý den,';
-      if (h>=13 && h<18) return 'Dobré odpoledne,';
-      if (h>=18 && h<21) return 'Dobrý večer,';
-      return 'Dobrou noc,';
-    },
-    tempLabel: 'TEPLOTA',
-    selectRoom: 'VYBRAT MÍSTNOST',
-    statusLabel: 'STAV',
-    statusOn: 'BĚŽÍ', statusOff: 'VYPNUTO',
-    airGood: 'Kvalita vzduchu dobrá', pressOn: 'Stiskněte pro zapnutí',
-    dustLabel: 'Jemný prach',
-    fanLabel: 'Rychlost ventilátoru', swingLabel: 'Směr proudění',
-    allOff: 'Vše vypnout', allOffSub: 'Vypnout všechny místnosti',
-    tapOff: 'Stiskněte pro vypnutí', tapOn: 'Stiskněte pro zapnutí',
-    confirmOff: '⚠ Vše vypnout?', confirmSub: function(n) { return 'Vypne ' + n + ' klimatizací najednou'; },
-    cancel: 'Zrušit', doOff: '⏻ Vše vypnout',
-    overlayOn: 'ZAP', overlayOff: 'VYP',
-    modes: { cool:'Chlazení', heat:'Topení', dry:'Odvlhčování', fan_only:'Ventilátor', off:'Vypnout' },
-    fans:   ['Auto','Nízká','Střední','Vysoká'],
-    swings: ['Pevný','Nahoru/Dolů','Vlevo/Vpravo','Vše'],
+     '</svg>'
+
+     '<div class="dial-controls">'
+     '  <div class="temp-controls">'
+     '    <button id="btn-temp-down" class="temp-btn">-</button>'
+     '    <div class="temp-display">' + Math.round(curTemp) + '&#176;C</div>'
+     '    <button id="btn-temp-up" class="temp-btn">+</button>'
+     '  </div>'
+     '  <div class="mode-grid">' + modeBtns + '</div>'
+     ((cfg.features && (cfg.features.fan || cfg.features.swing)) ? (
+       '<div class="fan-swing-row">'
+       + (cfg.features && cfg.features.fan ? (
+         '<div class="fan-card">'
+         + '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
+         + '    <button class="fan-tap" id="btn-fan-cycle">'
+         + '      <span class="fan-ico">' + fanIconSvg + '</span>'
+         + '      <div class="fan-bars">' + fanBarHtml + '</div>'
+         + '    </button>'
+         + '  </div>'
+       ) : '')
+       + (cfg.features && cfg.features.swing ? (
+         '<div class="swing-card">'
+         + '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
+         + swingBtn
+         + '  </div>'
+       ) : '')
+       + '</div>'
+     ) : '')
+     '</div>'
+
+     (cfg.features && cfg.features.chips ? (
+       '<div class="chips">'
+       + (cfg.features.chips.eco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>') : '')
+       + (cfg.features.chips.fav ? ('  <button class="chip chip--a">&#11088; Fav</button>') : '')
+       + (cfg.features.chips.clean ? ('  <button class="chip chip--b">&#10024; Clean</button>') : '')
+       + '</div>'
+     ) : '')
     comfort: { dry:'Suchý vzduch', fan_only:'Lehký svěží vánek', off:'Momentálně vypnuto' },
     comfortTemp: function(t) {
       t = Math.round(t);
