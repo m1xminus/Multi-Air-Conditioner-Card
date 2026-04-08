@@ -1282,10 +1282,13 @@ class AcControllerCardV2 extends HTMLElement {
     var pctSet    = clamp(setTemp / 40);
     var arcEndAct = -140 + pctActual * 280;
     var arcEndSet = -140 + pctSet * 280;
-    // dot for the outer (target) ring should follow arcEndSet
-    var dotRad    = (arcEndSet - 90) * Math.PI / 180;
-    var dotX      = (110 + 88 * Math.cos(dotRad)).toFixed(1);
-    var dotY      = (110 + 88 * Math.sin(dotRad)).toFixed(1);
+    // compute dot positions for inner (actual) and outer (target) rings
+    var dotRadAct = (arcEndAct - 90) * Math.PI / 180;
+    var dotRadSet = (arcEndSet - 90) * Math.PI / 180;
+    var dotInnerX = (110 + 72 * Math.cos(dotRadAct)).toFixed(1);
+    var dotInnerY = (110 + 72 * Math.sin(dotRadAct)).toFixed(1);
+    var dotOuterX = (110 + 88 * Math.cos(dotRadSet)).toFixed(1);
+    var dotOuterY = (110 + 88 * Math.sin(dotRadSet)).toFixed(1);
 
     // Format temperature strings: one decimal when sourced from a sensor
     var curTempStr = (roomCfg.temp_entity && this._hass.states && this._hass.states[roomCfg.temp_entity]) ? curTemp.toFixed(1) : Math.round(curTemp);
@@ -1296,40 +1299,31 @@ class AcControllerCardV2 extends HTMLElement {
 
     var arcTrack = this._arc(110,110,88,-140,140);
     // inner arc = actual temperature (smaller radius), outer arc = target/set temperature
-    var arcFillInner = pctActual > 0.02 ? this._arc(110,110,72,-140,arcEndAct) : '';
-    var arcFillOuter = pctSet    > 0.02 ? this._arc(110,110,88,-140,arcEndSet) : '';
+    var arcFillAct = pctActual > 0.02 ? this._arc(110,110,72,-140,arcEndAct) : '';
+    var arcFillSet = pctSet    > 0.02 ? this._arc(110,110,88,-140,arcEndSet) : '';
 
     var arcFillSvg = '';
     var activeColor = isOn ? mode.color : (MODE_CFG.off && MODE_CFG.off.color ? MODE_CFG.off.color : '#7e8594');
     var activeGlow  = isOn ? 'url(#arcGlow)' : '';
-    if (pctActual > 0.02) {
-      arcFillSvg += '<path d="' + arcFillAct + '" fill="none" stroke="' + activeColor + '" stroke-width="12" stroke-linecap="round"' + (activeGlow ? ' filter="' + activeGlow + '"' : '') + ' opacity="' + (isOn ? 0.95 : 0.22) + '"/>';
-    }
     if (pctSet > 0.02) {
-      // outer arc = target temp
-      arcFillSvg += '<path d="' + arcFillOuter + '" fill="none" stroke="' + activeColor + '" stroke-width="8" stroke-linecap="round" opacity="0.95"/>';
+      // outer arc = target
+      arcFillSvg += '<path d="' + arcFillSet + '" fill="none" stroke="' + activeColor + '" stroke-width="12" stroke-linecap="round" opacity="0.9"' + (isOn ? ' filter="url(#arcGlow)"' : '') + '/>';
     }
+    // inner arc = actual
     if (pctActual > 0.02) {
-      // inner arc = actual temp (thicker)
-      arcFillSvg += '<path d="' + arcFillInner + '" fill="none" stroke="' + activeColor + '" stroke-width="12" stroke-linecap="round"' + (activeGlow ? ' filter="' + activeGlow + '"' : '') + ' opacity="' + (isOn ? 0.95 : 0.22) + '"/>';
-    }
-    // Draw two dots: inner hollow dot for actual temp, outer filled dot for target temp
-    var dotInnerSvg = '';
-    if (pctActual > 0.02) {
-      var dotRadInner = (arcEndAct - 90) * Math.PI / 180;
-      var dotInnerX = (110 + 72 * Math.cos(dotRadInner)).toFixed(1);
-      var dotInnerY = (110 + 72 * Math.sin(dotRadInner)).toFixed(1);
-      dotInnerSvg = '<circle cx="' + dotInnerX + '" cy="' + dotInnerY + '" r="6" fill="none" stroke="white" stroke-width="2" opacity="0.95"/>';
-    }
-    var dotOuterSvg = '';
-    if (pctSet > 0.02) {
-      dotOuterSvg = '<circle cx="' + dotX + '" cy="' + dotY + '" r="8" fill="' + activeColor + '"' + (isOn ? ' filter="url(#dotGlow)"' : '') + '/>'
-                  + '<circle cx="' + dotX + '" cy="' + dotY + '" r="4" fill="white" opacity="0.9"/>';
+      arcFillSvg += '<path d="' + arcFillAct + '" fill="none" stroke="' + activeColor + '" stroke-width="8" stroke-linecap="round" opacity="0.95"/>';
     }
 
-    // Tick marks
-    var ticks = '';
-    for (var k = 0; k < 17; k++) {
+    // Dots: one per dial
+    var dotOuterSvg = '';
+    if (pctSet > 0.02) {
+      dotOuterSvg = '<circle cx="' + dotOuterX + '" cy="' + dotOuterY + '" r="6" fill="none" stroke="' + activeColor + '" stroke-width="2" opacity="0.95"/>';
+    }
+    var dotInnerSvg = '';
+    if (pctActual > 0.02) {
+      dotInnerSvg = '<circle cx="' + dotInnerX + '" cy="' + dotInnerY + '" r="8" fill="' + activeColor + '"' + (isOn ? ' filter="url(#dotGlow)"' : '') + '/>'
+                  + '<circle cx="' + dotInnerX + '" cy="' + dotInnerY + '" r="4" fill="white" opacity="0.9"/>';
+    }
       var tDeg = -140 + k * 280 / 16;
       var tRad = (tDeg - 90) * Math.PI / 180;
       var tx1 = (110 + 79 * Math.cos(tRad)).toFixed(1), ty1 = (110 + 79 * Math.sin(tRad)).toFixed(1);
@@ -1569,8 +1563,8 @@ class AcControllerCardV2 extends HTMLElement {
 + '<path d="' + arcTrack + '" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" stroke-linecap="round"/>'
 + ticks
 + arcFillSvg
-+ dotInnerSvg
 + dotOuterSvg
++ dotInnerSvg
 + '</svg>'
 + '<div class="dial-center">'
 + '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
