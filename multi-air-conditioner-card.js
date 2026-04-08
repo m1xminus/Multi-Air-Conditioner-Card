@@ -29,7 +29,7 @@ const AC_TRANSLATIONS = {
     tempLabel: 'NHIỆT ĐỘ',
     selectRoom: 'CHỌN PHÒNG',
     statusLabel: 'TRẠNG THÁI',
-    statusOn: 'ĐANG CHẠY', statusOff: 'TẮT',
+      statusOn: 'ĐANG BẬT', statusOff: 'TẮT',
     airGood: 'Chất lượng không khí tốt', pressOn: 'Nhấn nguồn để bật',
     dustLabel: 'Bụi mịn',
     fanLabel: 'Tốc độ quạt', swingLabel: 'Hướng gió',
@@ -88,7 +88,7 @@ const AC_TRANSLATIONS = {
     tempLabel: 'TEMPERATURA',
     selectRoom: 'SELECIONAR DIVISÃO',
     statusLabel: 'ESTADO',
-    statusOn: 'A FUNCIONAR', statusOff: 'DESLIGADO',
+      statusOn: 'LIGADO', statusOff: 'DESLIGADO',
     airGood: 'Qualidade do ar boa', pressOn: 'Premir para ligar',
     dustLabel: 'Poeira fina',
     fanLabel: 'Velocidade do ventilador', swingLabel: 'Direção do ar',
@@ -1459,7 +1459,7 @@ class AcControllerCardV2 extends HTMLElement {
     var wifiOk = entityState !== 'unknown' && entityState !== 'unavailable';
     var wifiColor = wifiOk ? '#34d399' : 'rgba(255,255,255,0.4)';
     var wifiGlow  = wifiOk ? 'drop-shadow(0 0 4px #34d399)' : 'none';
-    var pwSub   = isOn ? tr.tapOff : tr.tapOn;
+    var pwSub   = isOn ? tr.statusOn : tr.statusOff;
 
     // Đọc giá trị cảm biến từ config
     var cfg = this._config || {};
@@ -1626,7 +1626,7 @@ class AcControllerCardV2 extends HTMLElement {
 + '    <div>'
 + '      <div class="st-title">' + tr.statusLabel + '</div>'
 + '      <div class="' + (isOn ? 'st-on' : 'st-off') + '">' + (isOn ? tr.statusOn : tr.statusOff) + '</div>'
-+ '      <div class="st-sub">' + (isOn ? tr.airGood : tr.pressOn) + '</div>'
++ '      <div class="st-sub">' + (isOn ? tr.statusOn : tr.statusOff) + '</div>'
 + '    </div>'
 + '    ' + (showPm25 ? ('<div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>') : '')
 + '  </div>'
@@ -1765,13 +1765,13 @@ class AcControllerCardV2 extends HTMLElement {
       cpop.style.bottom = (window.innerHeight - rect2.top + 10) + 'px';
       cpop.style.right  = (window.innerWidth  - rect2.right + 12) + 'px';
       var trPop = AC_TRANSLATIONS[(self._config && self._config.language) || 'vi'] || AC_TRANSLATIONS.vi;
-        pop.innerHTML =
-          '<div class="tp-title">Hẹn giờ</div>'
-        + '<div class="tp-tabs">'
-        +   '<button class="tp-tab ' + (chosenMode==='off'?'tp-tab-off-sel':'') + '" id="tp-off">Hẹn tắt</button>'
-        +   '<button class="tp-tab ' + (chosenMode==='on'?'tp-tab-on-sel':'')   + '" id="tp-on" >Hẹn bật</button>'
-        + '<button class="cp-ok" id="cp-ok-btn">' + trPop.doOff + '</button>'
-        + '</div>';
+      cpop.innerHTML =
+        '<div class="cp-title">' + (trPop.confirmOff || 'Confirm') + '</div>'
+      + '<div style="margin-top:8px;font-size:12px;color:rgba(255,255,255,0.9)">' + (typeof trPop.confirmSub === 'function' ? trPop.confirmSub(ROOMS.length) : '') + '</div>'
+      + '<div style="display:flex;gap:8px;margin-top:12px">'
+      +   '<button id="cp-cancel-btn" class="tp-cancel">' + (trPop.cancel || 'Cancel') + '</button>'
+      +   '<button class="cp-ok" id="cp-ok-btn">' + (trPop.doOff || 'Turn off') + '</button>'
+      + '</div>';
       sr2.appendChild(cpop);
       cpop.querySelector('#cp-cancel-btn').onclick = function(ev) { ev.stopPropagation(); cpop.remove(); };
       cpop.querySelector('#cp-ok-btn').onclick = function(ev) {
@@ -1930,10 +1930,10 @@ class AcControllerCardV2 extends HTMLElement {
       function renderPop() {
         var hasTimer = !!(self._timers[roomIdx] && self._timers[roomIdx].end);
         pop.innerHTML =
-          '<div class="tp-title">Hẹn giờ</div>'
+          '<div class="tp-title">' + tr.timerBtn + '</div>'
         + '<div class="tp-tabs">'
-        +   '<button class="tp-tab ' + (chosenMode==='off'?'tp-tab-off-sel':'') + '" id="tp-off">Hẹn tắt</button>'
-        +   '<button class="tp-tab ' + (chosenMode==='on'?'tp-tab-on-sel':'')   + '" id="tp-on" >Hẹn bật</button>'
+        +   '<button class="tp-tab ' + (chosenMode==='off'?'tp-tab-off-sel':'') + '" id="tp-off">' + tr.statusOff + '</button>'
+        +   '<button class="tp-tab ' + (chosenMode==='on'?'tp-tab-on-sel':'')   + '" id="tp-on">' + tr.statusOn + '</button>'
         + '</div>'
         + '<div class="tp-hours">'
         + HOURS.map(function(h, i) {
@@ -1949,9 +1949,9 @@ class AcControllerCardV2 extends HTMLElement {
         +   '<span style="font-size:9px;color:rgba(255,255,255,0.45);white-space:nowrap">ph&#250;t</span>'
         + '</div>'
         + '<div class="tp-acts">'
-        +   '<button class="tp-cancel" id="tp-cancel">Hu&#7927;</button>'
-        +   (hasTimer ? '<button class="tp-del" id="tp-del">X&#243;a h&#7865;n</button>' : '')
-        +   '<button class="tp-ok ' + (chosenMode==='on'?'tp-ok-on':'tp-ok-off') + '" id="tp-ok">X&#225;c nh&#7853;n</button>'
+        +   '<button class="tp-cancel" id="tp-cancel">' + tr.cancel + '</button>'
+        +   (hasTimer ? '<button class="tp-del" id="tp-del">' + (tr.cancel || 'Delete') + '</button>' : '')
+        +   '<button class="tp-ok ' + (chosenMode==='on'?'tp-ok-on':'tp-ok-off') + '" id="tp-ok">OK</button>'
         + '</div>';
 
         // Bind tabs
