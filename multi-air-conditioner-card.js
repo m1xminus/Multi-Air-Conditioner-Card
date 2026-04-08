@@ -1399,7 +1399,12 @@ class AcControllerCardV2 extends HTMLElement {
       var rTemp = 0;
       if (hasTempSensor) rTemp = parseFloat(this._hass.states[entCfg.temp_entity].state || 0);
       else rTemp = parseFloat(this._a(climateId, 'current_temperature') || 0);
-      var rTempStr = rTemp > 0 ? Math.round(rTemp) + '°' : '--';
+      var rTempStr = '--';
+      if (hasTempSensor) {
+        rTempStr = rTemp > 0 ? (Math.round(rTemp * 10) / 10).toFixed(1) + '°' : '--';
+      } else {
+        rTempStr = rTemp > 0 ? Math.round(rTemp) + '°' : '--';
+      }
       var isActive = j === this._activeIdx;
       var tabClass = 'room-tab'
         + (isActive && ron  ? ' room-tab--active room-tab--on'  : '')
@@ -1453,11 +1458,20 @@ class AcControllerCardV2 extends HTMLElement {
       ? Math.round(parseFloat(this._hass.states[cfg.avg_temp_entity].state)) + '°'
       : '--°';
     // Outdoor / displayed temp: prefer per-room temp sensor (already in curTemp), fall back to curTemp
-    var outdoorTempVal = curTemp > 0 ? Math.round(curTemp) + '°' : '--°';
+    var outdoorTempVal = '--°';
+    if (cfg.outdoor_temp_entity && this._hass && this._hass.states[cfg.outdoor_temp_entity]) {
+      var ot = parseFloat(this._hass.states[cfg.outdoor_temp_entity].state || 0);
+      outdoorTempVal = ot > 0 ? (Math.round(ot * 10) / 10).toFixed(1) + '°' : '--°';
+    } else if (roomCfg.temp_entity && this._hass && this._hass.states[roomCfg.temp_entity]) {
+      outdoorTempVal = curTemp > 0 ? (Math.round(curTemp * 10) / 10).toFixed(1) + '°' : '--°';
+    } else {
+      outdoorTempVal = curTemp > 0 ? Math.round(curTemp) + '°' : '--°';
+    }
     // Humidity: prefer per-room humidity sensor, else room attributes
     var humidityVal = '--%';
     if (roomCfg.humidity_entity && this._hass && this._hass.states[roomCfg.humidity_entity]) {
-      humidityVal = Math.round(parseFloat(this._hass.states[roomCfg.humidity_entity].state)) + '%';
+      var hv = parseFloat(this._hass.states[roomCfg.humidity_entity].state || 0);
+      humidityVal = hv > 0 ? (Math.round(hv * 10) / 10).toFixed(1) + '%' : '--%';
     } else {
       var roomHumidity = parseFloat(this._a(room.id, 'current_humidity') || this._a(room.id, 'humidity') || 0);
       humidityVal = roomHumidity > 0 ? Math.round(roomHumidity) + '%' : '--%';
