@@ -1898,6 +1898,7 @@ class AcControllerCardV2 extends HTMLElement {
     var sr    = this.shadowRoot;
     var btn   = sr.getElementById('btn-timer');
     var roomIdx = this._activeIdx; // ghi nhớ phòng tại thời điểm bind
+    var tr = AC_TRANSLATIONS[(this._config && this._config.language) || 'vi'] || AC_TRANSLATIONS.vi;
     if (!btn) return;
 
     var HOURS     = [0.5, 1, 1.5, 2, 3, 4, 6, 8];
