@@ -645,7 +645,15 @@ const AC_DEFAULT_CONFIG = {
     show_avg_temp: true,
     show_welcome: true,
     show_eco: true,
-    modes: { cool: true, heat: true, dry: true, fan_only: true }
+    modes: { cool: true, heat: true, dry: true, fan_only: true },
+    show_airflow: true,
+    show_fav: true,
+    show_clean: true,
+    show_pm25: true,
+    show_room_temp: true,
+    show_metrics_temp: true,
+    show_metrics_humidity: true,
+    show_metrics_power: true,
   },
 };
 
@@ -1143,6 +1151,20 @@ class AcControllerCardV2 extends HTMLElement {
     var bgGrad = acPresetGradient(cfg.background_preset, cfg.bg_color1, cfg.bg_color2);
     var accent = cfg.accent_color || '#00ffcc';
     var txtClr = cfg.text_color   || '#ffffff';
+    // Features config (early so room-tabs can use them)
+    var features = cfg.features || {};
+    var showAvg    = features.show_avg_temp !== false;
+    var showWelcome= features.show_welcome !== false;
+    var showEco    = features.show_eco !== false;
+    var showAirflow= features.show_airflow !== false;
+    var showFav    = features.show_fav !== false;
+    var showClean  = features.show_clean !== false;
+    var showPm25   = features.show_pm25 !== false;
+    var showRoomTemp = features.show_room_temp !== false;
+    var showMetricTemp = features.show_metrics_temp !== false;
+    var showMetricHumidity = features.show_metrics_humidity !== false;
+    var showMetricPower = features.show_metrics_power !== false;
+    var featureModes = (features.modes && typeof features.modes === 'object') ? features.modes : { cool:true,heat:true,dry:true,fan_only:true };
 
     var room    = ROOMS[this._activeIdx];
     var roomCfg = (this._config.entities && this._config.entities[this._activeIdx]) || {};
@@ -1297,17 +1319,14 @@ class AcControllerCardV2 extends HTMLElement {
         + '<span class="room-tab-ico">' + ROOMS[j].icon + '</span>'
         + '<span class="room-tab-info">'
         + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
-        + '  <span class="room-tab-temp">' + rTempStr + '</span>'
+        + (showRoomTemp ? ('  <span class="room-tab-temp">' + rTempStr + '</span>') : '')
         + '</span>'
-        + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (hasTempSensor ? rTempStr : (ron ? 'ON' : 'OFF')) + '</span>'
+        + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (showRoomTemp ? (hasTempSensor ? rTempStr : (ron ? 'ON' : 'OFF')) : (ron ? 'ON' : 'OFF')) + '</span>'
         + '</button>';
     }
 
     // Mode buttons
     var modeKeys = ['cool','heat','dry','fan_only'];
-    // feature flags may hide individual modes (defined later too)
-    var features = (this._config && this._config.features) || {};
-    var featureModes = (features.modes && typeof features.modes === 'object') ? features.modes : { cool:true,heat:true,dry:true,fan_only:true };
     var modeBtns = '';
     for (var m = 0; m < modeKeys.length; m++) {
       var mk = modeKeys[m];
@@ -1357,13 +1376,6 @@ class AcControllerCardV2 extends HTMLElement {
     } else if (cfg.power_entity && this._hass && this._hass.states[cfg.power_entity]) {
       powerVal = parseFloat(this._hass.states[cfg.power_entity].state).toFixed(1) + ' kW';
     }
-
-    // Features flags (configurable)
-    var features = cfg.features || {};
-    var showAvg    = features.show_avg_temp !== false;
-    var showWelcome= features.show_welcome !== false;
-    var showEco    = features.show_eco !== false;
-    var featureModes = (features.modes && typeof features.modes === 'object') ? features.modes : { cool:true,heat:true,dry:true,fan_only:true };
 
     // build header pieces
     var hdrBrand = '<div class="hdr">'
@@ -1437,29 +1449,29 @@ class AcControllerCardV2 extends HTMLElement {
 + '  <button class="temp-btn" id="btn-temp-up">+</button>'
 + '</div>'
 
-+ '<div class="mode-grid">' + modeBtns + '</div>'
+ + '<div class="mode-grid">' + modeBtns + '</div>'
 
-+ '<div class="fan-swing-row">'
-+ '  <div class="fan-card">'
-+ '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
-+ '    <button class="fan-tap" id="btn-fan-cycle">'
-+ '      <span class="fan-ico">' + fanIconSvg + '</span>'
-+ '      <div class="fan-bars">' + fanBarHtml + '</div>'
-+ '    </button>'
-+ '  </div>'
-+ '  <div class="swing-card">'
-+ '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
-+ '    ' + swingBtn
-+ '  </div>'
-+ '</div>'
+ + (showAirflow ? ('<div class="fan-swing-row">'
+ + '  <div class="fan-card">'
+ + '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
+ + '    <button class="fan-tap" id="btn-fan-cycle">'
+ + '      <span class="fan-ico">' + fanIconSvg + '</span>'
+ + '      <div class="fan-bars">' + fanBarHtml + '</div>'
+ + '    </button>'
+ + '  </div>'
+ + '  <div class="swing-card">'
+ + '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
+ + '    ' + swingBtn
+ + '  </div>'
+ + '</div>') : '')
 
-+ '<div class="chips">'
-+ (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>') : '')
-+ '  <button class="chip chip--a">&#11088; Fav</button>'
-+ '  <button class="chip chip--b">&#10024; Clean</button>'
-+ '</div>'
+ + '<div class="chips">'
+ + (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>') : '')
+ + (showFav ? ('  <button class="chip chip--a">&#11088; Fav</button>') : '')
+ + (showClean ? ('  <button class="chip chip--b">&#10024; Clean</button>') : '')
+ + '</div>'
 
-+ '<div class="bottom-row">'
+ + '<div class="bottom-row">'
 + '<button class="power-row" id="btn-power">'
 + '  <div class="pw-btn ' + pwClass + '">&#9211;</div>'
 + '  <div style="flex:1;min-width:0">'
@@ -1496,12 +1508,12 @@ class AcControllerCardV2 extends HTMLElement {
 + '      <div class="' + (isOn ? 'st-on' : 'st-off') + '">' + (isOn ? tr.statusOn : tr.statusOff) + '</div>'
 + '      <div class="st-sub">' + (isOn ? tr.airGood : tr.pressOn) + '</div>'
 + '    </div>'
-+ '    <div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>'
++ '    ' + (showPm25 ? ('<div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>') : '')
 + '  </div>'
 + '  <div class="metrics">'
-+ '    <div class="met"><span class="met-ico">&#127777;</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>'
-+ '    <div class="met"><span class="met-ico">&#128167;</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>'
-+ '    <div class="met"><span class="met-ico">&#9889;</span><span class="met-val" id="met-power">' + powerVal + '</span></div>'
++ '    ' + (showMetricTemp ? ('<div class="met"><span class="met-ico">&#127777;</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>') : '')
++ '    ' + (showMetricHumidity ? ('<div class="met"><span class="met-ico">&#128167;</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>') : '')
++ '    ' + (showMetricPower ? ('<div class="met"><span class="met-ico">&#9889;</span><span class="met-val" id="met-power">' + powerVal + '</span></div>') : '')
 + '  </div>'
 + '</div>'
 
@@ -2219,12 +2231,42 @@ class MultiAcCardEditor extends HTMLElement {
         <label>Show Eco button</label>
         <input type="checkbox" id="feat-show-eco" ${ (this._config.features && this._config.features.show_eco !== false) ? 'checked' : '' } />
       </div>
-      <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Modes</div>
+      <div class="row">
+        <label>Show air flow (fan & swing)</label>
+        <input type="checkbox" id="feat-show-airflow" ${ (this._config.features && this._config.features.show_airflow !== false) ? 'checked' : '' } />
+      </div>
+      <div class="row">
+        <label>Show Fav button</label>
+        <input type="checkbox" id="feat-show-fav" ${ (this._config.features && this._config.features.show_fav !== false) ? 'checked' : '' } />
+      </div>
+      <div class="row">
+        <label>Show Clean button</label>
+        <input type="checkbox" id="feat-show-clean" ${ (this._config.features && this._config.features.show_clean !== false) ? 'checked' : '' } />
+      </div>
+
+      <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Room selector</div>
+      <div class="row">
+        <label>Show fine dust (PM2.5)</label>
+        <input type="checkbox" id="feat-show-pm25" ${ (this._config.features && this._config.features.show_pm25 !== false) ? 'checked' : '' } />
+      </div>
+      <div class="row">
+        <label>Show room temperature (in tabs)</label>
+        <input type="checkbox" id="feat-show-room-temp" ${ (this._config.features && this._config.features.show_room_temp !== false) ? 'checked' : '' } />
+      </div>
+      <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Metrics</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-cool" ${ (this._config.features && this._config.features.modes && this._config.features.modes.cool !== false) ? 'checked' : '' } /> Cool</label>
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-heat" ${ (this._config.features && this._config.features.modes && this._config.features.modes.heat !== false) ? 'checked' : '' } /> Heat</label>
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-dry" ${ (this._config.features && this._config.features.modes && this._config.features.modes.dry !== false) ? 'checked' : '' } /> Dry</label>
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-fan_only" ${ (this._config.features && this._config.features.modes && this._config.features.modes.fan_only !== false) ? 'checked' : '' } /> Fan</label>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-temp" disabled /> Temp (N/A)</label>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-temp" ${ (this._config.features && this._config.features.show_metrics_temp !== false) ? 'checked' : '' } /> Outdoor temp</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-humidity" ${ (this._config.features && this._config.features.show_metrics_humidity !== false) ? 'checked' : '' } /> Humidity</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-power" ${ (this._config.features && this._config.features.show_metrics_power !== false) ? 'checked' : '' } /> Power</label>
       </div>
     </div>
   </div>
@@ -2512,6 +2554,22 @@ class MultiAcCardEditor extends HTMLElement {
     if (elWelcome) elWelcome.addEventListener('change', () => setFeature('show_welcome', elWelcome.checked));
     const elEco = sr.getElementById('feat-show-eco');
     if (elEco) elEco.addEventListener('change', () => setFeature('show_eco', elEco.checked));
+    const elAir = sr.getElementById('feat-show-airflow');
+    if (elAir) elAir.addEventListener('change', () => setFeature('show_airflow', elAir.checked));
+    const elFav = sr.getElementById('feat-show-fav');
+    if (elFav) elFav.addEventListener('change', () => setFeature('show_fav', elFav.checked));
+    const elClean = sr.getElementById('feat-show-clean');
+    if (elClean) elClean.addEventListener('change', () => setFeature('show_clean', elClean.checked));
+    const elPm = sr.getElementById('feat-show-pm25');
+    if (elPm) elPm.addEventListener('change', () => setFeature('show_pm25', elPm.checked));
+    const elRoomTemp = sr.getElementById('feat-show-room-temp');
+    if (elRoomTemp) elRoomTemp.addEventListener('change', () => setFeature('show_room_temp', elRoomTemp.checked));
+    const elMTemp = sr.getElementById('feat-show-metric-temp');
+    if (elMTemp) elMTemp.addEventListener('change', () => setFeature('show_metrics_temp', elMTemp.checked));
+    const elMHum = sr.getElementById('feat-show-metric-humidity');
+    if (elMHum) elMHum.addEventListener('change', () => setFeature('show_metrics_humidity', elMHum.checked));
+    const elMPow = sr.getElementById('feat-show-metric-power');
+    if (elMPow) elMPow.addEventListener('change', () => setFeature('show_metrics_power', elMPow.checked));
     // modes
     const modeIds = ['cool','heat','dry','fan_only'];
     modeIds.forEach(m => {
