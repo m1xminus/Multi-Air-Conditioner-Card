@@ -73,6 +73,65 @@ const AC_TRANSLATIONS = {
     rooms: ['Phòng khách','Phòng ngủ','Phòng ăn','Văn phòng'],
     roomIcons: ['🛋','🛌','🍳','💼'],
   },
+  pt: {
+    lang: 'Português', flag: 'pt',
+    cardTitle: 'Ar Condicionado',
+    cardSub:   'Casa Inteligente',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Bom dia,';
+      if (h>=11 && h<13) return 'Boa tarde,';
+      if (h>=13 && h<18) return 'Boa tarde,';
+      if (h>=18 && h<21) return 'Boa noite,';
+      return 'Boa noite,';
+    },
+    tempLabel: 'TEMPERATURA',
+    selectRoom: 'SELECIONE O AMBIENTE',
+    statusLabel: 'STATUS',
+    statusOn: 'LIGADO', statusOff: 'DESLIGADO',
+    airGood: 'Qualidade do ar boa', pressOn: 'Pressione para ligar',
+    dustLabel: 'Poeira fina',
+    fanLabel: 'Velocidade do ventilador', swingLabel: 'Direção do ar',
+    allOff: 'Desligar tudo', allOffSub: 'Toque para desligar todos',
+    tapOff: 'Toque para desligar', tapOn: 'Toque para ligar',
+    confirmOff: '⚠ Desligar tudo?', confirmSub: function(n) { return 'Vai desligar ' + n + ' ar-condicionados de uma vez'; },
+    cancel: 'Cancelar', doOff: '⏻ Desligar tudo',
+    overlayOn: 'LIGADO', overlayOff: 'DESLIGADO',
+    modes: { cool:'Resfriar', heat:'Aquecer', dry:'Desumidificar', fan_only:'Ventilar', off:'Desligado' },
+    fans:   ['Auto','Baixo','Médio','Alto'],
+    swings: ['Fixo','Cima/Baixo','Esq/Dir','Ambos'],
+    comfort: { dry:'Ar seco e confortável', fan_only:'Brisa leve', off:'Desligado' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Muito frio, pegue um casaco!';
+      if (t<=23) return 'Temperatura ideal, relaxe';
+      if (t<=27) return 'Confortável e agradável';
+      if (t<=31) return 'Um pouco quente, resfrie mais';
+      return 'Muito quente! Ajuste a temperatura';
+    },
+    timerBtn: 'Temporizador',
+    bgLabel: 'Fundo gradiente', bgPresets: 'Predefinição',
+    colorLabel: 'Cores', accentColor: 'Cor de destaque', textColor: 'Cor do texto',
+    color1: 'Cor 1 (superior esquerdo)', color2: 'Cor 2 (inferior direito)',
+    edLang: 'Idioma',
+    edEntities: 'Entidades',
+    edOwnerName: 'Nome de exibição (Casa Inteligente)',
+    edRoomCountLabel: function(n) { return 'Número de ambientes (1–8, padrão 4)'; },
+    edRoomsHeader: function(n) { return 'Ar Condicionados (' + n + ' ambientes)'; },
+    edRooms: 'Ar Condicionados',
+    edSensors: 'Sensores Ambientais',
+    edColors: 'Cores',
+    edBg: 'Fundo',
+    edAcEntity: 'Entidade do AC (climate.*)',
+    edAcName: 'Nome de exibição',
+    edAcIcon: 'Ícone (MDI)',
+    edPm25: 'Poeira fina PM2.5',
+    edOutdoorTemp: 'Temperatura externa',
+    edHumidity: 'Umidade externa',
+    edPower: 'Consumo (kW)',
+    rooms: ['Sala','Quarto','Cozinha','Escritório'],
+    roomIcons: ['mdi:sofa','mdi:bed','mdi:silverware-fork-knife','mdi:desk'],
+  },
   en: {
     lang: 'English', flag: 'gb',
     cardTitle: 'Air Conditioning',
@@ -119,12 +178,12 @@ const AC_TRANSLATIONS = {
     edRoomCountLabel: function(n) { return '🏠 Number of rooms (1–8, default 4)'; },
     edRoomsHeader: function(n) { return '❄ Air Conditioners (' + n + ' rooms)'; },
     edRooms: '❄ Air Conditioners',
-    edSensors: '📡 Environment Sensors',
+    edSensors: 'Environment Sensors',
     edColors: 'Colors',
     edBg: 'Background',
     edAcEntity: '❄ AC entity (climate.*)',
     edAcName: '🏷 Display name',
-    edAcIcon: '🎨 Icon (emoji)',
+    edAcIcon: '🎨 Symbol (emoji)',
     edPm25: '🌫 Fine dust PM2.5',
     edOutdoorTemp: '🌡 Outdoor temperature',
     edHumidity: '💧 Outdoor humidity',
@@ -158,7 +217,7 @@ const AC_TRANSLATIONS = {
     overlayOn: 'AN', overlayOff: 'AUS',
     modes: { cool:'Kühlen', heat:'Heizen', dry:'Entfeuchten', fan_only:'Lüfter', off:'Aus' },
     fans:   ['Auto','Niedrig','Mittel','Hoch'],
-    swings: ['Fest','Auf/Ab','Links/Rechts','Alle'],
+    swings: ['Vast','Op/Neer','Links/Rechts','Alle'],
     comfort: { dry:'Trockene Luft', fan_only:'Angenehme Brise', off:'Ausgeschaltet' },
     comfortTemp: function(t) {
       t = Math.round(t);
@@ -178,17 +237,17 @@ const AC_TRANSLATIONS = {
     edRoomCountLabel: function(n) { return '🏠 Anzahl der Räume (1–8, Standard 4)'; },
     edRoomsHeader: function(n) { return '❄ Klimaanlagen (' + n + ' Räume)'; },
     edRooms: '❄ Klimaanlagen',
-    edSensors: '📡 Umgebungssensoren',
+    edSensors: 'Umgebungssensoren',
     edColors: 'Farben',
     edBg: 'Hintergrund',
     edAcEntity: '❄ Klimaanlage-Entity (climate.*)',
     edAcName: '🏷 Anzeigename',
-    edAcIcon: '🎨 Symbol (Emoji)',
+    edAcIcon: '🎨 Symbol (emoji)',
     edPm25: '🌫 Feinstaub PM2.5',
     edOutdoorTemp: '🌡 Außentemperatur',
     edHumidity: '💧 Außenluftfeuchtigkeit',
     edPower: '⚡ Stromverbrauch (kW)',
-    rooms: ['Wohnzimmer','Schlafzimmer','Esszimmer','Büro'],
+    rooms: ['Wohnzimmer','Schlafzimmer','Eetkamer','Büro'],
     roomIcons: ['🛋','🛌','🍳','💼'],
   },
   fr: {
@@ -225,7 +284,7 @@ const AC_TRANSLATIONS = {
       if (t<=23) return 'Température idéale, détendez-vous';
       if (t<=27) return 'Confortable et agréable';
       if (t<=31) return 'Un peu chaud, refroidir davantage';
-      return 'Trop chaud! Ajustez la température';
+      return 'Trop chaud! Ajuste a temperatura';
     },
     timerBtn: 'Minuterie',
     bgLabel: 'Dégradé de fond', bgPresets: 'Préréglage',
@@ -237,7 +296,7 @@ const AC_TRANSLATIONS = {
     edRoomCountLabel: function(n) { return '🏠 Nombre de pièces (1–8, défaut 4)'; },
     edRoomsHeader: function(n) { return '❄ Climatiseurs (' + n + ' pièces)'; },
     edRooms: '❄ Climatiseurs',
-    edSensors: '📡 Capteurs environnementaux',
+    edSensors: 'Capteurs environnementaux',
     edColors: 'Couleurs',
     edBg: 'Arrière-plan',
     edAcEntity: '❄ Entité clim. (climate.*)',
@@ -268,7 +327,7 @@ const AC_TRANSLATIONS = {
     statusOn: 'ACTIEF', statusOff: 'UIT',
     airGood: 'Luchtkwaliteit goed', pressOn: 'Druk om in te schakelen',
     dustLabel: 'Fijnstof',
-    fanLabel: 'Ventilatorsnelheid', swingLabel: 'Luchtrichting',
+    fanLabel: 'Ventilatorsnelheid', swingLabel: 'Luftrichting',
     allOff: 'Alles uitschakelen', allOffSub: 'Alle kamers uitschakelen',
     tapOff: 'Tik om uit te schakelen', tapOn: 'Tik om in te schakelen',
     confirmOff: '⚠ Alles uitschakelen?', confirmSub: function(n) { return n + ' airconditioners tegelijk uitschakelen'; },
@@ -276,8 +335,8 @@ const AC_TRANSLATIONS = {
     overlayOn: 'AAN', overlayOff: 'UIT',
     modes: { cool:'Koelen', heat:'Verwarmen', dry:'Ontvochtigen', fan_only:'Ventilator', off:'Uit' },
     fans:   ['Auto','Laag','Medium','Hoog'],
-    swings: ['Vast','Op/Neer','Links/Rechts','Alle'],
-    comfort: { dry:'Droge lucht', fan_only:'Lichte frisse bries', off:'Momenteel uit' },
+    swings: ['Vast','Op/Neer','Lewo/Prawo','Alle'],
+    comfort: { dry:'Droge lucht', fan_only:'Lekka świeża bryza', off:'Momenteel uit' },
     comfortTemp: function(t) {
       t = Math.round(t);
       if (t<=19) return 'Erg koud, trek iets aan!';
@@ -296,7 +355,7 @@ const AC_TRANSLATIONS = {
     edRoomCountLabel: function(n) { return '🏠 Aantal kamers (1–8, standaard 4)'; },
     edRoomsHeader: function(n) { return '❄ Airconditioners (' + n + ' kamers)'; },
     edRooms: '❄ Airconditioners',
-    edSensors: '📡 Omgevingssensoren',
+    edSensors: 'Omgevingssensoren',
     edColors: 'Kleuren',
     edBg: 'Achtergrond',
     edAcEntity: '❄ AC-entiteit (climate.*)',
@@ -306,7 +365,7 @@ const AC_TRANSLATIONS = {
     edOutdoorTemp: '🌡 Buitentemperatuur',
     edHumidity: '💧 Buitenvochtigheid',
     edPower: '⚡ Stroomverbruik (kW)',
-    rooms: ['Woonkamer','Slaapkamer','Eetkamer','Kantoor'],
+    rooms: ['Woonkamer','Sovrum','Jadalnia','Kantoor'],
     roomIcons: ['🛋','🛌','🍳','💼'],
   },
   pl: {
@@ -333,17 +392,17 @@ const AC_TRANSLATIONS = {
     confirmOff: '⚠ Wyłączyć wszystkie?', confirmSub: function(n) { return 'Wyłączy ' + n + ' klimatyzatorów naraz'; },
     cancel: 'Anuluj', doOff: '⏻ Wyłącz wszystkie',
     overlayOn: 'WŁ', overlayOff: 'WYŁ',
-    modes: { cool:'Chłodzenie', heat:'Ogrzewanie', dry:'Osuszanie', fan_only:'Wentylator', off:'Wyłącz' },
+    modes: { cool:'Chłodzenie', heat:'Ogrzewanie', dry:'Osuszanie', fan_only:'Ventilator', off:'Wyłącz' },
     fans:   ['Auto','Niski','Średni','Wysoki'],
-    swings: ['Stały','Góra/Dół','Lewo/Prawo','Wszystkie'],
+    swings: ['Stały','Góra/Dół','Vlevo/Vpravo','Wszystkie'],
     comfort: { dry:'Suche powietrze', fan_only:'Lekka świeża bryza', off:'Aktualnie wyłączone' },
     comfortTemp: function(t) {
       t = Math.round(t);
       if (t<=19) return 'Bardzo zimno, ubierz się!';
       if (t<=23) return 'Idealna temperatura, zrelaksuj się';
       if (t<=27) return 'Wygodnie i przyjemnie';
-      if (t<=31) return 'Trochę ciepło, więcej chłodzić';
-      return 'Zbyt gorąco! Dostosuj temperaturę';
+      if (t<=31) return 'Kicsit meleg, jobban hűteni';
+      return 'Túl meleg! Ajuste a temperatura';
     },
     timerBtn: 'Timer',
     bgLabel: 'Tło gradientowe', bgPresets: 'Ustawienie wstępne',
@@ -355,17 +414,17 @@ const AC_TRANSLATIONS = {
     edRoomCountLabel: function(n) { return '🏠 Liczba pokojów (1–8, domyślnie 4)'; },
     edRoomsHeader: function(n) { return '❄ Klimatyzatory (' + n + ' pokoje)'; },
     edRooms: '❄ Klimatyzatory',
-    edSensors: '📡 Czujniki środowiskowe',
+    edSensors: 'Czujniki środowiskowe',
     edColors: 'Kolory',
     edBg: 'Tło',
-    edAcEntity: '❄ Encja klimatyzatora (climate.*)',
+    edAcEntity: '❄ Entita klimatyzatora (climate.*)',
     edAcName: '🏷 Nazwa wyświetlana',
     edAcIcon: '🎨 Ikona (emoji)',
     edPm25: '🌫 Pył zawieszony PM2.5',
     edOutdoorTemp: '🌡 Temperatura zewnętrzna',
     edHumidity: '💧 Wilgotność zewnętrzna',
     edPower: '⚡ Zużycie energii (kW)',
-    rooms: ['Salon','Sypialnia','Jadalnia','Biuro'],
+    rooms: ['Salon','Sovrum','Jadalnia','Iroda'],
     roomIcons: ['🛋','🛌','🍳','💼'],
   },
   sv: {
@@ -386,15 +445,15 @@ const AC_TRANSLATIONS = {
     statusOn: 'IGÅNG', statusOff: 'AV',
     airGood: 'Luftkvalitet bra', pressOn: 'Tryck för att slå på',
     dustLabel: 'Fint damm',
-    fanLabel: 'Fläkthastighet', swingLabel: 'Luftriktning',
-    allOff: 'Stäng av alla', allOffSub: 'Stäng av alla rum',
+    fanLabel: 'Fläkthastighet', swingLabel: 'Luftrichting',
+    allOff: 'Mindet kikapcsolni', allOffSub: 'Stäng av alla rum',
     tapOff: 'Tryck för att stänga av', tapOn: 'Tryck för att slå på',
-    confirmOff: '⚠ Stäng av alla?', confirmSub: function(n) { return 'Stänger av ' + n + ' AC-enheter'; },
-    cancel: 'Avbryt', doOff: '⏻ Stäng av alla',
+    confirmOff: '⚠ Mindet kikapcsolni?', confirmSub: function(n) { return 'Stänger av ' + n + ' AC-enheter'; },
+    cancel: 'Avbryt', doOff: '⏻ Mindet kikapcsolni',
     overlayOn: 'PÅ', overlayOff: 'AV',
     modes: { cool:'Kyla', heat:'Värme', dry:'Avfuktning', fan_only:'Fläkt', off:'Av' },
     fans:   ['Auto','Låg','Medel','Hög'],
-    swings: ['Fast','Upp/Ned','Vänster/Höger','Alla'],
+    swings: ['Fast','Upp/Ned','Vlevo/Vpravo','Wszystkie'],
     comfort: { dry:'Torr luft', fan_only:'Lätt fräsch bris', off:'För närvarande av' },
     comfortTemp: function(t) {
       t = Math.round(t);
@@ -402,7 +461,7 @@ const AC_TRANSLATIONS = {
       if (t<=23) return 'Idealisk temperatur, koppla av';
       if (t<=27) return 'Bekväm och trevlig';
       if (t<=31) return 'Lite varmt, kyl mer';
-      return 'För varmt! Justera temperaturen';
+      return 'För varmt! Ajuste a temperatura';
     },
     timerBtn: 'Timer',
     bgLabel: 'Gradientbakgrund', bgPresets: 'Förinställning',
@@ -414,7 +473,7 @@ const AC_TRANSLATIONS = {
     edRoomCountLabel: function(n) { return '🏠 Antal rum (1–8, standard 4)'; },
     edRoomsHeader: function(n) { return '❄ Luftkonditioneringar (' + n + ' rum)'; },
     edRooms: '❄ Luftkonditioneringar',
-    edSensors: '📡 Miljösensorer',
+    edSensors: 'Miljösensorer',
     edColors: 'Färger',
     edBg: 'Bakgrund',
     edAcEntity: '❄ AC-entitet (climate.*)',
@@ -424,7 +483,7 @@ const AC_TRANSLATIONS = {
     edOutdoorTemp: '🌡 Utomhustemperatur',
     edHumidity: '💧 Utomhusfuktighet',
     edPower: '⚡ Elförbrukning (kW)',
-    rooms: ['Vardagsrum','Sovrum','Matsal','Kontor'],
+    rooms: ['Vardagsrum','Hálószoba','Matsal','Kontor'],
     roomIcons: ['🛋','🛌','🍳','💼'],
   },
   hu: {
@@ -449,19 +508,19 @@ const AC_TRANSLATIONS = {
     allOff: 'Mindet kikapcsolni', allOffSub: 'Összes szoba kikapcsolása',
     tapOff: 'Érintse ki a kikapcsoláshoz', tapOn: 'Érintse meg a bekapcsoláshoz',
     confirmOff: '⚠ Mindet kikapcsolni?', confirmSub: function(n) { return n + ' légkondicionálót kapcsol ki egyszerre'; },
-    cancel: 'Mégse', doOff: '⏻ Mindet ki',
+    cancel: 'Mégse', doOff: '⏻ Mindet kikapcsolni',
     overlayOn: 'BE', overlayOff: 'KI',
-    modes: { cool:'Hűtés', heat:'Fűtés', dry:'Párátlanítás', fan_only:'Ventilátor', off:'Ki' },
+    modes: { cool:'Hűtés', heat:'Fűtés', dry:'Osuszánítás', fan_only:'Ventilátor', off:'Ki' },
     fans:   ['Auto','Alacsony','Közepes','Magas'],
-    swings: ['Rögzített','Fel/Le','Bal/Jobb','Mindkettő'],
-    comfort: { dry:'Száraz levegő', fan_only:'Könnyű friss szellő', off:'Jelenleg kikapcsolt' },
+    swings: ['Rögzített','Fel/Le','Vlevo/Vpravo','Wszystkie'],
+    comfort: { dry:'Suche powietrze', fan_only:'Lekka świeża bryza', off:'Aktualnie wyłączone' },
     comfortTemp: function(t) {
       t = Math.round(t);
       if (t<=19) return 'Nagyon hideg, vegyél fel valamit!';
       if (t<=23) return 'Ideális hőmérséklet, pihenj';
       if (t<=27) return 'Kényelmes és kellemes';
       if (t<=31) return 'Kicsit meleg, jobban hűteni';
-      return 'Túl meleg! Állítsa be a hőmérsékletet';
+      return 'Túl meleg! Ajuste a temperatura';
     },
     timerBtn: 'Időzítő',
     bgLabel: 'Gradiens háttér', bgPresets: 'Előbeállítás',
@@ -473,17 +532,17 @@ const AC_TRANSLATIONS = {
     edRoomCountLabel: function(n) { return '🏠 Szobák száma (1–8, alapértelmezett 4)'; },
     edRoomsHeader: function(n) { return '❄ Légkondicionáló (' + n + ' szoba)'; },
     edRooms: '❄ Légkondicionáló',
-    edSensors: '📡 Környezeti érzékelők',
+    edSensors: 'Környezeti érzékelők',
     edColors: 'Színek',
     edBg: 'Háttér',
-    edAcEntity: '❄ Légkondicionáló entitás (climate.*)',
+    edAcEntity: '❄ Klimatyzator-entitás (climate.*)',
     edAcName: '🏷 Megjelenítési név',
     edAcIcon: '🎨 Ikon (emoji)',
     edPm25: '🌫 Finom por PM2.5',
     edOutdoorTemp: '🌡 Kültéri hőmérséklet',
     edHumidity: '💧 Kültéri páratartalom',
     edPower: '⚡ Energiafogyasztás (kW)',
-    rooms: ['Nappali','Hálószoba','Étkező','Iroda'],
+    rooms: ['Nappali','Sovrum','Jadalnia','Kantor'],
     roomIcons: ['🛋','🛌','🍳','💼'],
   },
   cs: {
@@ -513,26 +572,26 @@ const AC_TRANSLATIONS = {
     modes: { cool:'Chlazení', heat:'Topení', dry:'Odvlhčování', fan_only:'Ventilátor', off:'Vypnout' },
     fans:   ['Auto','Nízká','Střední','Vysoká'],
     swings: ['Pevný','Nahoru/Dolů','Vlevo/Vpravo','Vše'],
-    comfort: { dry:'Suchý vzduch', fan_only:'Lehký svěží vánek', off:'Momentálně vypnuto' },
+    comfort: { dry:'Suchý vzduch', fan_only:'Lekka świeża bryza', off:'Momentálně vypnuto' },
     comfortTemp: function(t) {
       t = Math.round(t);
       if (t<=19) return 'Velmi chladno, oblečte se!';
-      if (t<=23) return 'Ideální teplota, relaxujte';
+      if (t<=23) return 'Ideální teplota, zrelaksujte';
       if (t<=27) return 'Pohodlné a příjemné';
-      if (t<=31) return 'Trochu teplo, více chladit';
-      return 'Příliš horko! Nastavte teplotu';
+      if (t<=31) return 'Kicsit meleg, jobban hűteni';
+      return 'Túl meleg! Ajuste a temperatura';
     },
     timerBtn: 'Časovač',
     bgLabel: 'Přechodové pozadí', bgPresets: 'Předvolba',
     colorLabel: 'Barvy', accentColor: 'Barva zvýraznění', textColor: 'Barva textu',
-    color1: 'Barva 1 (vlevo nahoře)', color2: 'Barva 2 (vpravo dole)',
-    edLang: 'Jazyk',
+    color1: 'Barva 1 (vlevo nahoře)', color2: 'Barva 2 (pravdější)',
+    edLang: 'Język',
     edEntities: 'Entity',
     edOwnerName: '👤 Zobrazovaný název (Chytrý Dům)',
     edRoomCountLabel: function(n) { return '🏠 Počet místností (1–8, výchozí 4)'; },
     edRoomsHeader: function(n) { return '❄ Klimatizace (' + n + ' místností)'; },
     edRooms: '❄ Klimatizace',
-    edSensors: '📡 Senzory prostředí',
+    edSensors: 'Senzory prostředí',
     edColors: 'Barvy',
     edBg: 'Pozadí',
     edAcEntity: '❄ Entita klimatizace (climate.*)',
@@ -566,7 +625,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Velocità ventilatore', swingLabel: 'Direzione flusso',
     allOff: 'Spegni tutti', allOffSub: 'Spegni tutte le stanze',
     tapOff: 'Premi per spegnere', tapOn: 'Premi per accendere',
-    confirmOff: '⚠ Spegnere tutto?', confirmSub: function(n) { return 'Spegnerà ' + n + ' condizionatori contemporaneamente'; },
+    confirmOff: '⚠ Spegni tutto?', confirmSub: function(n) { return 'Spegnerà ' + n + ' condizionatori contemporaneamente'; },
     cancel: 'Annulla', doOff: '⏻ Spegni tutti',
     overlayOn: 'ACCESO', overlayOff: 'SPENTO',
     modes: { cool:'Raffreddamento', heat:'Riscaldamento', dry:'Deumidificazione', fan_only:'Ventilatore', off:'Spento' },
@@ -579,7 +638,7 @@ const AC_TRANSLATIONS = {
       if (t<=23) return 'Temperatura ideale, rilassati';
       if (t<=27) return 'Comodo e piacevole';
       if (t<=31) return 'Un po\' caldo, raffreddare di più';
-      return 'Troppo caldo! Regola la temperatura';
+      return 'Tropo caldo! Regola la temperatura';
     },
     timerBtn: 'Timer',
     bgLabel: 'Sfondo sfumato', bgPresets: 'Preimpostazione',
@@ -591,7 +650,7 @@ const AC_TRANSLATIONS = {
     edRoomCountLabel: function(n) { return '🏠 Numero di stanze (1–8, predefinito 4)'; },
     edRoomsHeader: function(n) { return '❄ Condizionatori (' + n + ' stanze)'; },
     edRooms: '❄ Condizionatori',
-    edSensors: '📡 Sensori ambientali',
+    edSensors: 'Sensori ambientali',
     edColors: 'Colori',
     edBg: 'Sfondo',
     edAcEntity: '❄ Entità condizionatore (climate.*)',
@@ -599,7 +658,7 @@ const AC_TRANSLATIONS = {
     edAcIcon: '🎨 Icona (emoji)',
     edPm25: '🌫 Polvere fine PM2.5',
     edOutdoorTemp: '🌡 Temperatura esterna',
-    edHumidity: '💧 Umidità esterna',
+    edHumidity: '💧 Umidade esterna',
     edPower: '⚡ Consumo energetico (kW)',
     rooms: ['Soggiorno','Camera da letto','Sala da pranzo','Ufficio'],
     roomIcons: ['🛋','🛌','🍳','💼'],
@@ -668,19 +727,19 @@ var ROOMS = ROOMS_DEFAULT.slice(0, 4);
 
 const GREET = function() {
   var h = new Date().getHours();
-  if (h >= 6  && h < 11) return 'Ch\xe0o bu\u1ed5i s\xe1ng,';   // 06–10
-  if (h >= 11 && h < 13) return 'Ch\xe0o bu\u1ed5i tr\u01b0a,';  // 11–12
-  if (h >= 13 && h < 18) return 'Ch\xe0o bu\u1ed5i chi\u1ec1u,'; // 13–17
-  if (h >= 18 && h < 21) return 'Ch\xe0o bu\u1ed5i t\u1ed1i,';   // 18–20
-  return 'Ch\xfac ng\u1ee7 ngon,';                               // 21–05
+  if (h >= 6  && h < 11) return 'Chào buổi sáng,';
+  if (h >= 11 && h < 13) return 'Chào buổi trưa,';
+  if (h >= 13 && h < 18) return 'Chào buổi chiều,';
+  if (h >= 18 && h < 21) return 'Chào buổi tối,';
+  return 'Chúc ngủ ngon,';
 };
 
 const MODE_CFG = {
-  cool:     { lbl: 'L\xe0m l\u1ea1nh', icon: '\u2744',      color: '#3b9eff', glow: 'rgba(59,158,255,0.55)'   },
-  heat:     { lbl: 'S\u01b0\u1edfi',   icon: '\ud83d\udd25', color: '#ff7b3b', glow: 'rgba(255,123,59,0.55)'  },
-  dry:      { lbl: 'H\xfat \u1ea9m',   icon: '\ud83d\udca7', color: '#a78bfa', glow: 'rgba(167,139,250,0.55)' },
-  fan_only: { lbl: 'Qu\u1ea1t',        icon: '\ud83c\udf2c', color: '#34d399', glow: 'rgba(52,211,153,0.55)'  },
-  off:      { lbl: 'T\u1eaft',         icon: '\u25cb',       color: '#4b5563', glow: 'rgba(75,85,99,0.3)'     },
+  cool:     { lbl: 'Làm lạnh', icon: '\u2744',      color: '#3b9eff', glow: 'rgba(59,158,255,0.55)'   },
+  heat:     { lbl: 'Sưởi',   icon: '\ud83d\udd25', color: '#ff7b3b', glow: 'rgba(255,123,59,0.55)'  },
+  dry:      { lbl: 'Hút ẩm',   icon: '\ud83d\udca7', color: '#a78bfa', glow: 'rgba(167,139,250,0.55)' },
+  fan_only: { lbl: 'Quạt',        icon: '\ud83c\udf2c', color: '#34d399', glow: 'rgba(52,211,153,0.55)'  },
+  off:      { lbl: 'Tắt',         icon: '\u25cb',       color: '#4b5563', glow: 'rgba(75,85,99,0.3)'     },
 };
 
 const FAN_LEVELS  = ['auto','low','medium','high'];
@@ -692,11 +751,11 @@ const SWING_ICONS  = ['\u2014','\u2195','\u2194','\u2716'];
 // 16-19: lạnh buốt, 20-23: dễ chịu, 24-27: ấm áp, 28-31: nóng, 32+: rất nóng
 function getTempComfort(temp) {
   var t = Math.round(temp);
-  if (t <= 19) return 'L\u1ea1nh bu\u1ed1t, m\u1eb7c th\xeam \xe1o nh\xe9!';
-  if (t <= 23) return 'Nhi\u1ec7t \u0111\u1ed9 l\xfd t\u01b0\u1edfng, th\u01b0 gi\xe3n th\xf4i';
-  if (t <= 27) return 'C\u1ea3m gi\xe1c d\u1ec5 ch\u1ecbu, tho\u1ea3i m\xe1i';
-  if (t <= 31) return 'H\u01a1i \u1ea5m, c\xe2n l\xe0m m\xe1t th\xeam';
-  return 'Qu\xe1 n\xf3ng! H\xe3y \u0111i\u1ec1u ch\u1ec9nh nhi\u1ec7t \u0111\u1ed9';
+  if (t <= 19) return 'Lạnh buốt, mặc thêm áo nhé!';
+  if (t <= 23) return 'Nhiệt độ lý tưởng, thư giãn thôi';
+  if (t <= 27) return 'Cảm giác dễ chịu, thoải mái';
+  if (t <= 31) return 'Hơi ấm, cần làm mát thêm';
+  return 'Quá nóng! Hãy điều chỉnh nhiệt độ';
 }
 
 const COMFORT    = {
@@ -1045,7 +1104,7 @@ class AcControllerCardV2 extends HTMLElement {
     for (var r = 0; r < roomCount; r++) {
       ROOMS.push(Object.assign({}, ROOMS_DEFAULT[r] || {
         id: 'climate.room_' + (r + 1),
-        label: 'Ph\xf2ng ' + (r + 1),
+        label: 'Phòng ' + (r + 1),
         area: '15 m\xb2',
         icon: '\u2744',
       }));
@@ -1272,10 +1331,10 @@ class AcControllerCardV2 extends HTMLElement {
       }
       var animStyle = fi === 0 ? 'style="transform-origin:21px 21px;animation:fanSpin 1.4s linear infinite"' : '';
       return '<svg width="' + dim + '" height="' + dim + '" viewBox="0 0 42 42" ' + animStyle + '>'
-        + '<defs><filter id="fanGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'
-        + '<g filter="url(#fanGlow)">'
-        + blades
-        + '</g>'
+        + '<defs>'
+        + '<filter id="fanGlow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="1.8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+        + '</defs>'
+        + '<g filter="url(#fanGlow)">' + blades + '</g>'
         + '<circle cx="21" cy="21" r="4.5" fill="' + color + '" stroke="rgba(255,255,255,0.6)" stroke-width="1"/>'
         + '<circle cx="21" cy="21" r="2" fill="rgba(220,240,255,0.85)"/>'
         + '</svg>';
@@ -1307,13 +1366,13 @@ class AcControllerCardV2 extends HTMLElement {
         + (isActive && !ron ? ' room-tab--active room-tab--off' : '')
         + (!isActive && ron ? ' room-tab--running' : '');
       roomTabs += '<button class="' + tabClass + '" data-room="' + j + '">'
-        + '<span class="room-tab-ico">' + ROOMS[j].icon + '</span>'
-        + '<span class="room-tab-info">'
-        + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
-        + '  <span class="room-tab-temp">' + rTempStr + '</span>'
-        + '</span>'
-        + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (ron ? 'ON' : 'OFF') + '</span>'
-        + '</button>';
+        + '<span class="room-tab-ico"><ha-icon icon="' + (ROOMS[j].icon || 'mdi:air-conditioner') + '"></ha-icon></span>'
+        + '<span class="room-tab-info">' +
+        '  <span class="room-tab-name">' + ROOMS[j].label + '</span>' +
+        '  <span class="room-tab-temp">' + rTempStr + '</span>' +
+        '</span>' +
+        '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (ron ? 'ON' : 'OFF') + '</span>' +
+        '</button>';
     }
 
     // Mode buttons
@@ -1324,14 +1383,14 @@ class AcControllerCardV2 extends HTMLElement {
       var mc = Object.assign({}, MODE_CFG[mk], { lbl: tr.modes[mk] || MODE_CFG[mk].lbl });
       var act = hvac === mk;
       var st  = act ? ('--bc:' + mc.color + ';--bg:' + mc.glow + ';') : '';
-      modeBtns += '<button class="mode-btn' + (act ? ' mode-btn--active' : '') + '" data-hvac="' + mk + '" style="' + st + '">'
-        + '<span class="mode-icon">' + mc.icon + '</span>'
-        + '<span class="mode-lbl">' + mc.lbl + '</span>'
-        + '</button>';
+      modeBtns += '<button class="mode-btn' + (act ? ' mode-btn--active' : '') + '" data-hvac="' + mk + '" style="' + st + '">' +
+        '<span class="mode-icon"><ha-icon icon="' + (mc.icon || 'mdi:air-conditioner') + '"></ha-icon></span>' +
+        '<span class="mode-lbl">' + mc.lbl + '</span>' +
+        '</button>';
     }
 
     var comfortTxt = (hvac === 'cool' || hvac === 'heat') ? tr.comfortTemp(curTemp) : (tr.comfort[hvac] || '');
-    var modeChip = isOn ? ('<span class="ac-mode-chip">' + mode.icon + ' ' + mode.lbl + '</span>') : '';
+    var modeChip = isOn ? ('<span class="ac-mode-chip"><ha-icon icon="' + (mode.icon || 'mdi:air-conditioner') + '"></ha-icon> ' + mode.lbl + '</span>') : '';
 
     var pwClass = isOn ? 'pw-on' : 'pw-off';
     var entityState = this._hass && this._hass.states && this._hass.states[room.id] ? this._hass.states[room.id].state : 'unknown';
@@ -1360,143 +1419,138 @@ class AcControllerCardV2 extends HTMLElement {
 
     // ── Không có <link>/<style> ở đây – đã inject ở connectedCallback
     var html = '<div class="card" style="--accent:' + mode.color + ';--glow:' + mode.glow + ';background:' + bgGrad + '">'
-+ '<div class="left">'
+      + '<div class="left">'
 
-+ '<div class="hdr">'
-+ '  <div class="hdr-brand">'
-+ '    <div class="hdr-ico">' + mode.icon + '</div>'
-+ '    <div><div class="hdr-title">' + tr.cardTitle + '</div><div class="hdr-sub">' + tr.cardSub + '</div></div>'
-+ '  </div>'
-+ '  <div class="hdr-icons">'
-+ '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="' + wifiColor + '" stroke-width="1.8" style="filter:' + wifiGlow + ';transition:all 0.4s"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>'
-+ '    <button id="btn-gear" style="background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;line-height:0">'
-+ '      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>'
-+ '    </button>'
-+ '  </div>'
-+ '</div>'
+      + '<div class="hdr">'
+      + '  <div class="hdr-brand">'
+      + '    <ha-icon icon="' + (room.icon || 'mdi:air-conditioner') + '"></ha-icon>'
+      + '    <div><div class="hdr-title">' + tr.cardTitle + '</div><div class="hdr-sub">' + tr.cardSub + '</div></div>'
+      + '  </div>'
+      + '  <div class="hdr-icons">'
+      + '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="' + wifiColor + '" stroke-width="1.8" style="filter:' + wifiGlow + ';transition:all 0.4s"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>'
+      + '    <button id="btn-gear" style="background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;line-height:0">'
+      + '      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>'
+      + '    </button>'
+      + '  </div>'
+      + '</div>'
 
-+ '<div class="greet-row">'
-+ '  <div>'
-+ '    <div class="greet-sub">' + tr.greet() + '</div>'
-+ '    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>'
-+ '  </div>'
-+ '  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">&#127807; ' + (ecoOn ? 'ECO ON' : 'ECO') + '</button>'
-+ '</div>'
+      + '<div class="greet-row">'
+      + '  <div>'
+      + '    <div class="greet-sub">' + tr.greet() + '</div>'
+      + '    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>'
+      + (cfg.main_temp_entity && mainTemp !== null ? '<div class="greet-main-temp"><ha-icon icon="mdi:thermometer"></ha-icon> ' + mainTemp + '°C</div>' : '')
+      + '  </div>'
+      + (cfg.show_eco_welcome !== false ? ('<button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '"><ha-icon icon="mdi:leaf"></ha-icon> ' + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
+      + '</div>'
 
-+ '<div class="dial-wrap">'
-+ '<svg width="220" height="220" viewBox="0 0 220 220" style="overflow:visible">'
-+ '<defs>'
-+ '<filter id="arcGlow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
-+ '<filter id="dotGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
-+ '<linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="100%">'
-+ '<stop offset="0%" stop-color="#3b9eff"/><stop offset="50%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#f59e0b"/>'
-+ '</linearGradient>'
-+ '<radialGradient id="innerGlow" cx="50%" cy="50%" r="50%">'
-+ '<stop offset="0%" stop-color="' + mode.color + '" stop-opacity="0.25"/>'
-+ '<stop offset="100%" stop-color="' + mode.color + '" stop-opacity="0"/>'
-+ '</radialGradient>'
-+ '</defs>'
-+ '<circle cx="110" cy="110" r="72" fill="rgba(180,220,255,0.25)" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>'
-+ '<circle cx="110" cy="110" r="68" fill="url(#innerGlow)"/>'
-+ '<path d="' + arcTrack + '" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" stroke-linecap="round"/>'
-+ ticks
-+ arcFillSvg
-+ dotSvg
-+ '</svg>'
-+ '<div class="dial-center">'
-+ '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
-+ '  <div class="dial-temp">' + Math.round(curTemp) + '<span class="dial-deg">&#176;</span></div>'
-+ '  <div class="dial-feel">' + comfortTxt + '</div>'
-+ '</div>'
-+ '</div>'
+      + '<div class="dial-wrap">'
+      + '<svg width="220" height="220" viewBox="0 0 220 220" style="overflow:visible">'
+      + '<defs>'
+      + '<filter id="arcGlow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+      + '<filter id="dotGlow" x="-150%" y="-150%" width="400%" height="400%"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>'
+      + '<linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#3b9eff"/><stop offset="50%" stop-color="#a78bfa"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>'
+      + '<radialGradient id="innerGlow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="' + mode.color + '" stop-opacity="0.25"/><stop offset="100%" stop-color="' + mode.color + '" stop-opacity="0"/></radialGradient>'
+      + '</defs>'
+      + '<circle cx="110" cy="110" r="72" fill="rgba(180,220,255,0.25)" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>'
+      + '<circle cx="110" cy="110" r="68" fill="url(#innerGlow)"/>'
+      + '<path d="' + arcTrack + '" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" stroke-linecap="round"/>'
+      + ticks
+      + arcFillSvg
+      + dotSvg
+      + '</svg>'
+      + '<div class="dial-center">'
+      + '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
+      + '  <div class="dial-temp">' + Math.round(curTemp) + '<span class="dial-deg">&#176;</span></div>'
+      + '  <div class="dial-feel">' + comfortTxt + '</div>'
+      + '</div>'
 
-+ '<div class="temp-ctrl">'
-+ '  <button class="temp-btn" id="btn-temp-down">&#8722;</button>'
-+ '  <span class="temp-set">' + setTemp + '&#176;C</span>'
-+ '  <button class="temp-btn" id="btn-temp-up">+</button>'
-+ '</div>'
+      + '<div class="temp-ctrl">'
+      + '  <button class="temp-btn" id="btn-temp-down">&#8722;</button>'
+      + '  <span class="temp-set">' + setTemp + '&#176;C</span>'
+      + '  <button class="temp-btn" id="btn-temp-up">+</button>'
+      + '</div>'
 
-+ '<div class="mode-grid">' + modeBtns + '</div>'
+      + '<div class="mode-grid">' + modeBtns + '</div>'
 
-+ '<div class="fan-swing-row">'
-+ '  <div class="fan-card">'
-+ '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
-+ '    <button class="fan-tap" id="btn-fan-cycle">'
-+ '      <span class="fan-ico">' + fanIconSvg + '</span>'
-+ '      <div class="fan-bars">' + fanBarHtml + '</div>'
-+ '    </button>'
-+ '  </div>'
-+ '  <div class="swing-card">'
-+ '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
-+ '    ' + swingBtn
-+ '  </div>'
-+ '</div>'
+      + '<div class="fan-swing-row">'
+      + '  <div class="fan-card">'
+      + '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
+      + '    <button class="fan-tap" id="btn-fan-cycle">'
+      + '      <span class="fan-ico">' + fanIconSvg + '</span>'
+      + '      <div class="fan-bars">' + fanBarHtml + '</div>'
+      + '    </button>'
+      + '  </div>'
+      + '  <div class="swing-card">'
+      + '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
+      + '    ' + swingBtn
+      + '  </div>'
+      + '</div>'
 
-+ '<div class="chips">'
-+ '  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>'
-+ '  <button class="chip chip--a">&#11088; Fav</button>'
-+ '  <button class="chip chip--b">&#10024; Clean</button>'
-+ '</div>'
+      + '<div class="chips">'
+      + '  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>'
+      + '  <button class="chip chip--a">&#11088; Fav</button>'
+      + '  <button class="chip chip--b">&#10024; Clean</button>'
+      + '</div>'
 
-+ '<div class="bottom-row">'
-+ '<button class="power-row" id="btn-power">'
-+ '  <div class="pw-btn ' + pwClass + '">&#9211;</div>'
-+ '  <div style="flex:1;min-width:0">'
-+ '    <div class="pw-sub pw-sub--big">' + pwSub + '</div>'
-+ '  </div>'
-+ '  <span class="pw-arrow">&#8250;</span>'
-+ '</button>'
-+ '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + '" id="btn-timer">'
-+ '  <span class="timer-ico">&#9200;</span>'
-+ '  <span class="timer-lbl">' + tr.timerBtn + '</span>'
-+ '  <span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
-+ '</button>'
-+ '</div>'
+      + '<div class="bottom-row">'
+      + '<button class="power-row" id="btn-power">'
+      + '  <div class="pw-btn ' + pwClass + '">&#9211;</div>'
+      + '  <div style="flex:1;min-width:0">'
+      + '    <div class="pw-sub pw-sub--big">' + pwSub + '</div>'
+      + '  </div>'
+      + '  <span class="pw-arrow">&#8250;</span>'
+      + '</button>'
+      + '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + '" id="btn-timer">'
+      + '  <span class="timer-ico">&#9200;</span>'
+      + '  <span class="timer-lbl">' + tr.timerBtn + '</span>'
+      + '  <span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
+      + '</button>'
+      + '</div>'
 
-+ '</div>'  // end .left
+      + '</div>'  // end .left
 
-+ '<div class="right">'
+      + '<div class="right">'
 
-+ '<div class="room-image">'
-+ '  <img id="room-photo" class="room-img-el" src="' + ROOM_IMAGES[this._activeIdx] + '" alt="room">'
-+ '  <div class="ac-overlay">'
-+ '    <span class="ac-led ' + (isOn ? 'led-on' : 'led-off') + '"></span>'
-+ '    <span class="ac-overlay-txt">' + (isOn ? tr.overlayOn : tr.overlayOff) + '</span>'
-+ modeChip
-+ '  </div>'
-+ '  <div class="img-temp-badge">' + Math.round(curTemp) + '<span>&#176;C</span></div>'
-+ '  <div class="img-room-name">' + room.label + '</div>'
-+ '</div>'
+      + '<div class="room-image">'
+      + '  <img id="room-photo" class="room-img-el" src="' + ROOM_IMAGES[this._activeIdx] + '" alt="room">'
+      + '  <div class="ac-overlay">'
+      + '    <span class="ac-led ' + (isOn ? 'led-on' : 'led-off') + '"></span>'
+      + '    <span class="ac-overlay-txt">' + (isOn ? tr.overlayOn : tr.overlayOff) + '</span>'
+      + modeChip
+      + '  </div>'
+      + '  <div class="img-temp-badge">' + Math.round(curTemp) + '<span>&#176;C</span></div>'
+      + '  <div class="img-room-name">' + room.label + '</div>'
+      + '</div>'
 
-+ '<div class="status-block">'
-+ '  <div class="status-header">'
-+ '    <div>'
-+ '      <div class="st-title">' + tr.statusLabel + '</div>'
-+ '      <div class="' + (isOn ? 'st-on' : 'st-off') + '">' + (isOn ? tr.statusOn : tr.statusOff) + '</div>'
-+ '      <div class="st-sub">' + (isOn ? tr.airGood : tr.pressOn) + '</div>'
-+ '    </div>'
-+ '    <div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>'
-+ '  </div>'
-+ '  <div class="metrics">'
-+ '    <div class="met"><span class="met-ico">&#127777;</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>'
-+ '    <div class="met"><span class="met-ico">&#128167;</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>'
-+ '    <div class="met"><span class="met-ico">&#9889;</span><span class="met-val" id="met-power">' + powerVal + '</span></div>'
-+ '  </div>'
-+ '</div>'
+      + '<div class="status-block">'
+      + '  <div class="status-header">'
+      + '    <div>'
+      + '      <div class="st-title">' + tr.statusLabel + '</div>'
+      + '      <div class="' + (isOn ? 'st-on' : 'st-off') + '">' + (isOn ? tr.statusOn : tr.statusOff) + '</div>'
+      + '      <div class="st-sub">' + (isOn ? tr.airGood : tr.pressOn) + '</div>'
+      + '    </div>'
+      + '    <div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>'
+      + '  </div>'
+      + '  <div class="metrics">'
+      + '    <div class="met"><span class="met-ico">&#127777;</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>'
+      + '    <div class="met"><span class="met-ico">&#128167;</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>'
+      + '    <div class="met"><span class="met-ico">&#9889;</span><span class="met-val" id="met-power">' + powerVal + '</span></div>'
+      + '  </div>'
+      + '</div>'
 
-+ '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
+      + '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
 
-+ '<button class="all-off-btn" id="btn-all-off">'
-+ '  <div class="all-off-ico">&#9211;</div>'
-+ '  <div class="all-off-info">'
-+ '    <div class="all-off-title">' + tr.allOff + '</div>'
-+ '    <div class="all-off-sub">' + tr.allOffSub + '</div>'
-+ '  </div>'
-+ '  <div class="all-off-arr">&#8250;</div>'
-+ '</button>'
+      + '<button class="all-off-btn" id="btn-all-off">'
+      + '  <div class="all-off-ico">&#9211;</div>'
+      + '  <div class="all-off-info">'
+      + '    <div class="all-off-title">' + tr.allOff + '</div>'
+      + '    <div class="all-off-sub">' + tr.allOffSub + '</div>'
+      + '  </div>'
+      + '  <div class="all-off-arr">&#8250;</div>'
+      + '</button>'
 
-+ '</div>'  // end .right
-+ '</div>'; // end .card
+      + '</div>'  // end .right
+      + '</div>'; // end .card
 
     // ── FIX: Chỉ cập nhật phần nội dung, không đụng vào <style> và <link> đã inject
     var container = this.shadowRoot.getElementById('ac-card-root');
@@ -1906,7 +1960,18 @@ class MultiAcCardEditor extends HTMLElement {
   }
 
   setConfig(c) {
+    // Add default show/hide toggles if not present
     this._config = { ...AC_DEFAULT_CONFIG, ...c };
+    if (typeof this._config.show_welcome === 'undefined') this._config.show_welcome = true;
+    if (typeof this._config.show_eco_welcome === 'undefined') this._config.show_eco_welcome = true;
+    if (typeof this._config.show_modes === 'undefined') this._config.show_modes = true;
+    if (typeof this._config.show_fan === 'undefined') this._config.show_fan = true;
+    if (typeof this._config.show_swing === 'undefined') this._config.show_swing = true;
+    if (typeof this._config.show_chips === 'undefined') this._config.show_chips = true;
+    if (typeof this._config.show_timer === 'undefined') this._config.show_timer = true;
+    if (typeof this._config.show_all_off === 'undefined') this._config.show_all_off = true;
+    if (typeof this._config.show_status_block === 'undefined') this._config.show_status_block = true;
+    if (typeof this._config.show_room_tabs === 'undefined') this._config.show_room_tabs = true;
     this._render();
   }
 
@@ -1987,15 +2052,18 @@ class MultiAcCardEditor extends HTMLElement {
       <span class="ci-hash">#</span>
       <input type="text" data-cp-hex="${key}" value="${value.replace('#','')}" maxlength="6" placeholder="rrggbb" class="ci-hex-inp"/>
     </div>
-    <div class="ci-swatches">
-      ${swatches.map(c=>`<div data-cp-dot="${key}" data-color="${c}" class="ci-dot"
-        style="background:${c};outline:${value===c?'2px solid var(--primary-color)':'2px solid transparent'};"></div>`).join('')}
-    </div>
-  </div>` : ''}
-</div>`;
   }
 
   // ── Entity field dùng ha-entity-picker native ─────────────────────────────
+       <div class="ci-swatches">
+         ${swatches.map(c=>`<div class="ci-dot ${value===c?'on':''}" data-cp-swatch="${key}" data-color="${c}" style="background:${c};"></div>`).join('')}
+       </div>
+     </div>
+     ` : ''}
+   </div>`;
+     }
+
+     // ── Entity field dùng ha-entity-picker native ─────────────────────────────
   _entityField(key, label, domain) {
     return `
 <div class="row">
@@ -2018,38 +2086,17 @@ class MultiAcCardEditor extends HTMLElement {
     for (let i = 0; i < roomCount; i++) {
       const ent   = entities[i] || {};
       const defLbl = (t.rooms && t.rooms[i]) || ('Room ' + (i+1));
-      const defIco = (t.roomIcons && t.roomIcons[i]) || '❄';
+      const defIco = (t.roomIcons && t.roomIcons[i]) || 'mdi:air-conditioner';
       roomRows += `
 <div class="ac-row">
-  <div class="ac-row-title">❄ ${t.edRooms.replace(/^❄\s*/,'')} ${i+1} – ${defLbl}</div>
-  <div class="row">
-    <label>Show Room</label>
-    <input type="checkbox" id="inp-room-visible-${i}" ${ent.visible !== false ? 'checked' : ''} />
-  </div>
-  <div class="row">
-    <label>${t.edAcEntity}</label>
-    <ha-entity-picker data-room="${i}" data-domain="climate" allow-custom-entity></ha-entity-picker>
-  </div>
-  <div class="row">
-    <label>${t.edAcName}</label>
-    <input class="txt-inp" type="text" id="inp-room-label-${i}" placeholder="${defLbl}" value="${ent.label||''}"/>
-  </div>
-  <div class="row">
-    <label>${t.edAcIcon}</label>
-    <input class="txt-inp" type="text" id="inp-room-icon-${i}" placeholder="${defIco}" value="${ent.icon||''}"/>
-  </div>
-  <div class="row">
-    <label>Room Temperature Sensor</label>
-    <ha-entity-picker id="inp-room-temp-sensor-${i}" data-domain="sensor" allow-custom-entity></ha-entity-picker>
-  </div>
-  <div class="row">
-    <label>Room Humidity Sensor</label>
-    <ha-entity-picker id="inp-room-humidity-sensor-${i}" data-domain="sensor" allow-custom-entity></ha-entity-picker>
-  </div>
-  <div class="row">
-    <label>Room Image URL</label>
-    <input class="txt-inp" type="text" id="inp-room-image-${i}" placeholder="Image URL" value="${ent.image||''}"/>
-  </div>
+  <div class="ac-row-title"><ha-icon icon="${ent.icon || defIco}"></ha-icon> ${t.edRooms ? t.edRooms.replace(/^❄\s*/,'') : 'Room'} ${i+1} — ${defLbl}</div>
+  <div class="row"><label>Mostrar Ambiente</label><input type="checkbox" id="inp-room-visible-${i}" ${ent.visible !== false ? 'checked' : ''} /></div>
+  <div class="row"><label>${t.edAcEntity || 'Entidade Climate'}</label><ha-entity-picker data-room="${i}" data-domain="climate" allow-custom-entity></ha-entity-picker></div>
+  <div class="row"><label>${t.edAcName || 'Nome'}</label><input class="txt-inp" type="text" id="inp-room-label-${i}" placeholder="${defLbl}" value="${ent.label||''}"/></div>
+  <div class="row"><label>${t.edAcIcon || 'Ícone'} (MDI)</label><input class="txt-inp" type="text" id="inp-room-icon-${i}" placeholder="${defIco}" value="${ent.icon||''}"/><a href="https://pictogrammers.com/library/mdi/" target="_blank" style="font-size:11px;color:var(--primary-color);text-decoration:underline;">Lista de Ícones MDI</a></div>
+  <div class="row"><label>Sensor de Temperatura do Ambiente</label><ha-entity-picker id="inp-room-temp-sensor-${i}" data-room="${i}" data-type="temp_sensor" data-domain="sensor" allow-custom-entity></ha-entity-picker></div>
+  <div class="row"><label>Sensor de Humidade do Ambiente</label><ha-entity-picker id="inp-room-humidity-sensor-${i}" data-room="${i}" data-type="humidity_sensor" data-domain="sensor" allow-custom-entity></ha-entity-picker></div>
+  <div class="row"><label>Imagem de Fundo do Ambiente (URL)</label><input class="txt-inp" type="text" id="inp-room-image-${i}" placeholder="URL da Imagem" value="${ent.image||''}"/></div>
 </div>`;
     }
 
@@ -2057,115 +2104,71 @@ class MultiAcCardEditor extends HTMLElement {
 <style>
   :host { display:block; font-family:var(--primary-font-family,'Roboto',sans-serif); }
   .editor { background:var(--card-background-color,#fff); color:var(--primary-text-color); }
-  .credit { display:flex;align-items:center;gap:8px;padding:12px 16px 8px;font-size:12px;
-            color:var(--primary-color);font-weight:500;border-bottom:1px solid var(--divider-color); }
-  /* accordion */
+  .credit { display:flex;align-items:center;gap:8px;padding:12px 16px 8px;font-size:12px;color:var(--primary-color);font-weight:500;border-bottom:1px solid var(--divider-color); }
   .acc-wrap { border-bottom:1px solid var(--divider-color); }
-  .acc-head { display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;
-              user-select:none;font-size:14px;font-weight:500;color:var(--primary-text-color);
-              background:var(--secondary-background-color); }
+  .acc-head { display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none;font-size:14px;font-weight:500;color:var(--primary-text-color);background:var(--secondary-background-color); }
   .acc-head:hover { filter:brightness(.96); }
   .acc-head ha-icon { color:var(--secondary-text-color);--mdi-icon-size:18px; }
   .acc-arrow { margin-left:auto;font-size:14px;color:var(--secondary-text-color); }
-  .acc-body { padding:12px 14px;border-top:1px solid var(--divider-color);
-              background:var(--card-background-color,#fff); }
-  /* fields */
+  .acc-body { padding:12px 14px;border-top:1px solid var(--divider-color);background:var(--card-background-color,#fff); }
   .row { display:flex;flex-direction:column;margin-bottom:12px; }
   .row:last-child { margin-bottom:0; }
   .row label { font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;font-weight:600; }
   ha-entity-picker { display:block;width:100%; }
-  /* language */
   .lang-grid { display:flex;flex-wrap:wrap;gap:6px; }
-  .lang-btn { display:flex;align-items:center;gap:5px;padding:7px 10px;border-radius:8px;
-              border:1.5px solid var(--divider-color);background:var(--secondary-background-color);
-              cursor:pointer;font-size:12px;color:var(--primary-text-color);transition:all .2s; }
-  .lang-btn.on { border-color:var(--primary-color);background:rgba(3,169,244,.12);
-                 color:var(--primary-color);font-weight:700; }
-  /* AC room rows */
-  .ac-row { background:var(--secondary-background-color);border:1px solid var(--divider-color);
-            border-radius:10px;padding:12px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px; }
+  .lang-btn { display:flex;align-items:center;gap:5px;padding:7px 10px;border-radius:8px;border:1.5px solid var(--divider-color);background:var(--secondary-background-color);cursor:pointer;font-size:12px;color:var(--primary-text-color);transition:all .2s; }
+  .lang-btn.on { border-color:var(--primary-color);background:rgba(3,169,244,.12);color:var(--primary-color);font-weight:700; }
+  .ac-row { background:var(--secondary-background-color);border:1px solid var(--divider-color);border-radius:10px;padding:12px;margin-bottom:10px;display:flex;flex-direction:column;gap:8px; }
   .ac-row:last-child { margin-bottom:0; }
-  .ac-row-title { font-size:12px;font-weight:700;color:var(--primary-color);margin-bottom:2px; }
-  /* text inputs */
-  .txt-inp { background:var(--input-fill-color,rgba(0,0,0,.04));border:1px solid var(--divider-color);
-             border-radius:8px;padding:8px 12px;font-size:13px;color:var(--primary-text-color);
-             width:100%;box-sizing:border-box; }
+  .ac-row-title { font-size:12px;font-weight:700;color:var(--primary-color);margin-bottom:2px;display:flex;align-items:center;gap:6px; }
+  .txt-inp { background:var(--input-fill-color,rgba(0,0,0,.04));border:1px solid var(--divider-color);border-radius:8px;padding:8px 12px;font-size:13px;color:var(--primary-text-color);width:100%;box-sizing:border-box; }
   .txt-inp:focus { outline:none;border-color:var(--primary-color); }
-  /* bg presets */
   .bg-grid { display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:10px; }
-  .bgs { border-radius:7px;height:40px;cursor:pointer;border:2px solid transparent;
-         display:flex;align-items:flex-end;padding:3px 5px;font-size:9px;font-family:monospace;
-         color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(0,0,0,.9);transition:border-color .15s;
-         white-space:nowrap;overflow:hidden; }
+  .bgs { border-radius:7px;height:40px;cursor:pointer;border:2px solid transparent;display:flex;align-items:flex-end;padding:3px 5px;font-size:9px;font-family:monospace;color:rgba(255,255,255,.85);text-shadow:0 1px 3px rgba(0,0,0,.9);transition:border-color .15s;white-space:nowrap;overflow:hidden; }
   .bgs.on { border-color:var(--primary-color); }
-  /* color picker */
   .ci { border:1px solid var(--divider-color);border-radius:8px;overflow:hidden;margin-bottom:8px; }
-  .ci:last-child { margin-bottom:0; }
-  .ci-hdr { display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;
-            background:var(--card-background-color,#fff); }
+  .ci-hdr { display:flex;align-items:center;gap:10px;padding:10px 12px;cursor:pointer;background:var(--card-background-color,#fff); }
   .ci-swatch { width:24px;height:24px;border-radius:4px;border:1px solid rgba(0,0,0,.1);flex-shrink:0; }
   .ci-label { font-size:13px;flex:1;color:var(--primary-text-color); }
-  .ci-code { font-size:11px;color:var(--secondary-text-color);font-family:monospace;
-             background:var(--secondary-background-color);padding:2px 6px;border-radius:3px; }
-  .ci-chv { color:var(--secondary-text-color);flex-shrink:0; }
-  .ci-body { padding:12px 14px;background:var(--secondary-background-color);
-             border-top:1px solid var(--divider-color);display:flex;flex-direction:column;gap:10px; }
-  .ci-native { width:100%;height:44px;border:1px solid var(--divider-color);border-radius:6px;
-               cursor:pointer;padding:2px;background:transparent; }
-  .ci-hex-wrap { display:flex;align-items:center;gap:6px;border:1px solid var(--divider-color);
-                 border-radius:4px;padding:6px 10px;background:var(--card-background-color,#fff); }
+  .ci-code { font-size:11px;color:var(--secondary-text-color);font-family:monospace;background:var(--secondary-background-color);padding:2px 6px;border-radius:3px; }
+  .ci-body { padding:12px 14px;background:var(--secondary-background-color);border-top:1px solid var(--divider-color);display:flex;flex-direction:column;gap:10px; }
+  .ci-native { width:100%;height:44px;border:1px solid var(--divider-color);border-radius:6px;cursor:pointer;padding:2px;background:transparent; }
+  .ci-hex-wrap { display:flex;align-items:center;gap:6px;border:1px solid var(--divider-color);border-radius:4px;padding:6px 10px;background:var(--card-background-color,#fff); }
   .ci-hash { color:var(--secondary-text-color);font-size:12px;font-family:monospace; }
-  .ci-hex-inp { border:none;outline:none;width:100%;font-size:14px;
-                color:var(--primary-text-color);font-family:monospace;background:transparent; }
+  .ci-hex-inp { border:none;outline:none;width:100%;font-size:14px;color:var(--primary-text-color);font-family:monospace;background:transparent; }
   .ci-swatches { display:flex;gap:6px;flex-wrap:wrap; }
-  .ci-dot { width:24px;height:24px;border-radius:50%;cursor:pointer;
-            transition:transform .1s;outline-offset:2px; }
-  .ci-dot:hover { transform:scale(1.15); }
+  .ci-dot { width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color .15s; }
+  .ci-dot.on { border-color:var(--primary-text-color); }
 </style>
 <div class="editor">
-  <div class="credit">❄️ <strong>Multi Air Conditioner Card</strong>
-    <span style="color:var(--secondary-text-color);font-weight:400;">v1.1 Designed by @doanlong1412 from 🇻🇳 Vietnam</span>
-  </div>
-
   <!-- 0. Owner name -->
-  <div class="row" style="margin-bottom:4px;">
-    <label style="font-size:12px;font-weight:600;color:var(--secondary-text-color);letter-spacing:.3px;">${t.edOwnerName}</label>
-    <input id="inp-owner-name" type="text" placeholder="Smart Home"
-      value="${this._config.owner_name || ''}"
-      style="width:100%;margin-top:6px;padding:8px 10px;border-radius:8px;
-        border:1px solid var(--divider-color);background:var(--card-background-color,#fff);
-        color:var(--primary-text-color);font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;">
-  </div>
-
-  <!-- 1. Language -->
   <div class="acc-wrap">
-    <div class="acc-head" id="head-lang">
-      <ha-icon icon="mdi:translate"></ha-icon> ${t.edLang}
-      <span class="acc-arrow" id="arrow-lang">${this._open.lang?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-lang" style="display:${this._open.lang?'block':'none'}">
-      <div class="lang-grid">
-        ${Object.entries(AC_TRANSLATIONS).map(([code,tr])=>`
-          <div class="lang-btn ${lang===code?'on':''}" data-lang="${code}">
-            <img src="https://flagcdn.com/20x15/${tr.flag}.png" width="20" height="15" alt="${tr.lang}" style="border-radius:2px;flex-shrink:0;display:block;">
-            ${tr.lang}
-          </div>`).join('')}
+    <div class="acc-body" style="display:block;">
+      <div class="row">
+        <label style="font-size:12px;font-weight:600;color:var(--secondary-text-color);letter-spacing:.3px;">${t.edOwnerName || 'Nome do Proprietário'}</label>
+        <input id="inp-owner-name" class="txt-inp" type="text" placeholder="Smart Home" value="${this._config.owner_name || ''}"/>
       </div>
     </div>
   </div>
 
-  <!-- 2. Số phòng -->
+  <!-- 1. Language -->
   <div class="acc-wrap">
-    <div class="acc-head" id="head-roomcount">
-      <ha-icon icon="mdi:home-group"></ha-icon> ${t.edRoomsHeader(roomCount)}
-      <span class="acc-arrow" id="arrow-roomcount">${this._open.roomcount?'▾':'▸'}</span>
+    <div class="acc-head" id="head-lang"><ha-icon icon="mdi:translate"></ha-icon> ${t.edLang || 'Idioma'}<span class="acc-arrow" id="arrow-lang">${this._open.lang?'▾':'▸'}</span></div>
+    <div class="acc-body" id="body-lang" style="display:${this._open.lang?'block':'none'}">
+      <div class="lang-grid">
+        ${Object.entries(AC_TRANSLATIONS).map(([code,tr])=>`<div class="lang-btn ${lang===code?'on':''}" data-lang="${code}"><img src="https://flagcdn.com/20x15/${tr.flag}.png" width="20" height="15" alt="${tr.lang}" style="border-radius:2px;flex-shrink:0;display:block;"> ${tr.lang}</div>`).join('')}
+      </div>
     </div>
+  </div>
+
+  <!-- 2. Room count -->
+  <div class="acc-wrap">
+    <div class="acc-head" id="head-roomcount"><ha-icon icon="mdi:home-group"></ha-icon> ${t.edRoomsHeader ? t.edRoomsHeader(roomCount) : 'Ambientes (' + roomCount + ')'}<span class="acc-arrow" id="arrow-roomcount">${this._open.roomcount?'▾':'▸'}</span></div>
     <div class="acc-body" id="body-roomcount" style="display:${this._open.roomcount?'block':'none'}">
       <div class="row">
-        <label style="margin-bottom:8px;">${t.edRoomCountLabel(roomCount)}</label>
+        <label>${t.edRoomCountLabel ? t.edRoomCountLabel(roomCount) : roomCount + ' ambientes'}</label>
         <div style="display:flex;align-items:center;gap:12px;">
-          <input type="range" id="inp-room-count" min="1" max="8" step="1" value="${roomCount}"
-            style="flex:1;height:4px;cursor:pointer;accent-color:var(--primary-color);">
+          <input type="range" id="inp-room-count" min="1" max="8" step="1" value="${roomCount}" style="flex:1;height:4px;cursor:pointer;accent-color:var(--primary-color);">
           <span id="room-count-display" style="min-width:24px;font-weight:700;font-size:16px;color:var(--primary-color);">${roomCount}</span>
         </div>
         <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--secondary-text-color);margin-top:4px;">
@@ -2177,54 +2180,52 @@ class MultiAcCardEditor extends HTMLElement {
 
   <!-- 3. Rooms -->
   <div class="acc-wrap">
-    <div class="acc-head" id="head-rooms">
-      <ha-icon icon="mdi:air-conditioner"></ha-icon> ${t.edRoomsHeader(roomCount)}
-      <span class="acc-arrow" id="arrow-rooms">${this._open.rooms?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-rooms" style="display:${this._open.rooms?'block':'none'}">
-      ${roomRows}
+    <div class="acc-head" id="head-rooms"><ha-icon icon="mdi:air-conditioner"></ha-icon> ${t.edRoomsHeader ? t.edRoomsHeader(roomCount) : 'Ambientes'}<span class="acc-arrow" id="arrow-rooms">${this._open.rooms?'▾':'▸'}</span></div>
+    <div class="acc-body" id="body-rooms" style="display:${this._open.rooms?'block':'none'}">${roomRows}</div>
+  </div>
+
+  <!-- 4. Show/hide toggles -->
+  <div class="acc-wrap">
+    <div class="acc-head" id="head-visibility"><ha-icon icon="mdi:eye-settings"></ha-icon> Mostrar/Ocultar Seções<span class="acc-arrow" id="arrow-visibility">${this._open.visibility?'▾':'▸'}</span></div>
+    <div class="acc-body" id="body-visibility" style="display:${this._open.visibility?'block':'none'}">
+      <div class="row"><label><ha-icon icon="mdi:hand-wave"></ha-icon> Bem-vindo</label><input type="checkbox" id="inp-show-welcome" ${cfg.show_welcome !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:leaf"></ha-icon> ECO no Bem-vindo</label><input type="checkbox" id="inp-show-eco-welcome" ${cfg.show_eco_welcome !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:format-list-bulleted-type"></ha-icon> Modos de Clima</label><input type="checkbox" id="inp-show-modes" ${cfg.show_modes !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:fan"></ha-icon> Ventilador</label><input type="checkbox" id="inp-show-fan" ${cfg.show_fan !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:swap-vertical"></ha-icon> Direção do Ar</label><input type="checkbox" id="inp-show-swing" ${cfg.show_swing !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:star"></ha-icon> Chips (ECO, Favorito, Limpar, Poeira Fina)</label><input type="checkbox" id="inp-show-chips" ${cfg.show_chips !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:timer"></ha-icon> Temporizador</label><input type="checkbox" id="inp-show-timer" ${cfg.show_timer !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:power"></ha-icon> Botão Desligar Tudo</label><input type="checkbox" id="inp-show-all-off" ${cfg.show_all_off !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:information-outline"></ha-icon> Bloco de Status</label><input type="checkbox" id="inp-show-status-block" ${cfg.show_status_block !== false ? 'checked' : ''}/></div>
+      <div class="row"><label><ha-icon icon="mdi:tab"></ha-icon> Abas de Ambientes</label><input type="checkbox" id="inp-show-room-tabs" ${cfg.show_room_tabs !== false ? 'checked' : ''}/></div>
     </div>
   </div>
 
-  <!-- 3. Sensors -->
+  <!-- 5. Sensors -->
   <div class="acc-wrap">
-    <div class="acc-head" id="head-sensors">
-      <ha-icon icon="mdi:broadcast"></ha-icon> ${t.edSensors}
-      <span class="acc-arrow" id="arrow-sensors">${this._open.sensors?'▾':'▸'}</span>
-    </div>
+    <div class="acc-head" id="head-sensors"><ha-icon icon="mdi:broadcast"></ha-icon> ${t.edSensors || 'Sensores'}<span class="acc-arrow" id="arrow-sensors">${this._open.sensors?'▾':'▸'}</span></div>
     <div class="acc-body" id="body-sensors" style="display:${this._open.sensors?'block':'none'}">
-      ${this._entityField('pm25_entity',           t.edPm25,        'sensor')}
-      ${this._entityField('outdoor_temp_entity',   t.edOutdoorTemp, 'sensor')}
-      ${this._entityField('humidity_entity',       t.edHumidity,    'sensor')}
-      ${this._entityField('power_entity',          t.edPower,       'sensor')}
-      <div class="row">
-        <label>Main/Average Temperature Sensor (for greeting area)</label>
-        <ha-entity-picker data-key="main_temp_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
-      </div>
+      ${this._entityField('pm25_entity', t.edPm25 || 'PM2.5', 'sensor')}
+      ${this._entityField('outdoor_temp_entity', t.edOutdoorTemp || 'Temperatura Externa', 'sensor')}
+      ${this._entityField('humidity_entity', t.edHumidity || 'Humidade', 'sensor')}
+      ${this._entityField('power_entity', t.edPower || 'Potência', 'sensor')}
+      <div class="row"><label>Sensor de Temperatura Principal (área de saudação)</label><ha-entity-picker data-key="main_temp_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker></div>
     </div>
   </div>
 
-  <!-- 4. Background -->
+  <!-- 6. Background -->
   <div class="acc-wrap">
-    <div class="acc-head" id="head-bg">
-      <ha-icon icon="mdi:palette"></ha-icon> ${t.edBg}
-      <span class="acc-arrow" id="arrow-bg">${this._open.bg?'▾':'▸'}</span>
-    </div>
+    <div class="acc-head" id="head-bg"><ha-icon icon="mdi:palette"></ha-icon> ${t.edBg || 'Fundo'}<span class="acc-arrow" id="arrow-bg">${this._open.bg?'▾':'▸'}</span></div>
     <div class="acc-body" id="body-bg" style="display:${this._open.bg?'block':'none'}">
-      <div style="font-size:11px;font-weight:700;color:var(--secondary-text-color);margin-bottom:8px;letter-spacing:.4px;">${t.bgPresets}</div>
+      <div style="font-size:11px;font-weight:700;color:var(--secondary-text-color);margin-bottom:8px;letter-spacing:.4px;">${t.bgPresets || 'Predefinições'}</div>
       <div class="bg-grid">
         ${AC_BG_PRESETS.map(p => {
           const c1 = p.c1||'#888', c2 = p.c2||'#444';
           const isC = p.id === 'custom';
-          return `<div class="bgs ${bgP===p.id?'on':''}" data-bg="${p.id}"
-            style="${isC?'background:linear-gradient(135deg,#e0e0e0,#bdbdbd);color:#555;text-shadow:none;':'background:linear-gradient(135deg,'+c1+'bb 0%,'+c2+'44 100%);'}">${p.label}</div>`;
+          return `<div class="bgs ${bgP===p.id?'on':''}" data-bg="${p.id}" style="${isC?'background:linear-gradient(135deg,#e0e0e0,#bdbdbd);color:#555;text-shadow:none;':'background:linear-gradient(135deg,'+c1+'bb 0%,'+c2+'44 100%);'}">${p.label}</div>`;
         }).join('')}
       </div>
-      ${bgP === 'custom' ? `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        ${this._colorRow('bg_color1', t.color1)}
-        ${this._colorRow('bg_color2', t.color2)}
-      </div>` : ''}
+      ${bgP === 'custom' ? `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">${this._colorRow('bg_color1', t.color1||'Cor 1')}${this._colorRow('bg_color2', t.color2||'Cor 2')}</div>` : ''}
     </div>
   </div>
 </div>`;
