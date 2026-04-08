@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Multi AC Card — Local Test</title>
+  <style>body{background:#111;color:#fff;font-family:sans-serif;padding:20px}#stage{max-width:960px}</style>
+</head>
+<body>
+  <h2>Multi AC Card test</h2>
+
+  <!-- Load the card script (local copy) -->
+  <script src="multi-air-conditioner-card.js"></script>
+
+  <div id="stage"></div>
+
+  <script>
+    // Minimal fake hass with sample entities and callService stub
+    const fakeHass = {
+      states: {
+        'climate.living_room': { state: 'cool', attributes: { current_temperature: 24, temperature: 25, fan_mode: 'auto', swing_mode: 'off', preset_mode: 'none' } },
+        'sensor.living_temp':   { state: '24.1', attributes: {} },
+        'sensor.living_hum':    { state: '45', attributes: {} },
+        'sensor.living_power':  { state: '0.85', attributes: {} },
+        'sensor.avg_temp':      { state: '24.3', attributes: {} },
+      },
+      callService(domain, service, data) {
+        console.log('callService', domain, service, data);
+      }
+    };
+
+    // Minimal stubs used by the editor/card
+    if (!customElements.get('ha-icon')) {
+      customElements.define('ha-icon', class extends HTMLElement {});
+    }
+    if (!customElements.get('ha-entity-picker')) {
+      customElements.define('ha-entity-picker', class extends HTMLElement {
+        constructor(){ super(); }
+        set hass(h){ /* ignore in test */ }
+      });
+    }
+
+    // Create the card and set config
+    const card = document.createElement('multi-air-conditioner-card');
+    card.setConfig({
+      language: 'en',
+      room_count: 1,
+      entities: [
+        { entity_id: 'climate.living_room', temp_entity: 'sensor.living_temp', humidity_entity: 'sensor.living_hum', power_entity: 'sensor.living_power' }
+      ],
+      avg_temp_entity: 'sensor.avg_temp',
+      features: {
+        greet: true, avg_temp: true, eco: true,
+        modes: { cool: true, heat: true, dry: true, fan_only: true },
+        fan: true, swing: true,
+        pm25: false, temperature: true, humidity: true, power: true
+      }
+    });
+
+    // Provide hass to the card
+    try { card.hass = fakeHass; } catch(e) { card._hass = fakeHass; }
+
+    document.getElementById('stage').appendChild(card);
+
+    // Force an initial render if card provides method
+    if (typeof card._renderFull === 'function') setTimeout(()=>card._renderFull(), 50);
+    console.log('Card appended. Check console for errors.');
+  </script>
+</body>
+</html>
