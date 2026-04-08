@@ -887,13 +887,39 @@ class AcControllerCardV2 extends HTMLElement {
 + ) : '')
 + '</div>'
  
- + (cfg.features && cfg.features.chips ? (
- +  '  <div class="chips">' +
- +    (cfg.features.chips.eco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>') : '') +
- +    (cfg.features.chips.fav ? ('  <button class="chip chip--a">&#11088; Fav</button>') : '') +
- +    (cfg.features.chips.clean ? ('  <button class="chip chip--b">&#10024; Clean</button>') : '') +
- +  '</div>'
- +) : '')
+  + '<div class="dial-controls">'
+  + '  <div class="temp-controls">'
+  + '    <button id="btn-temp-down" class="temp-btn">-</button>'
+  + '    <div class="temp-display">' + Math.round(curTemp) + '&#176;C</div>'
+  + '    <button id="btn-temp-up" class="temp-btn">+</button>'
+  + '  </div>'
+  + '  <div class="mode-grid">' + modeBtns + '</div>'
+  + ((cfg.features && (cfg.features.fan || cfg.features.swing)) ? (
+  +   '  <div class="fan-swing-row">'
+  +   + (cfg.features && cfg.features.fan ? (
+  +     '    <div class="fan-card">'
+  +     + '      <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
+  +     + '      <button class="fan-tap" id="btn-fan-cycle">'
+  +     + '        <span class="fan-ico">' + fanIconSvg + '</span>'
+  +     + '        <div class="fan-bars">' + fanBarHtml + '</div>'
+  +     + '      </button>'
+  +     + '    </div>'
+  +   ) : '')
+  +   + (cfg.features && cfg.features.swing ? (
+  +     '    <div class="swing-card">'
+  +     + '      <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
+  +     + swingBtn
+  +     + '    </div>'
+  +   ) : '')
+  +   + '  </div>'
+  + ) : '')
+  + ((cfg.features && cfg.features.chips) ? (
+  +  '  <div class="chips">'
+  +    + (cfg.features.chips.eco ? ('    <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>') : '')
+  +    + (cfg.features.chips.fav ? ('    <button class="chip chip--a">&#11088; Fav</button>') : '')
+  +    + (cfg.features.chips.clean ? ('    <button class="chip chip--b">&#10024; Clean</button>') : '')
+  +  + '  </div>'
+  + ) : '')
 
 + '<div class="bottom-row">'
 + '<button class="power-row" id="btn-power">'
