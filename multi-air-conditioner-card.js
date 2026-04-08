@@ -62,44 +62,7 @@ const AC_TRANSLATIONS = {
     edRooms: '❄ Điều hòa',
     edSensors: '📡 Cảm biến môi trường',
     edColors: 'Màu sắc',
-    edBg: 'Màu nền',
-    edAcEntity: '❄ Entity điều hòa (climate.*)',
-    edAcName: '🏷 Tên hiển thị',
-    edAcIcon: '🎨 Icon (emoji)',
-    edPm25: '🌫 Bụi mịn PM2.5',
-    edOutdoorTemp: '🌡 Nhiệt độ ngoài trời',
-    edHumidity: '💧 Độ ẩm ngoài trời',
-    edPower: '⚡ Tiêu thụ điện (kW)',
-    rooms: ['Phòng khách','Phòng ngủ','Phòng ăn','Văn phòng'],
-    roomIcons: ['🛋','🛌','🍳','💼'],
-  },
-  en: {
-    lang: 'English', flag: 'gb',
-    cardTitle: 'Air Conditioning',
-    cardSub:   'Smart Home',
-    greet: function() {
-      var h = new Date().getHours();
-      if (h>=6  && h<11) return 'Good morning,';
-      if (h>=11 && h<13) return 'Good noon,';
-      if (h>=13 && h<18) return 'Good afternoon,';
-      if (h>=18 && h<21) return 'Good evening,';
-      return 'Good night,';
-    },
-    tempLabel: 'TEMPERATURE',
-    selectRoom: 'SELECT ROOM',
-    statusLabel: 'STATUS',
-    statusOn: 'RUNNING', statusOff: 'OFF',
-    airGood: 'Air quality is good', pressOn: 'Press power to turn on',
-    dustLabel: 'Fine dust',
-    fanLabel: 'Fan speed', swingLabel: 'Airflow',
-    allOff: 'Turn all off', allOffSub: 'Tap to turn off all rooms',
-    tapOff: 'Tap to turn off', tapOn: 'Tap to turn on',
-    confirmOff: '⚠ Turn all off?', confirmSub: function(n) { return 'Will turn off ' + n + ' AC units at once'; },
-    cancel: 'Cancel', doOff: '⏻ Turn all off',
-    overlayOn: 'ON', overlayOff: 'OFF',
-    modes: { cool:'Cool', heat:'Heat', dry:'Dry', fan_only:'Fan', off:'Off' },
-    fans:   ['Auto','Low','Medium','High'],
-    swings: ['Fixed','Up/Down','Left/Right','Both'],
+    edColors: 'Színek',
     comfort: { dry:'Dry and comfortable', fan_only:'Light fresh breeze', off:'Currently off' },
     comfortTemp: function(t) {
       t = Math.round(t);
@@ -501,15 +464,6 @@ const AC_TRANSLATIONS = {
          + swingBtn
          + '  </div>'
        ) : '')
-       + '</div>'
-     ) : '')
-     '</div>'
-
-     (cfg.features && cfg.features.chips ? (
-       '<div class="chips">'
-       + (cfg.features.chips.eco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>') : '')
-       + (cfg.features.chips.fav ? ('  <button class="chip chip--a">&#11088; Fav</button>') : '')
-       + (cfg.features.chips.clean ? ('  <button class="chip chip--b">&#10024; Clean</button>') : '')
        + '</div>'
      ) : '')
     comfort: { dry:'Suchý vzduch', fan_only:'Lehký svěží vánek', off:'Momentálně vypnuto' },
