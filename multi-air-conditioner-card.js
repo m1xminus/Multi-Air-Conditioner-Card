@@ -715,6 +715,10 @@ const AC_DEFAULT_CONFIG = {
     show_metrics_power: true,
     show_modes_text: true,
     show_modes_icon: true,
+    show_power_text: true,
+    show_power_icon: true,
+    show_timer_text: true,
+    show_timer_icon: true,
   },
   icons: {
     eco: '',
@@ -1244,6 +1248,10 @@ class AcControllerCardV2 extends HTMLElement {
     var showMetricPower = features.show_metrics_power !== false;
     var showModesText = features.show_modes_text !== false;
     var showModesIcon = features.show_modes_icon !== false;
+    var showPowerText = features.show_power_text !== false;
+    var showPowerIcon = features.show_power_icon !== false;
+    var showTimerText = features.show_timer_text !== false;
+    var showTimerIcon = features.show_timer_icon !== false;
     var ecoIcon = icons.eco || '';
     var favIcon = icons.fav || '';
     var cleanIcon = icons.clean || '';
@@ -1597,16 +1605,16 @@ class AcControllerCardV2 extends HTMLElement {
  + '</div>'
 
  + '<div class="bottom-row">'
- + '<button class="power-row" id="btn-power">'
-+ '  <div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>'
++ '<button class="power-row" id="btn-power">'
++  (showPowerIcon ? ('  <div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>') : ('  <div class="pw-btn ' + pwClass + '"></div>'))
 + '  <div style="flex:1;min-width:0">'
-+ '    <div class="pw-sub pw-sub--big">' + pwSub + '</div>'
++ '    <div class="pw-sub pw-sub--big">' + (showPowerText ? pwSub : '') + '</div>'
 + '  </div>'
 + '  <span class="pw-arrow">&#8250;</span>'
 + '</button>'
 + '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + '" id="btn-timer">'
-+ '  <span class="timer-ico">' + (timerIcon ? ('<ha-icon icon="' + timerIcon + '"></ha-icon>') : '') + '</span>'
-+ '  <span class="timer-lbl">' + tr.timerBtn + '</span>'
++  (showTimerIcon ? ('  <span class="timer-ico">' + (timerIcon ? ('<ha-icon icon="' + timerIcon + '"></ha-icon>') : '') + '</span>') : '')
++  (showTimerText ? ('  <span class="timer-lbl">' + tr.timerBtn + '</span>') : '')
 + '  <span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
 + '</button>'
 + '</div>'
@@ -2395,6 +2403,12 @@ class MultiAcCardEditor extends HTMLElement {
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-modes-icon" ${ (this._config.features && this._config.features.show_modes_icon !== false) ? 'checked' : '' } /> Show modes icons</label>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-power-text" ${ (this._config.features && this._config.features.show_power_text !== false) ? 'checked' : '' } /> Show power text</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-power-icon" ${ (this._config.features && this._config.features.show_power_icon !== false) ? 'checked' : '' } /> Show power icon</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-timer-text" ${ (this._config.features && this._config.features.show_timer_text !== false) ? 'checked' : '' } /> Show timer text</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-timer-icon" ${ (this._config.features && this._config.features.show_timer_icon !== false) ? 'checked' : '' } /> Show timer icon</label>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-temp" disabled /> Temp (N/A)</label>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
@@ -2814,6 +2828,14 @@ class MultiAcCardEditor extends HTMLElement {
     if (elModesText) elModesText.addEventListener('change', () => setFeature('show_modes_text', elModesText.checked));
     const elModesIcon = sr.getElementById('feat-show-modes-icon');
     if (elModesIcon) elModesIcon.addEventListener('change', () => setFeature('show_modes_icon', elModesIcon.checked));
+    const elPowerText = sr.getElementById('feat-show-power-text');
+    if (elPowerText) elPowerText.addEventListener('change', () => setFeature('show_power_text', elPowerText.checked));
+    const elPowerIcon = sr.getElementById('feat-show-power-icon');
+    if (elPowerIcon) elPowerIcon.addEventListener('change', () => setFeature('show_power_icon', elPowerIcon.checked));
+    const elTimerText = sr.getElementById('feat-show-timer-text');
+    if (elTimerText) elTimerText.addEventListener('change', () => setFeature('show_timer_text', elTimerText.checked));
+    const elTimerIcon = sr.getElementById('feat-show-timer-icon');
+    if (elTimerIcon) elTimerIcon.addEventListener('change', () => setFeature('show_timer_icon', elTimerIcon.checked));
     // Icons inputs
     const iconMapping = [
       ['eco','inp-icon-eco'],['fav','inp-icon-fav'],['clean','inp-icon-clean'],['power','inp-icon-power'],['timer','inp-icon-timer'],['all_off','inp-icon-alloff'],
