@@ -719,6 +719,7 @@ const AC_DEFAULT_CONFIG = {
     show_power_icon: true,
     show_timer_text: true,
     show_timer_icon: true,
+    align_power_timer: false,
   },
   icons: {
     eco: '',
@@ -848,6 +849,14 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .temp-btn:active{transform:scale(0.88)}
 .temp-set{min-width:100px;text-align:center;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85)}
   .mode-grid{display:flex;gap:8px;width:220px;margin:8px auto 6px;justify-content:center;flex-wrap:wrap}
+  /* when align_power_timer is enabled we place power left and timer right of modes */
+  .mode-with-side{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px auto 6px}
+  .mode-with-side .mode-grid{margin:0}
+  .timer-compact{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.18);cursor:pointer}
+  .timer-compact .timer-ico{display:flex}
+  .timer-compact .timer-lbl{display:none}
+  .power-row.power-inline{padding:6px 8px;border-radius:12px}
+  .power-row.power-inline .pw-sub{display:none}
 .mode-btn{background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
   padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;
   cursor:pointer;outline:none;color:rgba(255,255,255,0.75);font-size:8px;font-weight:600;
@@ -1252,6 +1261,7 @@ class AcControllerCardV2 extends HTMLElement {
     var showPowerIcon = features.show_power_icon !== false;
     var showTimerText = features.show_timer_text !== false;
     var showTimerIcon = features.show_timer_icon !== false;
+    var showAlignPowerTimer = features.align_power_timer === true;
     var ecoIcon = icons.eco || '';
     var favIcon = icons.fav || '';
     var cleanIcon = icons.clean || '';
@@ -1582,7 +1592,21 @@ class AcControllerCardV2 extends HTMLElement {
 + '  <button class="temp-btn" id="btn-temp-up">+</button>'
 + '</div>'
 
- + '<div class="mode-grid">' + modeBtns + '</div>'
+ + (showAlignPowerTimer ? (
+     '<div class="mode-with-side">'
+       + (showPowerIcon ? ('<button class="power-row power-inline" id="btn-power">'
+           + '<div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>'
+           + (showPowerText ? ('<div style="flex:1;min-width:0"><div class="pw-sub pw-sub--big">' + pwSub + '</div></div>') : '')
+           + '<span class="pw-arrow">&#8250;</span>'
+         + '</button>') : ('<button class="power-row power-inline" id="btn-power"><div class="pw-btn ' + pwClass + '"></div></button>'))
+       + '<div class="mode-grid">' + modeBtns + '</div>'
+       + (showTimerIcon ? ('<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + ' timer-compact" id="btn-timer">'
+           + (timerIcon ? ('<span class="timer-ico"><ha-icon icon="' + timerIcon + '"></ha-icon></span>') : '')
+           + (showTimerText ? ('<span class="timer-lbl">' + tr.timerBtn + '</span>') : '')
+           + '<span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
+         + '</button>') : ('<button class="timer-btn timer-compact' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + '" id="btn-timer"></button>'))
+     + '</div>'
+   ) : ('<div class="mode-grid">' + modeBtns + '</div>'))
 
  + (showAirflow ? ('<div class="fan-swing-row">'
  + '  <div class="fan-card">'
@@ -1604,20 +1628,20 @@ class AcControllerCardV2 extends HTMLElement {
  + (showClean ? ('  <button class="chip chip--b">' + (cleanIcon ? ('<ha-icon icon="' + cleanIcon + '"></ha-icon> ') : '') + 'Clean</button>') : '')
  + '</div>'
 
- + '<div class="bottom-row">'
-+ '<button class="power-row" id="btn-power">'
-+  (showPowerIcon ? ('  <div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>') : ('  <div class="pw-btn ' + pwClass + '"></div>'))
-+ '  <div style="flex:1;min-width:0">'
-+ '    <div class="pw-sub pw-sub--big">' + (showPowerText ? pwSub : '') + '</div>'
-+ '  </div>'
-+ '  <span class="pw-arrow">&#8250;</span>'
-+ '</button>'
-+ '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + '" id="btn-timer">'
-+  (showTimerIcon ? ('  <span class="timer-ico">' + (timerIcon ? ('<ha-icon icon="' + timerIcon + '"></ha-icon>') : '') + '</span>') : '')
-+  (showTimerText ? ('  <span class="timer-lbl">' + tr.timerBtn + '</span>') : '')
-+ '  <span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
-+ '</button>'
-+ '</div>'
+ + (showAlignPowerTimer ? '' : (
+   '<div class="bottom-row">'
+ + '<button class="power-row" id="btn-power">'
+ +  (showPowerIcon ? ('  <div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>') : ('  <div class="pw-btn ' + pwClass + '"></div>'))
+ +  (showPowerText ? ('  <div style="flex:1;min-width:0"><div class="pw-sub pw-sub--big">' + pwSub + '</div></div>') : '')
+ +  '  <span class="pw-arrow">&#8250;</span>'
+ + '</button>'
+ + '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + (showTimerText ? '' : ' timer-compact') + '" id="btn-timer">'
+ +  (showTimerIcon ? ('  <span class="timer-ico">' + (timerIcon ? ('<ha-icon icon="' + timerIcon + '"></ha-icon>') : '') + '</span>') : '')
+ +  (showTimerText ? ('  <span class="timer-lbl">' + tr.timerBtn + '</span>') : '')
+ + '  <span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
+ + '</button>'
+ + '</div>'
+ ))
 
 + '</div>'  // end .left
 
@@ -2409,6 +2433,9 @@ class MultiAcCardEditor extends HTMLElement {
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-timer-icon" ${ (this._config.features && this._config.features.show_timer_icon !== false) ? 'checked' : '' } /> Show timer icon</label>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-align-power-timer" ${ (this._config.features && this._config.features.align_power_timer === true) ? 'checked' : '' } /> Align power/timer with modes</label>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-temp" disabled /> Temp (N/A)</label>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
@@ -2836,6 +2863,8 @@ class MultiAcCardEditor extends HTMLElement {
     if (elTimerText) elTimerText.addEventListener('change', () => setFeature('show_timer_text', elTimerText.checked));
     const elTimerIcon = sr.getElementById('feat-show-timer-icon');
     if (elTimerIcon) elTimerIcon.addEventListener('change', () => setFeature('show_timer_icon', elTimerIcon.checked));
+    const elAlign = sr.getElementById('feat-align-power-timer');
+    if (elAlign) elAlign.addEventListener('change', () => setFeature('align_power_timer', elAlign.checked));
     // Icons inputs
     const iconMapping = [
       ['eco','inp-icon-eco'],['fav','inp-icon-fav'],['clean','inp-icon-clean'],['power','inp-icon-power'],['timer','inp-icon-timer'],['all_off','inp-icon-alloff'],
