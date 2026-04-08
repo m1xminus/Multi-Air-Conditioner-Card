@@ -1420,7 +1420,7 @@ class AcControllerCardV2 extends HTMLElement {
         + '    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>'
         + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div>') : '')
         + '  </div>'
-        + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoIcon ? (ecoIcon + ' ') : '') + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
+        + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoIcon ? ('<ha-icon icon="' + ecoIcon + '"></ha-icon> ') : '') + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
         + '</div>';
     } else {
       if (showAvg) {
@@ -1487,21 +1487,21 @@ class AcControllerCardV2 extends HTMLElement {
  + '</div>') : '')
 
  + '<div class="chips">'
- + (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">' + (ecoIcon ? (ecoIcon + ' ') : '') + 'Eco</button>') : '')
- + (showFav ? ('  <button class="chip chip--a">' + (favIcon ? (favIcon + ' ') : '') + 'Fav</button>') : '')
- + (showClean ? ('  <button class="chip chip--b">' + (cleanIcon ? (cleanIcon + ' ') : '') + 'Clean</button>') : '')
+ + (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">' + (ecoIcon ? ('<ha-icon icon="' + ecoIcon + '"></ha-icon> ') : '') + 'Eco</button>') : '')
+ + (showFav ? ('  <button class="chip chip--a">' + (favIcon ? ('<ha-icon icon="' + favIcon + '"></ha-icon> ') : '') + 'Fav</button>') : '')
+ + (showClean ? ('  <button class="chip chip--b">' + (cleanIcon ? ('<ha-icon icon="' + cleanIcon + '"></ha-icon> ') : '') + 'Clean</button>') : '')
  + '</div>'
 
  + '<div class="bottom-row">'
-+ '<button class="power-row" id="btn-power">'
-+ '  <div class="pw-btn ' + pwClass + '"></div>'
+ + '<button class="power-row" id="btn-power">'
++ '  <div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>'
 + '  <div style="flex:1;min-width:0">'
 + '    <div class="pw-sub pw-sub--big">' + pwSub + '</div>'
 + '  </div>'
 + '  <span class="pw-arrow">&#8250;</span>'
 + '</button>'
 + '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + '" id="btn-timer">'
-+ '  <span class="timer-ico"></span>'
++ '  <span class="timer-ico">' + (timerIcon ? ('<ha-icon icon="' + timerIcon + '"></ha-icon>') : '') + '</span>'
 + '  <span class="timer-lbl">' + tr.timerBtn + '</span>'
 + '  <span class="timer-cd" id="timer-cd">' + (this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : '') + '</span>'
 + '</button>'
@@ -1532,16 +1532,16 @@ class AcControllerCardV2 extends HTMLElement {
 + '    ' + (showPm25 ? ('<div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>') : '')
 + '  </div>'
 + '  <div class="metrics">'
-+ '    ' + (showMetricTemp ? ('<div class="met"><span class="met-ico"></span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>') : '')
-+ '    ' + (showMetricHumidity ? ('<div class="met"><span class="met-ico"></span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>') : '')
-+ '    ' + (showMetricPower ? ('<div class="met"><span class="met-ico"></span><span class="met-val" id="met-power">' + powerVal + '</span></div>') : '')
++ '    ' + (showMetricTemp ? ('<div class="met"><span class="met-ico">' + (metricTempIcon ? ('<ha-icon icon="' + metricTempIcon + '"></ha-icon>') : '') + '</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>') : '')
++ '    ' + (showMetricHumidity ? ('<div class="met"><span class="met-ico">' + (metricHumidityIcon ? ('<ha-icon icon="' + metricHumidityIcon + '"></ha-icon>') : '') + '</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>') : '')
++ '    ' + (showMetricPower ? ('<div class="met"><span class="met-ico">' + (metricPowerIcon ? ('<ha-icon icon="' + metricPowerIcon + '"></ha-icon>') : '') + '</span><span class="met-val" id="met-power">' + powerVal + '</span></div>') : '')
 + '  </div>'
 + '</div>'
 
 + '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
 
-+ '<button class="all-off-btn" id="btn-all-off">'
-+ '  <div class="all-off-ico"></div>'
+ + '<button class="all-off-btn" id="btn-all-off">'
+ + '  <div class="all-off-ico">' + (allOffIcon ? ('<ha-icon icon="' + allOffIcon + '"></ha-icon>') : '') + '</div>'
 + '  <div class="all-off-info">'
 + '    <div class="all-off-title">' + tr.allOff + '</div>'
 + '    <div class="all-off-sub">' + tr.allOffSub + '</div>'
