@@ -1139,13 +1139,20 @@ class AcControllerCardV2 extends HTMLElement {
     var txtClr = cfg.text_color   || '#ffffff';
 
     var room    = ROOMS[this._activeIdx];
+    var domain  = room && room.id ? (room.id.split ? room.id.split('.')[0] : null) : null;
     var hvac    = this._s(room.id);
-    var isOn    = hvac !== 'off';
-    var curTemp = parseFloat(this._a(room.id,'current_temperature') || 26);
-    var setTemp = parseFloat(this._a(room.id,'temperature')         || 24);
-    var fanMode  = this._a(room.id,'fan_mode')     || 'auto';
-    var swingMode= this._a(room.id,'swing_mode')   || 'off';
-    var ecoOn   = this._a(room.id,'preset_mode') === 'eco';
+    // If the room entity is a sensor, treat it as read-only sensor for temperature/humidity
+    var isSensorEntity = domain === 'sensor';
+    var isOn    = isSensorEntity ? false : (hvac !== 'off');
+    var curTemp = isSensorEntity
+      ? parseFloat((this._hass.states && this._hass.states[room.id] && this._hass.states[room.id].state) || 0)
+      : parseFloat(this._a(room.id,'current_temperature') || 26);
+    var setTemp = isSensorEntity
+      ? parseFloat(this._hass.states && this._hass.states[room.id] && this._hass.states[room.id].attributes && this._hass.states[room.id].attributes.unit_of_measurement ? this._hass.states[room.id].state : 24)
+      : parseFloat(this._a(room.id,'temperature')         || 24);
+    var fanMode  = isSensorEntity ? 'auto' : (this._a(room.id,'fan_mode')     || 'auto');
+    var swingMode= isSensorEntity ? 'off'  : (this._a(room.id,'swing_mode')   || 'off');
+    var ecoOn   = isSensorEntity ? false : (this._a(room.id,'preset_mode') === 'eco');
     var fi  = Math.max(0, FAN_LEVELS.indexOf(fanMode));
     var si  = Math.max(0, SWING_LEVELS.indexOf(swingMode));
     var mode    = MODE_CFG[hvac] || MODE_CFG.cool;
@@ -1260,9 +1267,13 @@ class AcControllerCardV2 extends HTMLElement {
     // Room tabs
     var roomTabs = '';
     for (var j = 0; j < ROOMS.length; j++) {
-      var rState = this._s(ROOMS[j].id);
-      var ron = rState !== 'off';
-      var rTemp = parseFloat(this._a(ROOMS[j].id, 'current_temperature') || 0);
+      var rId = ROOMS[j].id;
+      var rDomain = rId && rId.split ? rId.split('.')[0] : null;
+      var rState = this._s(rId);
+      var ron = (rDomain === 'sensor') ? (rState && rState !== 'unknown' && rState !== 'unavailable') : (rState !== 'off');
+      var rTemp = (rDomain === 'sensor')
+        ? parseFloat(this._hass.states && this._hass.states[rId] && this._hass.states[rId].state || 0)
+        : parseFloat(this._a(rId, 'current_temperature') || 0);
       var rTempStr = rTemp > 0 ? Math.round(rTemp) + '°' : '--';
       var isActive = j === this._activeIdx;
       var tabClass = 'room-tab'
@@ -1275,7 +1286,7 @@ class AcControllerCardV2 extends HTMLElement {
         + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
         + '  <span class="room-tab-temp">' + rTempStr + '</span>'
         + '</span>'
-        + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (ron ? 'ON' : 'OFF') + '</span>'
+        + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (rDomain === 'sensor' ? rTempStr : (ron ? 'ON' : 'OFF')) + '</span>'
         + '</button>';
     }
 
@@ -1501,24 +1512,31 @@ class AcControllerCardV2 extends HTMLElement {
 
     onTap(r.getElementById('btn-temp-up'), function() {
       var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return; // ignore for sensor room entities
       self._call('climate','set_temperature',{entity_id:id, temperature: parseFloat(self._a(id,'temperature')||24)+1});
     });
 
     onTap(r.getElementById('btn-temp-down'), function() {
       var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
       self._call('climate','set_temperature',{entity_id:id, temperature: Math.max(16, parseFloat(self._a(id,'temperature')||24)-1)});
     });
 
     onTapAll(r.querySelectorAll('[data-hvac]'), function(b) {
-      self._call('climate','set_hvac_mode',{entity_id:ROOMS[self._activeIdx].id, hvac_mode:b.dataset.hvac});
+      var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
+      self._call('climate','set_hvac_mode',{entity_id:id, hvac_mode:b.dataset.hvac});
     });
 
     onTapAll(r.querySelectorAll('[data-fan]'), function(b) {
-      self._call('climate','set_fan_mode',{entity_id:ROOMS[self._activeIdx].id, fan_mode:b.dataset.fan});
+      var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
+      self._call('climate','set_fan_mode',{entity_id:id, fan_mode:b.dataset.fan});
     });
 
     onTap(r.getElementById('btn-power'), function() {
       var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
       self._call('climate','set_hvac_mode',{entity_id:id, hvac_mode: self._s(id)!=='off'?'off':'cool'});
     });
 
@@ -1532,6 +1550,7 @@ class AcControllerCardV2 extends HTMLElement {
 
     var ecoFn = function() {
       var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
       self._call('climate','set_preset_mode',{entity_id:id, preset_mode: self._a(id,'preset_mode')==='eco'?'none':'eco'});
     };
     onTap(r.getElementById('btn-eco'), ecoFn);
@@ -1539,6 +1558,7 @@ class AcControllerCardV2 extends HTMLElement {
 
     onTap(r.getElementById('btn-fan-cycle'), function() {
       var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
       var cur = self._a(id,'fan_mode') || 'auto';
       var idx = FAN_LEVELS.indexOf(cur);
       var next = FAN_LEVELS[(idx + 1) % FAN_LEVELS.length];
@@ -1547,6 +1567,7 @@ class AcControllerCardV2 extends HTMLElement {
 
     onTap(r.getElementById('btn-swing'), function() {
       var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
       var cur = self._a(id,'swing_mode') || 'off';
       var idx = SWING_LEVELS.indexOf(cur);
       var next = SWING_LEVELS[(idx + 1) % SWING_LEVELS.length];
@@ -1576,7 +1597,12 @@ class AcControllerCardV2 extends HTMLElement {
       cpop.querySelector('#cp-cancel-btn').onclick = function(ev) { ev.stopPropagation(); cpop.remove(); };
       cpop.querySelector('#cp-ok-btn').onclick = function(ev) {
         ev.stopPropagation();
-        ROOMS.forEach(function(room) { self._call('climate','set_hvac_mode',{entity_id:room.id, hvac_mode:'off'}); });
+        ROOMS.forEach(function(room) {
+          var did = room.id;
+          if (did && did.split && did.split('.')[0] === 'climate') {
+            self._call('climate','set_hvac_mode',{entity_id:did, hvac_mode:'off'});
+          }
+        });
         cpop.remove();
       };
       self._confirmJustOpened = true;
