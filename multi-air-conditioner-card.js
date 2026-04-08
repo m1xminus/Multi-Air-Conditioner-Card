@@ -1051,13 +1051,18 @@ class AcControllerCardV2 extends HTMLElement {
       }));
     }
 
-    // Ghi đè ROOMS từ config entities
+    // Ghi đè ROOMS từ config entities, hỗ trợ visible/temp_sensor/humidity_sensor
     if (c && c.entities && Array.isArray(c.entities)) {
       for (var i = 0; i < Math.min(c.entities.length, ROOMS.length); i++) {
         if (c.entities[i] && c.entities[i].entity_id) ROOMS[i].id    = c.entities[i].entity_id;
         if (c.entities[i] && c.entities[i].label)     ROOMS[i].label = c.entities[i].label;
         if (c.entities[i] && c.entities[i].area)      ROOMS[i].area  = c.entities[i].area;
         if (c.entities[i] && c.entities[i].icon)      ROOMS[i].icon  = c.entities[i].icon;
+        // New: visible property (default true)
+        ROOMS[i].visible = (c.entities[i].visible !== false);
+        // New: per-room temp/humidity sensor
+        if (c.entities[i].temp_sensor) ROOMS[i].temp_sensor = c.entities[i].temp_sensor;
+        if (c.entities[i].humidity_sensor) ROOMS[i].humidity_sensor = c.entities[i].humidity_sensor;
       }
     }
     // Áp dụng ngôn ngữ vào ROOMS nếu label chưa tuỳ chỉnh
@@ -1066,9 +1071,13 @@ class AcControllerCardV2 extends HTMLElement {
         ROOMS[j].label = (tr.rooms && tr.rooms[j]) || ROOMS[j].label;
         ROOMS[j].icon  = (tr.roomIcons && tr.roomIcons[j]) || ROOMS[j].icon;
       }
+      // Default visible to true if not set
+      if (typeof ROOMS[j].visible === 'undefined') ROOMS[j].visible = true;
     }
-    // Đảm bảo activeIdx không vượt quá số phòng
-    if (this._activeIdx >= ROOMS.length) this._activeIdx = 0;
+    // Đảm bảo activeIdx không vượt quá số phòng hoặc chỉ số phòng ẩn
+    var visibleRooms = ROOMS.filter(r => r.visible);
+    if (visibleRooms.length === 0) this._activeIdx = 0;
+    else if (this._activeIdx >= visibleRooms.length) this._activeIdx = 0;
   }
 
   static getConfigElement() {
@@ -1138,10 +1147,38 @@ class AcControllerCardV2 extends HTMLElement {
     var accent = cfg.accent_color || '#00ffcc';
     var txtClr = cfg.text_color   || '#ffffff';
 
-    var room    = ROOMS[this._activeIdx];
+    // Only show visible rooms
+    var visibleRooms = ROOMS.filter(r => r.visible);
+    if (visibleRooms.length === 0) return;
+    var room    = visibleRooms[this._activeIdx];
     var hvac    = this._s(room.id);
     var isOn    = hvac !== 'off';
-    var curTemp = parseFloat(this._a(room.id,'current_temperature') || 26);
+    var curTemp;
+    var curHumidity;
+    // Use per-room temp/humidity sensor if set, else fallback to global
+    if (room.temp_sensor && this._hass.states[room.temp_sensor]) {
+      curTemp = parseFloat(this._hass.states[room.temp_sensor].state);
+    } else if (cfg.outdoor_temp_entity && this._hass.states[cfg.outdoor_temp_entity]) {
+      curTemp = parseFloat(this._hass.states[cfg.outdoor_temp_entity].state);
+    } else {
+      curTemp = parseFloat(this._a(room.id,'current_temperature') || 26);
+    }
+    if (room.humidity_sensor && this._hass.states[room.humidity_sensor]) {
+      curHumidity = parseFloat(this._hass.states[room.humidity_sensor].state);
+    } else if (cfg.humidity_entity && this._hass.states[cfg.humidity_entity]) {
+      curHumidity = parseFloat(this._hass.states[cfg.humidity_entity].state);
+    } else {
+      curHumidity = this._a(room.id,'humidity');
+    }
+
+    // Room image support
+    var roomImage = room.image || ROOM_IMAGES[this._activeIdx] || '';
+
+    // Main/average temperature for greeting area
+    var mainTemp = null;
+    if (cfg.main_temp_entity && this._hass.states[cfg.main_temp_entity]) {
+      mainTemp = parseFloat(this._hass.states[cfg.main_temp_entity].state);
+    }
     var setTemp = parseFloat(this._a(room.id,'temperature')         || 24);
     var fanMode  = this._a(room.id,'fan_mode')     || 'auto';
     var swingMode= this._a(room.id,'swing_mode')   || 'off';
@@ -1986,6 +2023,10 @@ class MultiAcCardEditor extends HTMLElement {
 <div class="ac-row">
   <div class="ac-row-title">❄ ${t.edRooms.replace(/^❄\s*/,'')} ${i+1} – ${defLbl}</div>
   <div class="row">
+    <label>Show Room</label>
+    <input type="checkbox" id="inp-room-visible-${i}" ${ent.visible !== false ? 'checked' : ''} />
+  </div>
+  <div class="row">
     <label>${t.edAcEntity}</label>
     <ha-entity-picker data-room="${i}" data-domain="climate" allow-custom-entity></ha-entity-picker>
   </div>
@@ -1996,6 +2037,18 @@ class MultiAcCardEditor extends HTMLElement {
   <div class="row">
     <label>${t.edAcIcon}</label>
     <input class="txt-inp" type="text" id="inp-room-icon-${i}" placeholder="${defIco}" value="${ent.icon||''}"/>
+  </div>
+  <div class="row">
+    <label>Room Temperature Sensor</label>
+    <ha-entity-picker id="inp-room-temp-sensor-${i}" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+  </div>
+  <div class="row">
+    <label>Room Humidity Sensor</label>
+    <ha-entity-picker id="inp-room-humidity-sensor-${i}" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+  </div>
+  <div class="row">
+    <label>Room Image URL</label>
+    <input class="txt-inp" type="text" id="inp-room-image-${i}" placeholder="Image URL" value="${ent.image||''}"/>
   </div>
 </div>`;
     }
@@ -2144,6 +2197,10 @@ class MultiAcCardEditor extends HTMLElement {
       ${this._entityField('outdoor_temp_entity',   t.edOutdoorTemp, 'sensor')}
       ${this._entityField('humidity_entity',       t.edHumidity,    'sensor')}
       ${this._entityField('power_entity',          t.edPower,       'sensor')}
+      <div class="row">
+        <label>Main/Average Temperature Sensor (for greeting area)</label>
+        <ha-entity-picker data-key="main_temp_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+      </div>
     </div>
   </div>
 
@@ -2290,11 +2347,15 @@ class MultiAcCardEditor extends HTMLElement {
       this._config = { ...this._config, owner_name: val };
     });
 
-    // Room label + icon inputs
+    // Room label + icon + visible + sensors + image inputs
     const roomCountBind = Math.max(1, Math.min(8, parseInt(this._config.room_count) || 4));
     for (let i = 0; i < roomCountBind; i++) {
       const lblEl  = sr.getElementById('inp-room-label-' + i);
       const iconEl = sr.getElementById('inp-room-icon-'  + i);
+      const visEl  = sr.getElementById('inp-room-visible-' + i);
+      const tempEl = sr.getElementById('inp-room-temp-sensor-' + i);
+      const humEl  = sr.getElementById('inp-room-humidity-sensor-' + i);
+      const imgEl  = sr.getElementById('inp-room-image-' + i);
       wireTextInput(lblEl, val => {
         const ents = (this._config.entities || []).slice();
         while (ents.length <= i) ents.push({});
@@ -2305,6 +2366,33 @@ class MultiAcCardEditor extends HTMLElement {
         const ents = (this._config.entities || []).slice();
         while (ents.length <= i) ents.push({});
         ents[i] = { ...ents[i], icon: val };
+        this._config = { ...this._config, entities: ents };
+      });
+      if (visEl) visEl.addEventListener('change', () => {
+        const ents = (this._config.entities || []).slice();
+        while (ents.length <= i) ents.push({});
+        ents[i] = { ...ents[i], visible: visEl.checked };
+        this._config = { ...this._config, entities: ents };
+        this._fire();
+      });
+      if (tempEl) tempEl.addEventListener('value-changed', e => {
+        const ents = (this._config.entities || []).slice();
+        while (ents.length <= i) ents.push({});
+        ents[i] = { ...ents[i], temp_sensor: e.detail.value };
+        this._config = { ...this._config, entities: ents };
+        this._fire();
+      });
+      if (humEl) humEl.addEventListener('value-changed', e => {
+        const ents = (this._config.entities || []).slice();
+        while (ents.length <= i) ents.push({});
+        ents[i] = { ...ents[i], humidity_sensor: e.detail.value };
+        this._config = { ...this._config, entities: ents };
+        this._fire();
+      });
+      wireTextInput(imgEl, val => {
+        const ents = (this._config.entities || []).slice();
+        while (ents.length <= i) ents.push({});
+        ents[i] = { ...ents[i], image: val };
         this._config = { ...this._config, entities: ents };
       });
     }
