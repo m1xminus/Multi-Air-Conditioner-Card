@@ -813,7 +813,104 @@ class AcControllerCardV2 extends HTMLElement {
     }
 
     // ── Không có <link>/<style> ở đây – đã inject ở connectedCallback
-    var html = '<div class="card" style="--accent:' + mode.color + ';--glow:' + mode.glow + ';background:' + bgGrad + '">'
+    var html = `
+      <div class="card" style="--accent:${mode.color};--glow:${mode.glow};background:${bgGrad}">
+        <div class="left">
+          <div class="hdr">
+            <div class="hdr-brand">
+              <div class="hdr-ico">${mode.icon}</div>
+              <div><div class="hdr-title">${tr.cardTitle}</div><div class="hdr-sub">${tr.cardSub}</div></div>
+            </div>
+            <div class="hdr-icons">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${wifiColor}" stroke-width="1.8" style="filter:${wifiGlow};transition:all 0.4s"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>
+              <button id="btn-gear" style="background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;line-height:0">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="greet-row">
+            <div>
+              ${cfg.features && cfg.features.greet ? `<div class="greet-sub">${tr.greet()}</div>` : ''}
+              ${cfg.features && cfg.features.greet ? `<div class="greet-name">${cfg.owner_name || 'Smart Home'}</div>` : ''}
+              ${cfg.features && cfg.features.avg_temp ? `<div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ${avgTempVal}</div>` : ''}
+            </div>
+            ${cfg.features && cfg.features.eco ? `<button id="btn-eco" class="eco-badge ${ecoOn ? 'eco-on' : 'eco-off'}">🌿 ${ecoOn ? 'ECO ON' : 'ECO'}</button>` : ''}
+          </div>
+
+          <div class="dial-wrap">
+            <svg width="220" height="220" viewBox="0 0 220 220" style="overflow:visible">
+              <defs></defs>
+              <circle cx="110" cy="110" r="72" fill="rgba(180,220,255,0.25)" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>
+              <circle cx="110" cy="110" r="68" fill="url(#innerGlow)"/>
+              ${arcFillSvg || ''}
+              ${dotSvg || ''}
+              ${ticks}
+            </svg>
+
+            <div class="dial-controls">
+              <div class="temp-controls">
+                <button id="btn-temp-down" class="temp-btn">-</button>
+                <div class="temp-display">${Math.round(curTemp)}°C</div>
+                <button id="btn-temp-up" class="temp-btn">+</button>
+              </div>
+              <div class="mode-grid">${modeBtns}</div>
+              ${cfg.features && (cfg.features.fan || cfg.features.swing) ? `<div class="fan-swing-row">${cfg.features && cfg.features.fan ? `<div class="fan-card"><div class="fc-head"><span class="fc-label">${tr.fanLabel}</span><span class="fc-val">${fanLabels[fi]}</span></div><button class="fan-tap" id="btn-fan-cycle"><span class="fan-ico">${fanIconSvg}</span><div class="fan-bars">${fanBarHtml}</div></button></div>` : ''}${cfg.features && cfg.features.swing ? `<div class="swing-card"><div class="fc-head"><span class="fc-label">${tr.swingLabel}</span></div>${swingBtn}</div>` : ''}</div>` : ''}
+              ${cfg.features && cfg.features.chips ? `<div class="chips">${cfg.features.chips.eco ? `<button id="btn-eco-chip" class="chip ${ecoOn ? 'chip--g' : ''}">🌿 Eco</button>` : ''}${cfg.features.chips.fav ? `<button class="chip chip--a">★ Fav</button>` : ''}${cfg.features.chips.clean ? `<button class="chip chip--b">✦ Clean</button>` : ''}</div>` : ''}
+            </div>
+            
+            <div class="bottom-row">
+              <button class="power-row" id="btn-power">
+                <div class="pw-btn ${pwClass}">⏻</div>
+                <div style="flex:1;min-width:0"><div class="pw-sub pw-sub--big">${pwSub}</div></div>
+                <span class="pw-arrow">›</span>
+              </button>
+              <button class="timer-btn${this._timers[this._activeIdx] ? ' timer-btn--active' : ''}" id="btn-timer">
+                <span class="timer-ico">⏰</span>
+                <span class="timer-lbl">${tr.timerBtn}</span>
+                <span class="timer-cd" id="timer-cd">${this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : ''}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="room-image">
+            <img id="room-photo" class="room-img-el" src="${ROOM_IMAGES[this._activeIdx]}" alt="room">
+            <div class="ac-overlay">
+              <span class="ac-led ${isOn ? 'led-on' : 'led-off'}"></span>
+              <span class="ac-overlay-txt">${isOn ? tr.overlayOn : tr.overlayOff}</span>
+              ${modeChip}
+            </div>
+            <div class="img-temp-badge">${Math.round(curTemp)}<span>°C</span></div>
+            <div class="img-room-name">${room.label}</div>
+          </div>
+
+          <div class="status-block">
+            <div class="status-header">
+              <div>
+                <div class="st-title">${tr.statusLabel}</div>
+                <div class="${isOn ? 'st-on' : 'st-off'}">${isOn ? tr.statusOn : tr.statusOff}</div>
+                <div class="st-sub">${isOn ? tr.airGood : tr.pressOn}</div>
+              </div>
+              ${cfg.features && cfg.features.pm25 ? `<div class="pm-ring"><div class="pm-val">${pm25Val}</div><div class="pm-unit">${tr.dustLabel}</div></div>` : ''}
+            </div>
+            <div class="metrics">
+              ${cfg.features && cfg.features.temperature ? `<div class="met"><span class="met-ico">🌡</span><span class="met-val" id="met-outdoor-temp">${outdoorTempVal}</span></div>` : ''}
+              ${cfg.features && cfg.features.humidity ? `<div class="met"><span class="met-ico">💧</span><span class="met-val" id="met-humidity">${humidityVal}</span></div>` : ''}
+              ${cfg.features && cfg.features.power ? `<div class="met"><span class="met-ico">⚡</span><span class="met-val" id="met-power">${powerVal}</span></div>` : ''}
+            </div>
+          </div>
+
+          <div class="room-tabs"><div class="rt-header">${tr.selectRoom}</div><div class="room-tabs-inner${ROOMS.length >= 5 ? ' scrollable' : ''}">${roomTabs}</div></div>
+
+          <button class="all-off-btn" id="btn-all-off">
+            <div class="all-off-ico">⏻</div>
+            <div class="all-off-info"><div class="all-off-title">${tr.allOff}</div><div class="all-off-sub">${tr.allOffSub}</div></div>
+            <div class="all-off-arr">›</div>
+          </button>
+        </div>
+      </div>`;
 + '<div class="left">'
 
 + '<div class="hdr">'
