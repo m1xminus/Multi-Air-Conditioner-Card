@@ -2302,40 +2302,67 @@ class MultiAcCardEditor extends HTMLElement {
       <div class="acc-body" id="body-icons" style="display:${this._open.icons?'block':'none'}">
         <div class="row">
           <label>Eco icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-eco" placeholder="mdi:leaf" value="${icons.eco||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-eco" placeholder="mdi:leaf" value="${icons.eco||''}"/>
+            <span id="preview-icon-eco" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
         <div class="row">
           <label>Fav icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-fav" placeholder="mdi:heart" value="${icons.fav||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-fav" placeholder="mdi:heart" value="${icons.fav||''}"/>
+            <span id="preview-icon-fav" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
         <div class="row">
           <label>Clean icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-clean" placeholder="mdi:broom" value="${icons.clean||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-clean" placeholder="mdi:broom" value="${icons.clean||''}"/>
+            <span id="preview-icon-clean" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
         <div class="row">
           <label>Power icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-power" placeholder="mdi:power" value="${icons.power||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-power" placeholder="mdi:power" value="${icons.power||''}"/>
+            <span id="preview-icon-power" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
         <div class="row">
           <label>Timer icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-timer" placeholder="mdi:timer" value="${icons.timer||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-timer" placeholder="mdi:timer" value="${icons.timer||''}"/>
+            <span id="preview-icon-timer" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
         <div class="row">
           <label>All-off icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-alloff" placeholder="mdi:power-off" value="${icons.all_off||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-alloff" placeholder="mdi:power-off" value="${icons.all_off||''}"/>
+            <span id="preview-icon-alloff" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
         <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Metrics icons</div>
         <div class="row">
           <label>Temperature metric icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-metric-temp" placeholder="mdi:thermometer" value="${icons.metric_temp||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-metric-temp" placeholder="mdi:thermometer" value="${icons.metric_temp||''}"/>
+            <span id="preview-icon-metric-temp" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
         <div class="row">
           <label>Humidity metric icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-metric-humidity" placeholder="mdi:water-percent" value="${icons.metric_humidity||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-metric-humidity" placeholder="mdi:water-percent" value="${icons.metric_humidity||''}"/>
+            <span id="preview-icon-metric-humidity" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
         <div class="row">
           <label>Power metric icon</label>
-          <input class="txt-inp" type="text" id="inp-icon-metric-power" placeholder="mdi:flash" value="${icons.metric_power||''}"/>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="inp-icon-metric-power" placeholder="mdi:flash" value="${icons.metric_power||''}"/>
+            <span id="preview-icon-metric-power" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
         </div>
       </div>
     </div>
@@ -2646,8 +2673,16 @@ class MultiAcCardEditor extends HTMLElement {
     ];
     iconMapping.forEach(([key,id]) => {
       const el = sr.getElementById(id);
+      const previewId = id.replace('inp-','preview-');
+      const prev = sr.getElementById(previewId);
       if (!el) return;
+      // initialize preview
+      if (prev) {
+        const v = el.value || '';
+        prev.innerHTML = v ? `<ha-icon icon="${v}"></ha-icon>` : '';
+      }
       wireTextInput(el, val => {
+        if (prev) prev.innerHTML = val ? `<ha-icon icon="${val}"></ha-icon>` : '';
         const icons = Object.assign({}, this._config.icons || {});
         if (val) icons[key] = val; else delete icons[key];
         this._config = { ...this._config, icons };
