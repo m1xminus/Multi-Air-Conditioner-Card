@@ -713,6 +713,8 @@ const AC_DEFAULT_CONFIG = {
     show_metrics_temp: true,
     show_metrics_humidity: true,
     show_metrics_power: true,
+    show_modes_text: true,
+    show_modes_icon: true,
   },
   icons: {
     eco: '',
@@ -1240,6 +1242,8 @@ class AcControllerCardV2 extends HTMLElement {
     var showMetricTemp = features.show_metrics_temp !== false;
     var showMetricHumidity = features.show_metrics_humidity !== false;
     var showMetricPower = features.show_metrics_power !== false;
+    var showModesText = features.show_modes_text !== false;
+    var showModesIcon = features.show_modes_icon !== false;
     var ecoIcon = icons.eco || '';
     var favIcon = icons.fav || '';
     var cleanIcon = icons.clean || '';
@@ -1446,8 +1450,8 @@ class AcControllerCardV2 extends HTMLElement {
       var act = hvac === mk;
       var st  = act ? ('--bc:' + mc.color + ';--bg:' + mc.glow + ';') : '';
       modeBtns += '<button class="mode-btn' + (act ? ' mode-btn--active' : '') + '" data-hvac="' + mk + '" style="' + st + '">'
-        + '<span class="mode-icon">' + ((icons['mode_' + mk] || mc.icon) ? ('<ha-icon icon="' + (icons['mode_' + mk] || mc.icon) + '"></ha-icon>') : '') + '</span>'
-        + '<span class="mode-lbl">' + mc.lbl + '</span>'
+        + (showModesIcon ? ('<span class="mode-icon">' + ((icons['mode_' + mk] || mc.icon) ? ('<ha-icon icon="' + (icons['mode_' + mk] || mc.icon) + '"></ha-icon>') : '') + '</span>') : '')
+        + (showModesText ? ('<span class="mode-lbl">' + mc.lbl + '</span>') : '')
         + '</button>';
     }
 
@@ -2387,6 +2391,10 @@ class MultiAcCardEditor extends HTMLElement {
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-fan_only" ${ (this._config.features && this._config.features.modes && this._config.features.modes.fan_only !== false) ? 'checked' : '' } /> Fan</label>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-modes-text" ${ (this._config.features && this._config.features.show_modes_text !== false) ? 'checked' : '' } /> Show modes text</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-modes-icon" ${ (this._config.features && this._config.features.show_modes_icon !== false) ? 'checked' : '' } /> Show modes icons</label>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
         <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-temp" disabled /> Temp (N/A)</label>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
@@ -2802,6 +2810,10 @@ class MultiAcCardEditor extends HTMLElement {
     if (elMHum) elMHum.addEventListener('change', () => setFeature('show_metrics_humidity', elMHum.checked));
     const elMPow = sr.getElementById('feat-show-metric-power');
     if (elMPow) elMPow.addEventListener('change', () => setFeature('show_metrics_power', elMPow.checked));
+    const elModesText = sr.getElementById('feat-show-modes-text');
+    if (elModesText) elModesText.addEventListener('change', () => setFeature('show_modes_text', elModesText.checked));
+    const elModesIcon = sr.getElementById('feat-show-modes-icon');
+    if (elModesIcon) elModesIcon.addEventListener('change', () => setFeature('show_modes_icon', elModesIcon.checked));
     // Icons inputs
     const iconMapping = [
       ['eco','inp-icon-eco'],['fav','inp-icon-fav'],['clean','inp-icon-clean'],['power','inp-icon-power'],['timer','inp-icon-timer'],['all_off','inp-icon-alloff'],
