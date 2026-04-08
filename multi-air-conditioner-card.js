@@ -1090,26 +1090,17 @@ class AcControllerCardV2 extends HTMLElement {
 
   static getStubConfig() {
     return {
-        ${cfg.features && cfg.features.modes ? '<div class="mode-grid">' + modeBtns + '</div>' : ''}
-        ${((cfg.features && cfg.features.fan) || (cfg.features && cfg.features.swing)) ? (
-          '<div class="fan-swing-row">'
-          + (cfg.features && cfg.features.fan ? (
-            '<div class="fan-card">'
-            + '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
-            + '    <button class="fan-tap" id="btn-fan-cycle">'
-            + '      <span class="fan-ico">' + fanIconSvg + '</span>'
-            + '      <div class="fan-bars">' + fanBarHtml + '</div>'
-            + '    </button>'
-            + '  </div>'
-          ) : '')
-          + (cfg.features && cfg.features.swing ? (
-            '<div class="swing-card">'
-            + '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
-            + '    ' + swingBtn
-            + '  </div>'
-          ) : '')
-          + '</div>'
-        ) : '')}
+      type: 'custom:multi-air-conditioner-card',
+      language: 'en',
+      room_count: 4,
+      entities: [
+        { entity_id: 'climate.living_room' },
+        { entity_id: 'climate.bedroom' },
+        { entity_id: 'climate.kitchen' },
+        { entity_id: 'climate.office' }
+      ]
+    };
+  }
   _s(id)       { return this._stateOf(this._hass, id); }
   _a(id, k)    { return this._attrOf(this._hass, id, k); }
   _call(d,s,x) { this._hass.callService(d, s, x); }
@@ -1412,36 +1403,17 @@ class AcControllerCardV2 extends HTMLElement {
 + '<circle cx="110" cy="110" r="68" fill="url(#innerGlow)"/>'
 + '<path d="' + arcTrack + '" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" stroke-linecap="round"/>'
 + ticks
-+ arcFillSvg
-+ dotSvg
-+ '</svg>'
-+ '<div class="dial-center">'
-+ '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
-+ '  <div class="dial-temp">' + Math.round(curTemp) + '<span class="dial-deg">&#176;</span></div>'
-+ '  <div class="dial-feel">' + comfortTxt + '</div>'
-+ '</div>'
-+ '</div>'
-
-+ '<div class="temp-ctrl">'
-+ '  <button class="temp-btn" id="btn-temp-down">&#8722;</button>'
-+ '  <span class="temp-set">' + setTemp + '&#176;C</span>'
-+ '  <button class="temp-btn" id="btn-temp-up">+</button>'
-+ '</div>'
-
-+ '<div class="mode-grid">' + modeBtns + '</div>'
-
-+ '<div class="fan-swing-row">'
-+ '  <div class="fan-card">'
-+ '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
-+ '    <button class="fan-tap" id="btn-fan-cycle">'
-+ '      <span class="fan-ico">' + fanIconSvg + '</span>'
-+ '      <div class="fan-bars">' + fanBarHtml + '</div>'
-+ '    </button>'
-+ '  </div>'
-+ '  <div class="swing-card">'
-+ '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
-+ '    ' + swingBtn
-+ '  </div>'
+      return {
+        type: 'custom:multi-air-conditioner-card',
+        language: 'en',
+        room_count: 4,
+        entities: [
+          { entity_id: 'climate.living_room' },
+          { entity_id: 'climate.bedroom' },
+          { entity_id: 'climate.kitchen' },
+          { entity_id: 'climate.office' }
+        ]
+      };
 + '</div>'
 
 + '<div class="chips">'
