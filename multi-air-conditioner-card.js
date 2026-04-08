@@ -65,7 +65,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Màu nền',
     edAcEntity: 'Entity điều hòa (climate.*)',
     edAcName: 'Tên hiển thị',
-    edAcIcon: 'Icon (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Bụi mịn PM2.5',
     edOutdoorTemp: 'Nhiệt độ ngoài trời',
     edHumidity: 'Độ ẩm ngoài trời',
@@ -124,7 +124,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Background',
     edAcEntity: 'AC entity (climate.*)',
     edAcName: 'Display name',
-    edAcIcon: 'Icon (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Fine dust PM2.5',
     edOutdoorTemp: 'Outdoor temperature',
     edHumidity: 'Outdoor humidity',
@@ -183,7 +183,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Hintergrund',
     edAcEntity: 'Klimaanlage-Entity (climate.*)',
     edAcName: 'Anzeigename',
-    edAcIcon: 'Symbol (Emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Feinstaub PM2.5',
     edOutdoorTemp: 'Außentemperatur',
     edHumidity: 'Außenluftfeuchtigkeit',
@@ -242,7 +242,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Arrière-plan',
     edAcEntity: 'Entité clim. (climate.*)',
     edAcName: 'Nom affiché',
-    edAcIcon: 'Icône (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Particules fines PM2.5',
     edOutdoorTemp: 'Température extérieure',
     edHumidity: 'Humidité extérieure',
@@ -301,7 +301,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Achtergrond',
     edAcEntity: 'AC-entiteit (climate.*)',
     edAcName: 'Weergavenaam',
-    edAcIcon: 'Pictogram (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Fijnstof PM2.5',
     edOutdoorTemp: 'Buitentemperatuur',
     edHumidity: 'Buitenvochtigheid',
@@ -360,7 +360,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Tło',
     edAcEntity: 'Encja klimatyzatora (climate.*)',
     edAcName: 'Nazwa wyświetlana',
-    edAcIcon: 'Ikona (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Pył zawieszony PM2.5',
     edOutdoorTemp: 'Temperatura zewnętrzna',
     edHumidity: 'Wilgotność zewnętrzna',
@@ -419,7 +419,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Bakgrund',
     edAcEntity: 'AC-entitet (climate.*)',
     edAcName: 'Visningsnamn',
-    edAcIcon: 'Ikon (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Fint damm PM2.5',
     edOutdoorTemp: 'Utomhustemperatur',
     edHumidity: 'Utomhusfuktighet',
@@ -478,7 +478,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Háttér',
     edAcEntity: 'Légkondicionáló entitás (climate.*)',
     edAcName: 'Megjelenítési név',
-    edAcIcon: 'Ikon (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Finom por PM2.5',
     edOutdoorTemp: 'Kültéri hőmérséklet',
     edHumidity: 'Kültéri páratartalom',
@@ -537,7 +537,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Pozadí',
     edAcEntity: 'Entita klimatizace (climate.*)',
     edAcName: 'Zobrazovaný název',
-    edAcIcon: 'Ikona (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Jemný prach PM2.5',
     edOutdoorTemp: 'Venkovní teplota',
     edHumidity: 'Venkovní vlhkost',
@@ -596,7 +596,7 @@ const AC_TRANSLATIONS = {
     edBg: 'Sfondo',
     edAcEntity: 'Entità condizionatore (climate.*)',
     edAcName: 'Nome visualizzato',
-    edAcIcon: 'Icona (emoji)',
+    edAcIcon: 'Icon (mdi)',
     edPm25: 'Polvere fine PM2.5',
     edOutdoorTemp: 'Temperatura esterna',
     edHumidity: 'Umidità esterna',
@@ -1346,8 +1346,10 @@ class AcControllerCardV2 extends HTMLElement {
         + (isActive && ron  ? ' room-tab--active room-tab--on'  : '')
         + (isActive && !ron ? ' room-tab--active room-tab--off' : '')
         + (!isActive && ron ? ' room-tab--running' : '');
+      var rIconStr = (entCfg.icon && entCfg.icon !== '') ? entCfg.icon : ROOMS[j].icon || '';
+      var rIconHtml = rIconStr && rIconStr.indexOf('mdi:') === 0 ? ('<ha-icon icon="' + rIconStr + '"></ha-icon>') : (rIconStr || '');
       roomTabs += '<button class="' + tabClass + '" data-room="' + j + '">'
-        + '<span class="room-tab-ico">' + ROOMS[j].icon + '</span>'
+        + '<span class="room-tab-ico">' + rIconHtml + '</span>'
         + '<span class="room-tab-info">'
         + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
         + (showRoomTemp ? ('  <span class="room-tab-temp">' + rTempStr + '</span>') : '')
