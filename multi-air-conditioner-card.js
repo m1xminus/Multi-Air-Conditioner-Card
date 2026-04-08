@@ -1139,20 +1139,17 @@ class AcControllerCardV2 extends HTMLElement {
     var txtClr = cfg.text_color   || '#ffffff';
 
     var room    = ROOMS[this._activeIdx];
-    var domain  = room && room.id ? (room.id.split ? room.id.split('.')[0] : null) : null;
+    var roomCfg = (this._config.entities && this._config.entities[this._activeIdx]) || {};
     var hvac    = this._s(room.id);
-    // If the room entity is a sensor, treat it as read-only sensor for temperature/humidity
-    var isSensorEntity = domain === 'sensor';
-    var isOn    = isSensorEntity ? false : (hvac !== 'off');
-    var curTemp = isSensorEntity
-      ? parseFloat((this._hass.states && this._hass.states[room.id] && this._hass.states[room.id].state) || 0)
-      : parseFloat(this._a(room.id,'current_temperature') || 26);
-    var setTemp = isSensorEntity
-      ? parseFloat(this._hass.states && this._hass.states[room.id] && this._hass.states[room.id].attributes && this._hass.states[room.id].attributes.unit_of_measurement ? this._hass.states[room.id].state : 24)
-      : parseFloat(this._a(room.id,'temperature')         || 24);
-    var fanMode  = isSensorEntity ? 'auto' : (this._a(room.id,'fan_mode')     || 'auto');
-    var swingMode= isSensorEntity ? 'off'  : (this._a(room.id,'swing_mode')   || 'off');
-    var ecoOn   = isSensorEntity ? false : (this._a(room.id,'preset_mode') === 'eco');
+    var isOn    = hvac && hvac !== 'off' && hvac !== 'unknown' && hvac !== 'unavailable';
+    // temperature: prefer per-room temp sensor, fall back to climate current_temperature
+    var curTemp = (roomCfg.temp_entity && this._hass.states && this._hass.states[roomCfg.temp_entity])
+      ? parseFloat(this._hass.states[roomCfg.temp_entity].state || 0)
+      : parseFloat(this._a(room.id,'current_temperature') || 0) || 0;
+    var setTemp = parseFloat(this._a(room.id,'temperature') || 24);
+    var fanMode  = this._a(room.id,'fan_mode') || 'auto';
+    var swingMode= this._a(room.id,'swing_mode') || 'off';
+    var ecoOn   = this._a(room.id,'preset_mode') === 'eco';
     var fi  = Math.max(0, FAN_LEVELS.indexOf(fanMode));
     var si  = Math.max(0, SWING_LEVELS.indexOf(swingMode));
     var mode    = MODE_CFG[hvac] || MODE_CFG.cool;
@@ -1268,12 +1265,22 @@ class AcControllerCardV2 extends HTMLElement {
     var roomTabs = '';
     for (var j = 0; j < ROOMS.length; j++) {
       var rId = ROOMS[j].id;
-      var rDomain = rId && rId.split ? rId.split('.')[0] : null;
-      var rState = this._s(rId);
-      var ron = (rDomain === 'sensor') ? (rState && rState !== 'unknown' && rState !== 'unavailable') : (rState !== 'off');
-      var rTemp = (rDomain === 'sensor')
-        ? parseFloat(this._hass.states && this._hass.states[rId] && this._hass.states[rId].state || 0)
-        : parseFloat(this._a(rId, 'current_temperature') || 0);
+      var entCfg = (this._config.entities && this._config.entities[j]) || {};
+      var climateId = entCfg.entity_id || rId;
+      var climateState = this._s(climateId);
+      var hasClimate = !!(entCfg.entity_id && this._hass && this._hass.states && this._hass.states[entCfg.entity_id]);
+      var hasTempSensor = !!(entCfg.temp_entity && this._hass && this._hass.states && this._hass.states[entCfg.temp_entity]);
+
+      var ron = false;
+      if (hasClimate) ron = climateState !== 'off' && climateState !== 'unknown' && climateState !== 'unavailable';
+      else if (hasTempSensor) {
+        var sst = this._hass.states[entCfg.temp_entity].state;
+        ron = sst !== 'unknown' && sst !== 'unavailable' && sst !== null && sst !== '';
+      }
+
+      var rTemp = 0;
+      if (hasTempSensor) rTemp = parseFloat(this._hass.states[entCfg.temp_entity].state || 0);
+      else rTemp = parseFloat(this._a(climateId, 'current_temperature') || 0);
       var rTempStr = rTemp > 0 ? Math.round(rTemp) + '°' : '--';
       var isActive = j === this._activeIdx;
       var tabClass = 'room-tab'
@@ -1286,7 +1293,7 @@ class AcControllerCardV2 extends HTMLElement {
         + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
         + '  <span class="room-tab-temp">' + rTempStr + '</span>'
         + '</span>'
-        + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (rDomain === 'sensor' ? rTempStr : (ron ? 'ON' : 'OFF')) + '</span>'
+        + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (hasTempSensor ? rTempStr : (ron ? 'ON' : 'OFF')) + '</span>'
         + '</button>';
     }
 
@@ -1319,18 +1326,27 @@ class AcControllerCardV2 extends HTMLElement {
     var pm25Val = cfg.pm25_entity && this._hass && this._hass.states[cfg.pm25_entity]
       ? parseFloat(this._hass.states[cfg.pm25_entity].state) || '--'
       : '--';
-    // Nhiệt độ ngoài: ưu tiên sensor config, fallback current_temperature phòng đang chọn
-    var outdoorTempVal = cfg.outdoor_temp_entity && this._hass && this._hass.states[cfg.outdoor_temp_entity]
-      ? Math.round(parseFloat(this._hass.states[cfg.outdoor_temp_entity].state)) + '°'
-      : (curTemp > 0 ? Math.round(curTemp) + '°' : '--°');
-    // Độ ẩm: ưu tiên sensor config, fallback humidity attr của phòng đang chọn
-    var roomHumidity = parseFloat(this._a(room.id, 'current_humidity') || this._a(room.id, 'humidity') || 0);
-    var humidityVal = cfg.humidity_entity && this._hass && this._hass.states[cfg.humidity_entity]
-      ? Math.round(parseFloat(this._hass.states[cfg.humidity_entity].state)) + '%'
-      : (roomHumidity > 0 ? Math.round(roomHumidity) + '%' : '--%');
-    var powerVal = cfg.power_entity && this._hass && this._hass.states[cfg.power_entity]
-      ? parseFloat(this._hass.states[cfg.power_entity].state).toFixed(1) + ' kW'
-      : '--';
+    // Average temperature sensor (header)
+    var avgTempVal = cfg.avg_temp_entity && this._hass && this._hass.states[cfg.avg_temp_entity]
+      ? Math.round(parseFloat(this._hass.states[cfg.avg_temp_entity].state)) + '°'
+      : '--°';
+    // Outdoor / displayed temp: prefer per-room temp sensor (already in curTemp), fall back to curTemp
+    var outdoorTempVal = curTemp > 0 ? Math.round(curTemp) + '°' : '--°';
+    // Humidity: prefer per-room humidity sensor, else room attributes
+    var humidityVal = '--%';
+    if (roomCfg.humidity_entity && this._hass && this._hass.states[roomCfg.humidity_entity]) {
+      humidityVal = Math.round(parseFloat(this._hass.states[roomCfg.humidity_entity].state)) + '%';
+    } else {
+      var roomHumidity = parseFloat(this._a(room.id, 'current_humidity') || this._a(room.id, 'humidity') || 0);
+      humidityVal = roomHumidity > 0 ? Math.round(roomHumidity) + '%' : '--%';
+    }
+    // Power: prefer per-room power sensor, else global
+    var powerVal = '--';
+    if (roomCfg.power_entity && this._hass && this._hass.states[roomCfg.power_entity]) {
+      powerVal = parseFloat(this._hass.states[roomCfg.power_entity].state).toFixed(1) + ' kW';
+    } else if (cfg.power_entity && this._hass && this._hass.states[cfg.power_entity]) {
+      powerVal = parseFloat(this._hass.states[cfg.power_entity].state).toFixed(1) + ' kW';
+    }
 
     // ── Không có <link>/<style> ở đây – đã inject ở connectedCallback
     var html = '<div class="card" style="--accent:' + mode.color + ';--glow:' + mode.glow + ';background:' + bgGrad + '">'
@@ -1353,6 +1369,7 @@ class AcControllerCardV2 extends HTMLElement {
 + '  <div>'
 + '    <div class="greet-sub">' + tr.greet() + '</div>'
 + '    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>'
++ '    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div>'
 + '  </div>'
 + '  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">&#127807; ' + (ecoOn ? 'ECO ON' : 'ECO') + '</button>'
 + '</div>'
@@ -1918,24 +1935,33 @@ class MultiAcCardEditor extends HTMLElement {
     const apply = () => {
       this.shadowRoot.querySelectorAll('ha-entity-picker').forEach(p => {
         p.hass = this._hass;
-        const domain = p.dataset.domain;
-        if (domain) p.includeDomains = [domain];
-        const key   = p.dataset.key;
-        const saved = this._config[key] || '';
-        if (saved && p.value !== saved) {
-          p.value = saved;
-          p.setAttribute('value', saved);
+        // decide domain default based on picker role
+        let domain = p.dataset.domain;
+        if (!domain) {
+          if (p.dataset.room) domain = 'climate';
+          else if (p.dataset.roomTemp || p.dataset.roomTemp === '') domain = 'sensor';
+          else if (p.dataset.roomHum || p.dataset.roomHum === '') domain = 'sensor';
+          else if (p.dataset.roomPower || p.dataset.roomPower === '') domain = 'sensor';
+          else domain = 'sensor';
         }
-      });
-      // entity pickers cho từng room — respect picker dataset.domain (so room pickers can be sensors or climate)
-      this.shadowRoot.querySelectorAll('ha-entity-picker[data-room]').forEach(p => {
-        p.hass = this._hass;
-        const domain = p.dataset.domain || 'climate';
-        p.includeDomains = [domain];
-        const idx   = parseInt(p.dataset.room);
-        const ents  = this._config.entities || [];
-        const saved = (ents[idx] && ents[idx].entity_id) || '';
-        if (saved && p.value !== saved) { p.value = saved; p.setAttribute('value', saved); }
+        if (domain) p.includeDomains = [domain];
+
+        // restore saved values for global pickers (data-key)
+        const key = p.dataset.key;
+        if (key) {
+          const saved = this._config[key] || '';
+          if (saved && p.value !== saved) { p.value = saved; p.setAttribute('value', saved); }
+          return;
+        }
+
+        // per-room pickers
+        const idx = p.dataset.room !== undefined ? parseInt(p.dataset.room) : (p.dataset.roomTemp !== undefined ? parseInt(p.dataset.roomTemp) : (p.dataset.roomHum !== undefined ? parseInt(p.dataset.roomHum) : (p.dataset.roomPower !== undefined ? parseInt(p.dataset.roomPower) : -1)));
+        if (idx >= 0) {
+          const ents = this._config.entities || [];
+          const ent = ents[idx] || {};
+          const saved = p.dataset.room ? (ent.entity_id || '') : (p.dataset.roomTemp ? (ent.temp_entity || '') : (p.dataset.roomHum ? (ent.humidity_entity || '') : (p.dataset.roomPower ? (ent.power_entity || '') : '')));
+          if (saved && p.value !== saved) { p.value = saved; p.setAttribute('value', saved); }
+        }
       });
     };
     apply();
@@ -2014,7 +2040,19 @@ class MultiAcCardEditor extends HTMLElement {
   <div class="ac-row-title">❄ ${t.edRooms.replace(/^❄\s*/,'')} ${i+1} – ${defLbl}</div>
   <div class="row">
     <label>${t.edAcEntity}</label>
-    <ha-entity-picker data-room="${i}" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+    <ha-entity-picker data-room="${i}" data-domain="climate" allow-custom-entity></ha-entity-picker>
+  </div>
+  <div class="row">
+    <label>Temperature sensor</label>
+    <ha-entity-picker data-room-temp="${i}" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+  </div>
+  <div class="row">
+    <label>Humidity sensor</label>
+    <ha-entity-picker data-room-hum="${i}" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+  </div>
+  <div class="row">
+    <label>Power sensor</label>
+    <ha-entity-picker data-room-power="${i}" data-domain="sensor" allow-custom-entity></ha-entity-picker>
   </div>
   <div class="row">
     <label>${t.edAcName}</label>
@@ -2109,6 +2147,10 @@ class MultiAcCardEditor extends HTMLElement {
       style="width:100%;margin-top:6px;padding:8px 10px;border-radius:8px;
         border:1px solid var(--divider-color);background:var(--card-background-color,#fff);
         color:var(--primary-text-color);font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;">
+  </div>
+  <div class="row" style="margin-bottom:8px;">
+    <label>Average temperature sensor</label>
+    <ha-entity-picker data-key="avg_temp_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
   </div>
 
   <!-- 1. Language -->
@@ -2336,16 +2378,52 @@ class MultiAcCardEditor extends HTMLElement {
       });
     }
 
-    // ha-entity-picker: room entities
+    // ha-entity-picker: room entities (climate)
     sr.querySelectorAll('ha-entity-picker[data-room]').forEach(picker =>
       picker.addEventListener('value-changed', e => {
         const idx  = parseInt(picker.dataset.room);
         const val  = e.detail.value;
-        const rcMax = Math.max(1, Math.min(8, parseInt(this._config.room_count) || 4));
         const ents = (this._config.entities || []).slice();
         while (ents.length <= idx) ents.push({});
         if (val) ents[idx] = { ...ents[idx], entity_id: val };
-        else delete ents[idx].entity_id;
+        else if (ents[idx]) delete ents[idx].entity_id;
+        this._config = { ...this._config, entities: ents };
+        this._fire();
+      }));
+
+    // per-room temp/humidity/power pickers
+    sr.querySelectorAll('ha-entity-picker[data-room-temp]').forEach(picker =>
+      picker.addEventListener('value-changed', e => {
+        const idx = parseInt(picker.dataset.roomTemp);
+        const val = e.detail.value;
+        const ents = (this._config.entities || []).slice();
+        while (ents.length <= idx) ents.push({});
+        if (val) ents[idx] = { ...ents[idx], temp_entity: val };
+        else if (ents[idx]) delete ents[idx].temp_entity;
+        this._config = { ...this._config, entities: ents };
+        this._fire();
+      }));
+
+    sr.querySelectorAll('ha-entity-picker[data-room-hum]').forEach(picker =>
+      picker.addEventListener('value-changed', e => {
+        const idx = parseInt(picker.dataset.roomHum);
+        const val = e.detail.value;
+        const ents = (this._config.entities || []).slice();
+        while (ents.length <= idx) ents.push({});
+        if (val) ents[idx] = { ...ents[idx], humidity_entity: val };
+        else if (ents[idx]) delete ents[idx].humidity_entity;
+        this._config = { ...this._config, entities: ents };
+        this._fire();
+      }));
+
+    sr.querySelectorAll('ha-entity-picker[data-room-power]').forEach(picker =>
+      picker.addEventListener('value-changed', e => {
+        const idx = parseInt(picker.dataset.roomPower);
+        const val = e.detail.value;
+        const ents = (this._config.entities || []).slice();
+        while (ents.length <= idx) ents.push({});
+        if (val) ents[idx] = { ...ents[idx], power_entity: val };
+        else if (ents[idx]) delete ents[idx].power_entity;
         this._config = { ...this._config, entities: ents };
         this._fire();
       }));
