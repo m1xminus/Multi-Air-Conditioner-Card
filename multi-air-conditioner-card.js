@@ -2135,7 +2135,10 @@ class MultiAcCardEditor extends HTMLElement {
   </div>
   <div class="row">
     <label>${t.edAcIcon}</label>
-    <input class="txt-inp" type="text" id="inp-room-icon-${i}" placeholder="${defIco}" value="${ent.icon||''}"/>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <input class="txt-inp" type="text" id="inp-room-icon-${i}" placeholder="${defIco}" value="${ent.icon||''}"/>
+      <span id="preview-room-icon-${i}" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+    </div>
   </div>
 </div>`;
     }
@@ -2598,13 +2601,19 @@ class MultiAcCardEditor extends HTMLElement {
     for (let i = 0; i < roomCountBind; i++) {
       const lblEl  = sr.getElementById('inp-room-label-' + i);
       const iconEl = sr.getElementById('inp-room-icon-'  + i);
+      const iconPrev = sr.getElementById('preview-room-icon-' + i);
       wireTextInput(lblEl, val => {
         const ents = (this._config.entities || []).slice();
         while (ents.length <= i) ents.push({});
         ents[i] = { ...ents[i], label: val };
         this._config = { ...this._config, entities: ents };
       });
+      if (iconPrev && iconEl) {
+        const v0 = iconEl.value || '';
+        iconPrev.innerHTML = v0 ? `<ha-icon icon="${v0}"></ha-icon>` : '';
+      }
       wireTextInput(iconEl, val => {
+        if (iconPrev) iconPrev.innerHTML = val ? `<ha-icon icon="${val}"></ha-icon>` : '';
         const ents = (this._config.entities || []).slice();
         while (ents.length <= i) ents.push({});
         ents[i] = { ...ents[i], icon: val };
