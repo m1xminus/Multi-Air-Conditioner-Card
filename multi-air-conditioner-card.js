@@ -687,8 +687,8 @@ const AC_BG_PRESETS = [
 
 function acPresetGradient(preset, c1, c2) {
   const p = AC_BG_PRESETS.find(x => x.id === preset) || AC_BG_PRESETS[0];
-  const gc1 = (preset === 'custom' ? c1 : p.c1) || '#001e2b'; 
-    const gc2 = (preset === 'custom' ? c2 : p.c2) || '#12c6f3'; 
+     const gc1 = (preset === 'custom' ? c1 : p.c1) || '#001e2b';
+     const gc2 = (preset === 'custom' ? c2 : p.c2) || '#12c6f3';
   return 'linear-gradient(135deg, ' + gc1 + 'bb 0%, ' + gc2 + '44 100%)';
 }
 
@@ -697,7 +697,7 @@ const AC_DEFAULT_CONFIG = {
   background_preset: 'default',
   bg_color1: '#001e2b',
   bg_color2: '#12c6f3',
-  accent_color: '#00ffcc',
+    accent_color: '#00ffcc',
   text_color: '#ffffff',
   room_count: 4,
   features: {
@@ -1276,26 +1276,39 @@ class AcControllerCardV2 extends HTMLElement {
     var fanLabels   = tr.fans   || ['Auto','Low','Medium','High'];
     var swingLabels = tr.swings || ['Fixed','Up/Down','Left/Right','Both'];
 
-    var pct    = Math.max(0, Math.min(1, (curTemp - 16) / 16));
-    var arcEnd = -140 + pct * 280;
-    var dotRad = (arcEnd - 90) * Math.PI / 180;
-    var dotX   = (110 + 88 * Math.cos(dotRad)).toFixed(1);
-    var dotY   = (110 + 88 * Math.sin(dotRad)).toFixed(1);
+    // Normalize temperatures to a 0–40°C scale for the dials
+    var clamp = function(v) { return Math.max(0, Math.min(1, v)); };
+    var pctActual = clamp(curTemp / 40);
+    var pctSet    = clamp(setTemp / 40);
+    var arcEndAct = -140 + pctActual * 280;
+    var arcEndSet = -140 + pctSet * 280;
+    var dotRad    = (arcEndAct - 90) * Math.PI / 180;
+    var dotX      = (110 + 88 * Math.cos(dotRad)).toFixed(1);
+    var dotY      = (110 + 88 * Math.sin(dotRad)).toFixed(1);
 
+    // Format temperature strings: one decimal when sourced from a sensor
+    var curTempStr = (roomCfg.temp_entity && this._hass.states && this._hass.states[roomCfg.temp_entity]) ? curTemp.toFixed(1) : Math.round(curTemp);
+    var setTempStr = (setTemp % 1 !== 0) ? setTemp.toFixed(1) : setTemp;
     var now     = new Date();
     var timeStr = now.toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit'});
     var dateStr = now.toLocaleDateString('vi-VN', {weekday:'long', day:'2-digit', month:'2-digit'});
 
     var arcTrack = this._arc(110,110,88,-140,140);
-    var arcFill  = pct > 0.02 ? this._arc(110,110,88,-140,arcEnd) : '';
+    var arcFillAct = pctActual > 0.02 ? this._arc(110,110,88,-140,arcEndAct) : '';
+    var arcFillSet = pctSet    > 0.02 ? this._arc(110,110,72,-140,arcEndSet) : '';
 
     var arcFillSvg = '';
-    if (pct > 0.02) {
-      arcFillSvg = '<path d="' + arcFill + '" fill="none" stroke="url(#arcGrad)" stroke-width="12" stroke-linecap="round" filter="url(#arcGlow)" opacity="0.95"/>';
+    var activeColor = isOn ? mode.color : (MODE_CFG.off && MODE_CFG.off.color ? MODE_CFG.off.color : '#7e8594');
+    var activeGlow  = isOn ? 'url(#arcGlow)' : '';
+    if (pctActual > 0.02) {
+      arcFillSvg += '<path d="' + arcFillAct + '" fill="none" stroke="' + activeColor + '" stroke-width="12" stroke-linecap="round"' + (activeGlow ? ' filter="' + activeGlow + '"' : '') + ' opacity="' + (isOn ? 0.95 : 0.22) + '"/>';
+    }
+    if (pctSet > 0.02) {
+      arcFillSvg += '<path d="' + arcFillSet + '" fill="none" stroke="' + activeColor + '" stroke-width="6" stroke-linecap="round" opacity="0.6"/>';
     }
     var dotSvg = '';
-    if (pct > 0.02) {
-      dotSvg = '<circle cx="' + dotX + '" cy="' + dotY + '" r="8" fill="' + mode.color + '" filter="url(#dotGlow)"/>'
+    if (pctActual > 0.02) {
+      dotSvg = '<circle cx="' + dotX + '" cy="' + dotY + '" r="8" fill="' + activeColor + '"' + (isOn ? ' filter="url(#dotGlow)"' : '') + '/>'
              + '<circle cx="' + dotX + '" cy="' + dotY + '" r="4" fill="white" opacity="0.9"/>';
     }
 
@@ -1545,14 +1558,14 @@ class AcControllerCardV2 extends HTMLElement {
 + '</svg>'
 + '<div class="dial-center">'
 + '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
-+ '  <div class="dial-temp">' + Math.round(curTemp) + '<span class="dial-deg">&#176;</span></div>'
++ '  <div class="dial-temp">' + curTempStr + '<span class="dial-deg">&#176;</span></div>'
 + '  <div class="dial-feel">' + comfortTxt + '</div>'
 + '</div>'
 + '</div>'
 
 + '<div class="temp-ctrl">'
 + '  <button class="temp-btn" id="btn-temp-down">&#8722;</button>'
-+ '  <span class="temp-set">' + setTemp + '&#176;C</span>'
++ '  <span class="temp-set">' + setTempStr + '&#176;C</span>'
 + '  <button class="temp-btn" id="btn-temp-up">+</button>'
 + '</div>'
 
@@ -1604,7 +1617,7 @@ class AcControllerCardV2 extends HTMLElement {
 + '    <span class="ac-overlay-txt">' + (isOn ? tr.overlayOn : tr.overlayOff) + '</span>'
 + modeChip
 + '  </div>'
-+ '  <div class="img-temp-badge">' + Math.round(curTemp) + '<span>&#176;C</span></div>'
++ '  <div class="img-temp-badge">' + curTempStr + '<span>&#176;C</span></div>'
 + '  <div class="img-room-name">' + room.label + '</div>'
 + '</div>'
 
