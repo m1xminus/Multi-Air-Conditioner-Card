@@ -830,10 +830,10 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .dial-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-38%);
   display:flex;flex-direction:column;align-items:center;pointer-events:none;user-select:none;width:144px;height:144px}
 .dial-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:500}
-.dial-temp{font-family:'Orbitron',sans-serif;font-size:60px;font-weight:800;color:#ffffff;line-height:1;
-  text-shadow:0 0 30px var(--glow),0 0 60px var(--glow)}
+.dial-temp{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:800;color:#ffffff;line-height:1;
+  text-shadow:0 0 26px var(--glow),0 0 50px var(--glow)}
 .dial-deg{font-size:24px;font-weight:400;vertical-align:super;line-height:0}
-.dial-feel{font-size:10px;color:rgba(255,255,255,0.6);margin-top:5px;font-weight:300;text-align:center}
+.dial-feel{display:none}
 .temp-ctrl{display:flex;align-items:center;justify-content:center}
 .temp-btn{width:36px;height:36px;border-radius:50%;background:rgba(0,20,50,0.25);
   border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.9);font-size:18px;
@@ -841,7 +841,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .temp-btn:hover{background:rgba(0,30,70,0.4);border-color:var(--accent);color:var(--accent);box-shadow:0 0 18px var(--glow)}
 .temp-btn:active{transform:scale(0.88)}
 .temp-set{min-width:100px;text-align:center;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85)}
-.mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
+.mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:220px;margin:8px auto 6px;justify-items:center}
 .mode-btn{background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
   padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;
   cursor:pointer;outline:none;color:rgba(255,255,255,0.75);font-size:8px;font-weight:600;
@@ -932,7 +932,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .ac-mode-chip{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--accent);
   font-size:8.5px;font-weight:600;padding:2px 9px;border-radius:10px}
 .img-temp-badge{position:absolute;bottom:18px;left:14px;z-index:3;
-  font-family:'Orbitron',sans-serif;font-size:28px;font-weight:800;
+  font-family:'Orbitron',sans-serif;font-size:22px;font-weight:800;
   color:#ffffff;line-height:1;
   text-shadow:0 0 18px var(--glow),0 0 40px var(--glow),0 2px 20px rgba(0,0,0,0.7);
   animation:tempPulse 2.2s ease-in-out infinite}
@@ -982,16 +982,16 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .all-off-title{font-size:11px;font-weight:600;color:rgba(255,150,150,0.85)}
 .all-off-sub{font-size:8.5px;color:rgba(255,255,255,0.5);margin-top:1px}
 .all-off-arr{color:rgba(255,100,100,0.35);font-size:18px}
-.bottom-row{display:flex;gap:8px}
-.power-row{display:flex;align-items:center;gap:10px;background:rgba(0,20,50,0.3);
-  border:1px solid rgba(255,255,255,0.25);border-radius:18px;padding:12px 14px;
-  cursor:pointer;outline:none;text-align:left;transition:all 0.2s;font-family:'Sora',sans-serif;flex:1.6;min-width:0}
+.bottom-row{display:flex;gap:8px;width:220px;margin:0 auto;justify-content:space-between}
+.power-row{display:flex;align-items:center;gap:8px;background:rgba(0,20,50,0.3);
+  border:1px solid rgba(255,255,255,0.25);border-radius:18px;padding:10px 10px;
+  cursor:pointer;outline:none;text-align:left;transition:all 0.2s;font-family:'Sora',sans-serif;flex:none;width:140px;min-width:0}
 .power-row:hover{background:rgba(0,30,70,0.45)}
 .power-row:active{transform:scale(0.98)}
 .timer-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.22);border-radius:18px;
-  padding:10px 8px;cursor:pointer;outline:none;font-family:'Sora',sans-serif;
-  transition:all 0.2s;flex:1;min-width:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+  padding:8px 6px;cursor:pointer;outline:none;font-family:'Sora',sans-serif;
+  transition:all 0.2s;flex:none;width:68px;min-width:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 .timer-btn:hover{background:rgba(0,30,70,0.45);border-color:rgba(251,191,36,0.45)}
 .timer-btn--active{border-color:rgba(251,191,36,0.75)!important;background:rgba(251,191,36,0.12)!important;box-shadow:0 0 14px rgba(251,191,36,0.2)}
 .timer-ico{font-size:18px;line-height:1;pointer-events:none}
@@ -1282,13 +1282,9 @@ class AcControllerCardV2 extends HTMLElement {
     var pctSet    = clamp(setTemp / 40);
     var arcEndAct = -140 + pctActual * 280;
     var arcEndSet = -140 + pctSet * 280;
-    // compute dot positions for inner (actual) and outer (target) rings
-    var dotRadAct = (arcEndAct - 90) * Math.PI / 180;
-    var dotRadSet = (arcEndSet - 90) * Math.PI / 180;
-    var dotInnerX = (110 + 72 * Math.cos(dotRadAct)).toFixed(1);
-    var dotInnerY = (110 + 72 * Math.sin(dotRadAct)).toFixed(1);
-    var dotOuterX = (110 + 88 * Math.cos(dotRadSet)).toFixed(1);
-    var dotOuterY = (110 + 88 * Math.sin(dotRadSet)).toFixed(1);
+    var dotRad    = (arcEndAct - 90) * Math.PI / 180;
+    var dotX      = (110 + 88 * Math.cos(dotRad)).toFixed(1);
+    var dotY      = (110 + 88 * Math.sin(dotRad)).toFixed(1);
 
     // Format temperature strings: one decimal when sourced from a sensor
     var curTempStr = (roomCfg.temp_entity && this._hass.states && this._hass.states[roomCfg.temp_entity]) ? curTemp.toFixed(1) : Math.round(curTemp);
@@ -1298,32 +1294,28 @@ class AcControllerCardV2 extends HTMLElement {
     var dateStr = now.toLocaleDateString('vi-VN', {weekday:'long', day:'2-digit', month:'2-digit'});
 
     var arcTrack = this._arc(110,110,88,-140,140);
-    // inner arc = actual temperature (smaller radius), outer arc = target/set temperature
-    var arcFillAct = pctActual > 0.02 ? this._arc(110,110,72,-140,arcEndAct) : '';
-    var arcFillSet = pctSet    > 0.02 ? this._arc(110,110,88,-140,arcEndSet) : '';
+    var arcFillAct = pctActual > 0.02 ? this._arc(110,110,88,-140,arcEndAct) : '';
+    var arcFillSet = pctSet    > 0.02 ? this._arc(110,110,72,-140,arcEndSet) : '';
 
     var arcFillSvg = '';
     var activeColor = isOn ? mode.color : (MODE_CFG.off && MODE_CFG.off.color ? MODE_CFG.off.color : '#7e8594');
     var activeGlow  = isOn ? 'url(#arcGlow)' : '';
-    if (pctSet > 0.02) {
-      // outer arc = target
-      arcFillSvg += '<path d="' + arcFillSet + '" fill="none" stroke="' + activeColor + '" stroke-width="12" stroke-linecap="round" opacity="0.9"' + (isOn ? ' filter="url(#arcGlow)"' : '') + '/>';
-    }
-    // inner arc = actual
     if (pctActual > 0.02) {
-      arcFillSvg += '<path d="' + arcFillAct + '" fill="none" stroke="' + activeColor + '" stroke-width="8" stroke-linecap="round" opacity="0.95"/>';
+      arcFillSvg += '<path d="' + arcFillAct + '" fill="none" stroke="' + activeColor + '" stroke-width="12" stroke-linecap="round"' + (activeGlow ? ' filter="' + activeGlow + '"' : '') + ' opacity="' + (isOn ? 0.95 : 0.22) + '"/>';
+    }
+    if (pctSet > 0.02) {
+      // inner arc uses round linecap so its end appears as the target dot
+      arcFillSvg += '<path d="' + arcFillSet + '" fill="none" stroke="' + activeColor + '" stroke-width="8" stroke-linecap="round" opacity="0.9"/>';
+    }
+    var dotSvg = '';
+    if (pctActual > 0.02) {
+      dotSvg = '<circle cx="' + dotX + '" cy="' + dotY + '" r="8" fill="' + activeColor + '"' + (isOn ? ' filter="url(#dotGlow)"' : '') + '/>'
+             + '<circle cx="' + dotX + '" cy="' + dotY + '" r="4" fill="white" opacity="0.9"/>';
     }
 
-    // Dots: one per dial
-    var dotOuterSvg = '';
-    if (pctSet > 0.02) {
-      dotOuterSvg = '<circle cx="' + dotOuterX + '" cy="' + dotOuterY + '" r="6" fill="none" stroke="' + activeColor + '" stroke-width="2" opacity="0.95"/>';
-    }
-    var dotInnerSvg = '';
-    if (pctActual > 0.02) {
-      dotInnerSvg = '<circle cx="' + dotInnerX + '" cy="' + dotInnerY + '" r="8" fill="' + activeColor + '"' + (isOn ? ' filter="url(#dotGlow)"' : '') + '/>'
-                  + '<circle cx="' + dotInnerX + '" cy="' + dotInnerY + '" r="4" fill="white" opacity="0.9"/>';
-    }
+    // Tick marks
+    var ticks = '';
+    for (var k = 0; k < 17; k++) {
       var tDeg = -140 + k * 280 / 16;
       var tRad = (tDeg - 90) * Math.PI / 180;
       var tx1 = (110 + 79 * Math.cos(tRad)).toFixed(1), ty1 = (110 + 79 * Math.sin(tRad)).toFixed(1);
@@ -1563,8 +1555,7 @@ class AcControllerCardV2 extends HTMLElement {
 + '<path d="' + arcTrack + '" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" stroke-linecap="round"/>'
 + ticks
 + arcFillSvg
-+ dotOuterSvg
-+ dotInnerSvg
++ dotSvg
 + '</svg>'
 + '<div class="dial-center">'
 + '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
