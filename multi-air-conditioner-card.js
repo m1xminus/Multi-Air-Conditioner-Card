@@ -655,6 +655,17 @@ const AC_DEFAULT_CONFIG = {
     show_metrics_humidity: true,
     show_metrics_power: true,
   },
+  icons: {
+    eco: '',
+    fav: '',
+    clean: '',
+    power: '',
+    timer: '',
+    all_off: '',
+    metric_temp: '',
+    metric_humidity: '',
+    metric_power: '',
+  },
 };
 
 const ROOM_IMAGES = [
@@ -1153,6 +1164,7 @@ class AcControllerCardV2 extends HTMLElement {
     var txtClr = cfg.text_color   || '#ffffff';
     // Features config (early so room-tabs can use them)
     var features = cfg.features || {};
+    var icons = cfg.icons || {};
     var showAvg    = features.show_avg_temp !== false;
     var showWelcome= features.show_welcome !== false;
     var showEco    = features.show_eco !== false;
@@ -1164,6 +1176,15 @@ class AcControllerCardV2 extends HTMLElement {
     var showMetricTemp = features.show_metrics_temp !== false;
     var showMetricHumidity = features.show_metrics_humidity !== false;
     var showMetricPower = features.show_metrics_power !== false;
+    var ecoIcon = icons.eco || '';
+    var favIcon = icons.fav || '';
+    var cleanIcon = icons.clean || '';
+    var powerIcon = icons.power || '';
+    var timerIcon = icons.timer || '';
+    var allOffIcon = icons.all_off || '';
+    var metricTempIcon = icons.metric_temp || '';
+    var metricHumidityIcon = icons.metric_humidity || '';
+    var metricPowerIcon = icons.metric_power || '';
     var featureModes = (features.modes && typeof features.modes === 'object') ? features.modes : { cool:true,heat:true,dry:true,fan_only:true };
 
     var room    = ROOMS[this._activeIdx];
@@ -1399,7 +1420,7 @@ class AcControllerCardV2 extends HTMLElement {
         + '    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>'
         + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div>') : '')
         + '  </div>'
-        + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
+        + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoIcon ? (ecoIcon + ' ') : '') + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
         + '</div>';
     } else {
       if (showAvg) {
@@ -1466,9 +1487,9 @@ class AcControllerCardV2 extends HTMLElement {
  + '</div>') : '')
 
  + '<div class="chips">'
- + (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">Eco</button>') : '')
- + (showFav ? ('  <button class="chip chip--a">Fav</button>') : '')
- + (showClean ? ('  <button class="chip chip--b">Clean</button>') : '')
+ + (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">' + (ecoIcon ? (ecoIcon + ' ') : '') + 'Eco</button>') : '')
+ + (showFav ? ('  <button class="chip chip--a">' + (favIcon ? (favIcon + ' ') : '') + 'Fav</button>') : '')
+ + (showClean ? ('  <button class="chip chip--b">' + (cleanIcon ? (cleanIcon + ' ') : '') + 'Clean</button>') : '')
  + '</div>'
 
  + '<div class="bottom-row">'
@@ -1949,7 +1970,7 @@ class MultiAcCardEditor extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this._config = { ...AC_DEFAULT_CONFIG };
     this._hass   = null;
-    this._open   = { lang: true, roomcount: true, rooms: true, sensors: true, features: true, colors: false, bg: true };
+    this._open   = { lang: true, roomcount: true, rooms: true, sensors: true, features: true, icons: false, colors: false, bg: true };
     this._picker = null;
   }
 
@@ -2065,6 +2086,7 @@ class MultiAcCardEditor extends HTMLElement {
   _render() {
     const cfg  = this._config;
     const t    = this.t;
+    const icons = cfg.icons || {};
     const bgP  = cfg.background_preset || 'default';
     const lang = cfg.language || 'vi';
     const roomCount = Math.max(1, Math.min(8, parseInt(cfg.room_count) || 4));
@@ -2271,7 +2293,54 @@ class MultiAcCardEditor extends HTMLElement {
     </div>
   </div>
 
-  <!-- 2. Số phòng -->
+    <!-- 3. Icons -->
+    <div class="acc-wrap">
+      <div class="acc-head" id="head-icons">
+        <ha-icon icon="mdi:vector-square"></ha-icon> Icons
+        <span class="acc-arrow" id="arrow-icons">${this._open.icons?'▾':'▸'}</span>
+      </div>
+      <div class="acc-body" id="body-icons" style="display:${this._open.icons?'block':'none'}">
+        <div class="row">
+          <label>Eco icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-eco" placeholder="mdi:leaf" value="${icons.eco||''}"/>
+        </div>
+        <div class="row">
+          <label>Fav icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-fav" placeholder="mdi:heart" value="${icons.fav||''}"/>
+        </div>
+        <div class="row">
+          <label>Clean icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-clean" placeholder="mdi:broom" value="${icons.clean||''}"/>
+        </div>
+        <div class="row">
+          <label>Power icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-power" placeholder="mdi:power" value="${icons.power||''}"/>
+        </div>
+        <div class="row">
+          <label>Timer icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-timer" placeholder="mdi:timer" value="${icons.timer||''}"/>
+        </div>
+        <div class="row">
+          <label>All-off icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-alloff" placeholder="mdi:power-off" value="${icons.all_off||''}"/>
+        </div>
+        <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Metrics icons</div>
+        <div class="row">
+          <label>Temperature metric icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-metric-temp" placeholder="mdi:thermometer" value="${icons.metric_temp||''}"/>
+        </div>
+        <div class="row">
+          <label>Humidity metric icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-metric-humidity" placeholder="mdi:water-percent" value="${icons.metric_humidity||''}"/>
+        </div>
+        <div class="row">
+          <label>Power metric icon</label>
+          <input class="txt-inp" type="text" id="inp-icon-metric-power" placeholder="mdi:flash" value="${icons.metric_power||''}"/>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Số phòng -->
   <div class="acc-wrap">
     <div class="acc-head" id="head-roomcount">
       <ha-icon icon="mdi:home-group"></ha-icon> ${t.edRoomsHeader(roomCount)}
@@ -2350,7 +2419,7 @@ class MultiAcCardEditor extends HTMLElement {
     const sr = this.shadowRoot;
 
     // accordion
-    ['lang','roomcount','rooms','sensors','features','bg'].forEach(id => {
+    ['lang','roomcount','rooms','sensors','features','icons','bg'].forEach(id => {
       const hdr = sr.getElementById('head-' + id);
       if (hdr) hdr.addEventListener('click', () => this._toggleSection(id));
     });
@@ -2570,6 +2639,20 @@ class MultiAcCardEditor extends HTMLElement {
     if (elMHum) elMHum.addEventListener('change', () => setFeature('show_metrics_humidity', elMHum.checked));
     const elMPow = sr.getElementById('feat-show-metric-power');
     if (elMPow) elMPow.addEventListener('change', () => setFeature('show_metrics_power', elMPow.checked));
+    // Icons inputs
+    const iconMapping = [
+      ['eco','inp-icon-eco'],['fav','inp-icon-fav'],['clean','inp-icon-clean'],['power','inp-icon-power'],['timer','inp-icon-timer'],['all_off','inp-icon-alloff'],
+      ['metric_temp','inp-icon-metric-temp'],['metric_humidity','inp-icon-metric-humidity'],['metric_power','inp-icon-metric-power']
+    ];
+    iconMapping.forEach(([key,id]) => {
+      const el = sr.getElementById(id);
+      if (!el) return;
+      wireTextInput(el, val => {
+        const icons = Object.assign({}, this._config.icons || {});
+        if (val) icons[key] = val; else delete icons[key];
+        this._config = { ...this._config, icons };
+      });
+    });
     // modes
     const modeIds = ['cool','heat','dry','fan_only'];
     modeIds.forEach(m => {
