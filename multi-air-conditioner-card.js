@@ -1902,7 +1902,7 @@ class AcControllerCardV2 extends HTMLElement {
     if (!btn) return;
 
     var HOURS     = [0.5, 1, 1.5, 2, 3, 4, 6, 8];
-    var HOUR_LBLS = ['30p','1h','1.5h','2h','3h','4h','6h','8h'];
+    var HOUR_LBLS = [(tr && tr.halfHourLabel) ? tr.halfHourLabel : '30m','1h','1.5h','2h','3h','4h','6h','8h'];
 
     function closePopup() {
       var p = sr.getElementById('timer-popup-el');
@@ -1945,10 +1945,10 @@ class AcControllerCardV2 extends HTMLElement {
         + '</div>'
         // Dòng nhập số phút tùy chỉnh
         + '<div style="display:flex;align-items:center;gap:6px;margin-bottom:10px">'
-        +   '<input id="tp-custom-min" type="number" min="1" max="999" placeholder="Nhập phút..." value="' + customMin + '"'
+        +   '<input id="tp-custom-min" type="number" min="1" max="999" placeholder="' + ((tr && tr.customMinPlaceholder) ? tr.customMinPlaceholder : 'Enter minutes...') + '" value="' + customMin + '"'
         +     ' style="flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-radius:8px;'
         +     'padding:6px 8px;font-size:11px;font-family:Sora,sans-serif;color:#fff;outline:none;width:0">'
-        +   '<span style="font-size:9px;color:rgba(255,255,255,0.45);white-space:nowrap">ph&#250;t</span>'
+        +   '<span style="font-size:9px;color:rgba(255,255,255,0.45);white-space:nowrap">' + ((tr && tr.minAbbr) ? tr.minAbbr : 'm') + '</span>'
         + '</div>'
         + '<div class="tp-acts">'
         +   '<button class="tp-cancel" id="tp-cancel">' + tr.cancel + '</button>'
