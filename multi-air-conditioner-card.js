@@ -1444,7 +1444,6 @@ class AcControllerCardV2 extends HTMLElement {
         + '<span class="room-tab-ico">' + rIconHtml + '</span>'
         + '<span class="room-tab-info">'
         + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
-        + (showRoomTemp ? ('  <span class="room-tab-temp">' + rTempStr + '</span>') : '')
         + '</span>'
         + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (showRoomTemp ? (hasTempSensor ? rTempStr : (ron ? 'ON' : 'OFF')) : (ron ? 'ON' : 'OFF')) + '</span>'
         + '</button>';
@@ -1552,7 +1551,7 @@ class AcControllerCardV2 extends HTMLElement {
       greetPart = '<div class="greet-row">'
         + '  <div>'
         + '    <div class="greet-sub">' + tr.greet() + '</div>'
-        + '    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>'
+        + '    <div class="greet-name">' + (cfg.owner_name || '') + '</div>'
         + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div>') : '')
         + '  </div>'
         + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoIcon ? ('<ha-icon icon="' + ecoIcon + '"></ha-icon> ') : '') + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
