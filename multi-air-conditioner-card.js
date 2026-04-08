@@ -1476,6 +1476,27 @@ class AcControllerCardV2 extends HTMLElement {
     var wifiGlow  = wifiOk ? 'drop-shadow(0 0 4px #34d399)' : 'none';
     var pwSub   = isOn ? tr.statusOn : tr.statusOff;
 
+    // build compact/expanded power and timer buttons
+    var powerHtml = '';
+    if (showPowerText) {
+      powerHtml = '<button class="power-row" id="btn-power">'
+        + (showPowerIcon ? ('<div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>') : ('<div class="pw-btn ' + pwClass + '"></div>'))
+        + '<div style="flex:1;min-width:0">'
+        + '<div class="pw-sub pw-sub--big">' + pwSub + '</div>'
+        + '</div>'
+        + '<span class="pw-arrow">&#8250;</span>'
+        + '</button>';
+    } else {
+      powerHtml = '<button class="power-row power-row--icon" id="btn-power">'
+        + (showPowerIcon ? ('<div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>') : ('<div class="pw-btn ' + pwClass + '"></div>'))
+        + '</button>';
+    }
+    var timerHtml = '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + (showTimerText ? '' : ' timer-btn--icon') + '" id="btn-timer">'
+      + (showTimerIcon ? ('<span class="timer-ico">' + (timerIcon ? ('<ha-icon icon="' + timerIcon + '"></ha-icon>') : '') + '</span>') : '')
+      + (showTimerText ? ('<span class="timer-lbl">' + tr.timerBtn + '</span>') : '')
+      + (this._timers[this._activeIdx] ? ('<span class="timer-cd" id="timer-cd">' + this._fmtRemain(this._activeIdx) + '</span>') : '')
+      + '</button>';
+
     // Đọc giá trị cảm biến từ config
     var cfg = this._config || {};
     var pm25Val = cfg.pm25_entity && this._hass && this._hass.states[cfg.pm25_entity]
@@ -1606,27 +1627,7 @@ class AcControllerCardV2 extends HTMLElement {
  + (showClean ? ('  <button class="chip chip--b">' + (cleanIcon ? ('<ha-icon icon="' + cleanIcon + '"></ha-icon> ') : '') + 'Clean</button>') : '')
  + '</div>'
 
- + '<div class="bottom-row">'
- + (showPowerText ? (
- +   '<button class="power-row" id="btn-power">'
- +    (showPowerIcon ? ('<div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>') : ('<div class="pw-btn ' + pwClass + '"></div>'))
- +    '<div style="flex:1;min-width:0">'
- +    '<div class="pw-sub pw-sub--big">' + pwSub + '</div>'
- +    '</div>'
- +    '<span class="pw-arrow">&#8250;</span>'
- +    '</button>'
- + ) : (
- +   '<button class="power-row power-row--icon" id="btn-power">'
- +    (showPowerIcon ? ('<div class="pw-btn ' + pwClass + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '') + '</div>') : ('<div class="pw-btn ' + pwClass + '"></div>'))
- +    '</button>'
- + ))
- +
- + '<button class="timer-btn' + (this._timers[this._activeIdx] ? ' timer-btn--active' : '') + (showTimerText ? '' : ' timer-btn--icon') + '" id="btn-timer">'
- +  (showTimerIcon ? ('<span class="timer-ico">' + (timerIcon ? ('<ha-icon icon="' + timerIcon + '"></ha-icon>') : '') + '</span>') : '')
- +  (showTimerText ? ('<span class="timer-lbl">' + tr.timerBtn + '</span>') : '')
- +  (this._timers[this._activeIdx] ? ('<span class="timer-cd" id="timer-cd">' + this._fmtRemain(this._activeIdx) + '</span>') : '')
- +'</button>'
- +'</div>'
+ + '<div class="bottom-row">' + powerHtml + timerHtml + '</div>'
 
 + '</div>'  // end .left
 
