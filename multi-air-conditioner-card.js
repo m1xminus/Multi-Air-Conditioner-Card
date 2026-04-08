@@ -16,46 +16,594 @@
 const AC_TRANSLATIONS = {
   vi: {
     lang: 'Tiếng Việt', flag: 'vn',
-    cardTitle: 'Điều Hòa', cardSub: 'Nhà Thông Minh',
-    greet: function(){ var h=new Date().getHours(); if(h>=6&&h<11) return 'Chào buổi sáng,'; if(h>=11&&h<13) return 'Chào buổi trưa,'; if(h>=13&&h<18) return 'Chào buổi chiều,'; if(h>=18&&h<21) return 'Chào buổi tối,'; return 'Chúc ngủ ngon,'; },
-    tempLabel: 'NHIỆT ĐỘ', selectRoom: 'CHỌN PHÒNG', statusLabel: 'TRẠNG THÁI', statusOn: 'BẬT', statusOff: 'TẮT',
-    airGood: 'Chất lượng không khí tốt', pressOn: 'Nhấn để bật', dustLabel: 'Bụi mịn',
-    fanLabel: 'Quạt', swingLabel: 'Hướng gió',
-    allOff: 'Tắt tất cả', allOffSub: 'Tắt tất cả các phòng',
+    cardTitle: 'Điều Hòa Không Khí',
+    cardSub:   'Nhà Thông Minh',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Chào buổi sáng,';
+      if (h>=11 && h<13) return 'Chào buổi trưa,';
+      if (h>=13 && h<18) return 'Chào buổi chiều,';
+      if (h>=18 && h<21) return 'Chào buổi tối,';
+      return 'Chúc ngủ ngon,';
+    },
+    tempLabel: 'NHIỆT ĐỘ',
+    selectRoom: 'CHỌN PHÒNG',
+    statusLabel: 'TRẠNG THÁI',
+    statusOn: 'ĐANG CHẠY', statusOff: 'TẮT',
+    airGood: 'Chất lượng không khí tốt', pressOn: 'Nhấn nguồn để bật',
+    dustLabel: 'Bụi mịn',
+    fanLabel: 'Tốc độ quạt', swingLabel: 'Hướng gió',
+    allOff: 'Tắt tất cả', allOffSub: 'Nhấn để tắt mọi phòng',
     tapOff: 'Nhấn để tắt', tapOn: 'Nhấn để bật',
-    confirmOff: '⚠ Tắt tất cả?', confirmSub: function(n){ return 'Sẽ tắt '+n+' điều hòa'; }, cancel: 'Hủy', doOff: '⏻ Tắt',
-    overlayOn: 'BẬT', overlayOff: 'TẮT',
+    confirmOff: '⚠ Tắt tất cả?', confirmSub: function(n) { return 'Sẽ tắt ' + n + ' điều hòa cùng lúc'; },
+    cancel: 'Hủy', doOff: '⏻ Tắt hết',
+    overlayOn: 'ĐANG BẬT', overlayOff: 'TẮT',
     modes: { cool:'Làm lạnh', heat:'Sưởi', dry:'Hút ẩm', fan_only:'Quạt', off:'Tắt' },
-    fans:['Auto','Thấp','Vừa','Cao'], swings:['Cố định','Lên/Xuống','Trái/Phải','Cả hai'],
-    comfort: { dry:'Không khí khô ráo', fan_only:'Gió nhẹ', off:'Đang tắt' },
-    comfortTemp: function(t){ t=Math.round(t); if(t<=19) return 'Rất lạnh'; if(t<=23) return 'Lý tưởng'; if(t<=27) return 'Thoải mái'; if(t<=31) return 'Hơi nóng'; return 'Quá nóng'; },
-    timerBtn: 'Hẹn giờ', bgLabel: 'Nền gradient', bgPresets: 'Preset',
-    colorLabel:'Màu', accentColor:'Màu nhấn', textColor:'Màu chữ', color1:'Màu 1', color2:'Màu 2',
-    edLang:'Ngôn ngữ', edEntities:'Entiti', edOwnerName:'👤 Tên hiển thị',
-    edRoomCountLabel: function(n){ return '🏠 Số phòng (1–8)'; }, edRoomsHeader: function(n){ return '❄ Điều hòa ('+n+')'; },
-    edRooms:'❄ Điều hòa', edSensors:'📡 Cảm biến', edColors:'Màu', edBg:'Nền', edAcEntity:'❄ AC (climate.*)',
-    edAcName:'Tên', edAcIcon:'Biểu tượng', edPm25:'PM2.5', edOutdoorTemp:'Nhiệt độ ngoài', edHumidity:'Độ ẩm ngoài', edPower:'Công suất',
-    rooms:['Phòng khách','Phòng ngủ','Phòng ăn','Văn phòng'], roomIcons:['🛋','🛌','🍳','💼']
+    fans:   ['Tự động','Thấp','Vừa','Cao'],
+    swings: ['Cố định','Lên xuống','Trái phải','Tất cả'],
+    comfort: { dry:'Không khí khô ráo', fan_only:'Gió nhẹ mát mẻ', off:'Đang tắt' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Lạnh buốt, mặc thêm áo nhé!';
+      if (t<=23) return 'Nhiệt độ lý tưởng, thư giãn thôi';
+      if (t<=27) return 'Cảm giác dễ chịu, thoải mái';
+      if (t<=31) return 'Hơi ấm, cần làm mát thêm';
+      return 'Quá nóng! Hãy điều chỉnh nhiệt độ';
+    },
+    timerBtn: 'Hẹn giờ',
+    bgLabel: 'Màu nền gradient', bgPresets: 'Preset',
+    colorLabel: 'Màu sắc', accentColor: 'Màu nhấn (accent)', textColor: 'Màu chữ',
+    color1: 'Màu 1 (trên trái)', color2: 'Màu 2 (dưới phải)',
+    edLang: 'Ngôn ngữ',
+    edEntities: 'Thực thể (Entity)',
+    edOwnerName: '👤 Tên hiển thị (Smart Home)',
+    edRoomCountLabel: function(n) { return '🏠 Số lượng phòng (1–8, mặc định 4)'; },
+    edRoomsHeader: function(n) { return '❄ Điều hòa (' + n + ' phòng)'; },
+    edRooms: '❄ Điều hòa',
+    edSensors: '📡 Cảm biến môi trường',
+    edColors: 'Màu sắc',
+    edBg: 'Màu nền',
+    edAcEntity: '❄ Entity điều hòa (climate.*)',
+    edAcName: '🏷 Tên hiển thị',
+    edAcIcon: '🎨 Icon (emoji)',
+    edPm25: '🌫 Bụi mịn PM2.5',
+    edOutdoorTemp: '🌡 Nhiệt độ ngoài trời',
+    edHumidity: '💧 Độ ẩm ngoài trời',
+    edPower: '⚡ Tiêu thụ điện (kW)',
+    rooms: ['Phòng khách','Phòng ngủ','Phòng ăn','Văn phòng'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
   },
   en: {
-    lang: 'English', flag: 'us',
-    cardTitle: 'Air Conditioner', cardSub: 'Smart Home',
-    greet: function(){ var h=new Date().getHours(); if(h>=6&&h<11) return 'Good morning,'; if(h>=11&&h<13) return 'Good day,'; if(h>=13&&h<18) return 'Good afternoon,'; if(h>=18&&h<21) return 'Good evening,'; return 'Good night,'; },
-    tempLabel:'TEMPERATURE', selectRoom:'SELECT ROOM', statusLabel:'STATUS', statusOn:'ON', statusOff:'OFF',
-    airGood:'Air quality good', pressOn:'Press to turn on', dustLabel:'Fine dust',
-    fanLabel:'Fan', swingLabel:'Swing', allOff:'Turn all off', allOffSub:'Turn off all rooms',
-    tapOff:'Tap to turn off', tapOn:'Tap to turn on', confirmOff:'⚠ Turn all off?', confirmSub:function(n){ return 'Will turn off '+n+' ACs'; },
-    cancel:'Cancel', doOff:'⏻ Turn off', overlayOn:'ON', overlayOff:'OFF',
-    modes:{ cool:'Cool', heat:'Heat', dry:'Dry', fan_only:'Fan', off:'Off' },
-    fans:['Auto','Low','Med','High'], swings:['Fixed','Up/Down','Left/Right','Both'],
-    comfort:{ dry:'Dry and comfortable', fan_only:'Light breeze', off:'Currently off' },
-    comfortTemp:function(t){ t=Math.round(t); if(t<=19) return 'Very cold'; if(t<=23) return 'Ideal'; if(t<=27) return 'Comfortable'; if(t<=31) return 'A bit warm'; return 'Too hot'; },
-    timerBtn:'Timer', bgLabel:'Background', bgPresets:'Preset', colorLabel:'Colors', accentColor:'Accent', textColor:'Text', color1:'Color 1', color2:'Color 2',
-    edLang:'Language', edEntities:'Entities', edOwnerName:'👤 Display name', edRoomCountLabel:function(n){ return '🏠 Number of rooms (1–8)'; },
-    edRoomsHeader:function(n){ return '❄ Air Conditioners ('+n+')'; }, edRooms:'❄ Air Conditioners', edSensors:'📡 Sensors', edColors:'Colors', edBg:'Background',
-    edAcEntity:'❄ AC entity (climate.*)', edAcName:'Display name', edAcIcon:'Icon (emoji)', edPm25:'PM2.5', edOutdoorTemp:'Outdoor temp', edHumidity:'Outdoor humidity', edPower:'Power',
-    rooms:['Living room','Bedroom','Dining room','Office'], roomIcons:['🛋','🛌','🍳','💼']
-  }
+    lang: 'English', flag: 'gb',
+    cardTitle: 'Air Conditioning',
+    cardSub:   'Smart Home',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Good morning,';
+      if (h>=11 && h<13) return 'Good noon,';
+      if (h>=13 && h<18) return 'Good afternoon,';
+      if (h>=18 && h<21) return 'Good evening,';
+      return 'Good night,';
+    },
+    tempLabel: 'TEMPERATURE',
+    selectRoom: 'SELECT ROOM',
+    statusLabel: 'STATUS',
+    statusOn: 'RUNNING', statusOff: 'OFF',
+    airGood: 'Air quality is good', pressOn: 'Press power to turn on',
+    dustLabel: 'Fine dust',
+    fanLabel: 'Fan speed', swingLabel: 'Airflow',
+    allOff: 'Turn all off', allOffSub: 'Tap to turn off all rooms',
+    tapOff: 'Tap to turn off', tapOn: 'Tap to turn on',
+    confirmOff: '⚠ Turn all off?', confirmSub: function(n) { return 'Will turn off ' + n + ' AC units at once'; },
+    cancel: 'Cancel', doOff: '⏻ Turn all off',
+    overlayOn: 'ON', overlayOff: 'OFF',
+    modes: { cool:'Cool', heat:'Heat', dry:'Dry', fan_only:'Fan', off:'Off' },
+    fans:   ['Auto','Low','Medium','High'],
+    swings: ['Fixed','Up/Down','Left/Right','Both'],
+    comfort: { dry:'Dry and comfortable', fan_only:'Light fresh breeze', off:'Currently off' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Very cold, grab a jacket!';
+      if (t<=23) return 'Ideal temperature, relax';
+      if (t<=27) return 'Comfortable and pleasant';
+      if (t<=31) return 'A bit warm, cool down more';
+      return 'Too hot! Adjust the temperature';
+    },
+    timerBtn: 'Timer',
+    bgLabel: 'Gradient background', bgPresets: 'Preset',
+    colorLabel: 'Colors', accentColor: 'Accent color', textColor: 'Text color',
+    color1: 'Color 1 (top left)', color2: 'Color 2 (bottom right)',
+    edLang: 'Language',
+    edEntities: 'Entities',
+    edOwnerName: '👤 Display name (Smart Home)',
+    edRoomCountLabel: function(n) { return '🏠 Number of rooms (1–8, default 4)'; },
+    edRoomsHeader: function(n) { return '❄ Air Conditioners (' + n + ' rooms)'; },
+    edRooms: '❄ Air Conditioners',
+    edSensors: '📡 Environment Sensors',
+    edColors: 'Colors',
+    edBg: 'Background',
+    edAcEntity: '❄ AC entity (climate.*)',
+    edAcName: '🏷 Display name',
+    edAcIcon: '🎨 Icon (emoji)',
+    edPm25: '🌫 Fine dust PM2.5',
+    edOutdoorTemp: '🌡 Outdoor temperature',
+    edHumidity: '💧 Outdoor humidity',
+    edPower: '⚡ Power consumption (kW)',
+    rooms: ['Living room','Bedroom','Dining room','Office'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
+  de: {
+    lang: 'Deutsch', flag: 'de',
+    cardTitle: 'Klimaanlage',
+    cardSub:   'Smart Home',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Guten Morgen,';
+      if (h>=11 && h<13) return 'Guten Tag,';
+      if (h>=13 && h<18) return 'Guten Nachmittag,';
+      if (h>=18 && h<21) return 'Guten Abend,';
+      return 'Gute Nacht,';
+    },
+    tempLabel: 'TEMPERATUR',
+    selectRoom: 'RAUM WÄHLEN',
+    statusLabel: 'STATUS',
+    statusOn: 'LÄUFT', statusOff: 'AUS',
+    airGood: 'Luftqualität gut', pressOn: 'Einschalten drücken',
+    dustLabel: 'Feinstaub',
+    fanLabel: 'Lüfterstufe', swingLabel: 'Luftrichtung',
+    allOff: 'Alle ausschalten', allOffSub: 'Alle Räume ausschalten',
+    tapOff: 'Zum Ausschalten', tapOn: 'Zum Einschalten',
+    confirmOff: '⚠ Alle ausschalten?', confirmSub: function(n) { return n + ' Klimaanlagen gleichzeitig ausschalten'; },
+    cancel: 'Abbrechen', doOff: '⏻ Alle aus',
+    overlayOn: 'AN', overlayOff: 'AUS',
+    modes: { cool:'Kühlen', heat:'Heizen', dry:'Entfeuchten', fan_only:'Lüfter', off:'Aus' },
+    fans:   ['Auto','Niedrig','Mittel','Hoch'],
+    swings: ['Fest','Auf/Ab','Links/Rechts','Alle'],
+    comfort: { dry:'Trockene Luft', fan_only:'Angenehme Brise', off:'Ausgeschaltet' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Sehr kalt, zieh etwas an!';
+      if (t<=23) return 'Ideale Temperatur, entspann dich';
+      if (t<=27) return 'Angenehm und komfortabel';
+      if (t<=31) return 'Etwas warm, mehr kühlen';
+      return 'Zu heiß! Temperatur anpassen';
+    },
+    timerBtn: 'Timer',
+    bgLabel: 'Verlaufshintergrund', bgPresets: 'Voreinstellung',
+    colorLabel: 'Farben', accentColor: 'Akzentfarbe', textColor: 'Textfarbe',
+    color1: 'Farbe 1 (oben links)', color2: 'Farbe 2 (unten rechts)',
+    edLang: 'Sprache',
+    edEntities: 'Entitäten',
+    edOwnerName: '👤 Anzeigename (Smart Home)',
+    edRoomCountLabel: function(n) { return '🏠 Anzahl der Räume (1–8, Standard 4)'; },
+    edRoomsHeader: function(n) { return '❄ Klimaanlagen (' + n + ' Räume)'; },
+    edRooms: '❄ Klimaanlagen',
+    edSensors: '📡 Umgebungssensoren',
+    edColors: 'Farben',
+    edBg: 'Hintergrund',
+    edAcEntity: '❄ Klimaanlage-Entity (climate.*)',
+    edAcName: '🏷 Anzeigename',
+    edAcIcon: '🎨 Symbol (Emoji)',
+    edPm25: '🌫 Feinstaub PM2.5',
+    edOutdoorTemp: '🌡 Außentemperatur',
+    edHumidity: '💧 Außenluftfeuchtigkeit',
+    edPower: '⚡ Stromverbrauch (kW)',
+    rooms: ['Wohnzimmer','Schlafzimmer','Esszimmer','Büro'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
+  fr: {
+    lang: 'Français', flag: 'fr',
+    cardTitle: 'Climatisation',
+    cardSub:   'Maison Intelligente',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Bonjour,';
+      if (h>=11 && h<13) return 'Bonne journée,';
+      if (h>=13 && h<18) return 'Bon après-midi,';
+      if (h>=18 && h<21) return 'Bonsoir,';
+      return 'Bonne nuit,';
+    },
+    tempLabel: 'TEMPÉRATURE',
+    selectRoom: 'CHOISIR PIÈCE',
+    statusLabel: 'STATUT',
+    statusOn: 'EN MARCHE', statusOff: 'ÉTEINT',
+    airGood: 'Qualité de l\'air bonne', pressOn: 'Appuyer pour allumer',
+    dustLabel: 'Particules fines',
+    fanLabel: 'Vitesse ventilateur', swingLabel: 'Direction d\'air',
+    allOff: 'Tout éteindre', allOffSub: 'Éteindre toutes les pièces',
+    tapOff: 'Appuyer pour éteindre', tapOn: 'Appuyer pour allumer',
+    confirmOff: '⚠ Tout éteindre?', confirmSub: function(n) { return 'Éteindra ' + n + ' climatiseurs à la fois'; },
+    cancel: 'Annuler', doOff: '⏻ Tout éteindre',
+    overlayOn: 'ALLUMÉ', overlayOff: 'ÉTEINT',
+    modes: { cool:'Refroidir', heat:'Chauffer', dry:'Déshumidifier', fan_only:'Ventilateur', off:'Éteint' },
+    fans:   ['Auto','Faible','Moyen','Élevé'],
+    swings: ['Fixe','Haut/Bas','Gauche/Droite','Tous'],
+    comfort: { dry:'Air sec et confortable', fan_only:'Brise légère et fraîche', off:'Actuellement éteint' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Très froid, mettez une veste!';
+      if (t<=23) return 'Température idéale, détendez-vous';
+      if (t<=27) return 'Confortable et agréable';
+      if (t<=31) return 'Un peu chaud, refroidir davantage';
+      return 'Trop chaud! Ajustez la température';
+    },
+    timerBtn: 'Minuterie',
+    bgLabel: 'Dégradé de fond', bgPresets: 'Préréglage',
+    colorLabel: 'Couleurs', accentColor: 'Couleur d\'accent', textColor: 'Couleur du texte',
+    color1: 'Couleur 1 (haut gauche)', color2: 'Couleur 2 (bas droite)',
+    edLang: 'Langue',
+    edEntities: 'Entités',
+    edOwnerName: '👤 Nom affiché (Maison Intelligente)',
+    edRoomCountLabel: function(n) { return '🏠 Nombre de pièces (1–8, défaut 4)'; },
+    edRoomsHeader: function(n) { return '❄ Climatiseurs (' + n + ' pièces)'; },
+    edRooms: '❄ Climatiseurs',
+    edSensors: '📡 Capteurs environnementaux',
+    edColors: 'Couleurs',
+    edBg: 'Arrière-plan',
+    edAcEntity: '❄ Entité clim. (climate.*)',
+    edAcName: '🏷 Nom affiché',
+    edAcIcon: '🎨 Icône (emoji)',
+    edPm25: '🌫 Particules fines PM2.5',
+    edOutdoorTemp: '🌡 Température extérieure',
+    edHumidity: '💧 Humidité extérieure',
+    edPower: '⚡ Consommation (kW)',
+    rooms: ['Salon','Chambre','Salle à manger','Bureau'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
+  nl: {
+    lang: 'Nederlands', flag: 'nl',
+    cardTitle: 'Airconditioning',
+    cardSub:   'Slim Huis',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Goedemorgen,';
+      if (h>=11 && h<13) return 'Goedemiddag,';
+      if (h>=13 && h<18) return 'Goedemiddag,';
+      if (h>=18 && h<21) return 'Goedenavond,';
+      return 'Goedenacht,';
+    },
+    tempLabel: 'TEMPERATUUR',
+    selectRoom: 'KAMER KIEZEN',
+    statusLabel: 'STATUS',
+    statusOn: 'ACTIEF', statusOff: 'UIT',
+    airGood: 'Luchtkwaliteit goed', pressOn: 'Druk om in te schakelen',
+    dustLabel: 'Fijnstof',
+    fanLabel: 'Ventilatorsnelheid', swingLabel: 'Luchtrichting',
+    allOff: 'Alles uitschakelen', allOffSub: 'Alle kamers uitschakelen',
+    tapOff: 'Tik om uit te schakelen', tapOn: 'Tik om in te schakelen',
+    confirmOff: '⚠ Alles uitschakelen?', confirmSub: function(n) { return n + ' airconditioners tegelijk uitschakelen'; },
+    cancel: 'Annuleren', doOff: '⏻ Alles uit',
+    overlayOn: 'AAN', overlayOff: 'UIT',
+    modes: { cool:'Koelen', heat:'Verwarmen', dry:'Ontvochtigen', fan_only:'Ventilator', off:'Uit' },
+    fans:   ['Auto','Laag','Medium','Hoog'],
+    swings: ['Vast','Op/Neer','Links/Rechts','Alle'],
+    comfort: { dry:'Droge lucht', fan_only:'Lichte frisse bries', off:'Momenteel uit' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Erg koud, trek iets aan!';
+      if (t<=23) return 'Ideale temperatuur, ontspan';
+      if (t<=27) return 'Aangenaam en comfortabel';
+      if (t<=31) return 'Iets warm, meer koelen';
+      return 'Te heet! Temperatuur aanpassen';
+    },
+    timerBtn: 'Timer',
+    bgLabel: 'Verloopachtergrond', bgPresets: 'Voorinstelling',
+    colorLabel: 'Kleuren', accentColor: 'Accentkleur', textColor: 'Tekstkleur',
+    color1: 'Kleur 1 (linksboven)', color2: 'Kleur 2 (rechtsonder)',
+    edLang: 'Taal',
+    edEntities: 'Entiteiten',
+    edOwnerName: '👤 Weergavenaam (Slim Huis)',
+    edRoomCountLabel: function(n) { return '🏠 Aantal kamers (1–8, standaard 4)'; },
+    edRoomsHeader: function(n) { return '❄ Airconditioners (' + n + ' kamers)'; },
+    edRooms: '❄ Airconditioners',
+    edSensors: '📡 Omgevingssensoren',
+    edColors: 'Kleuren',
+    edBg: 'Achtergrond',
+    edAcEntity: '❄ AC-entiteit (climate.*)',
+    edAcName: '🏷 Weergavenaam',
+    edAcIcon: '🎨 Pictogram (emoji)',
+    edPm25: '🌫 Fijnstof PM2.5',
+    edOutdoorTemp: '🌡 Buitentemperatuur',
+    edHumidity: '💧 Buitenvochtigheid',
+    edPower: '⚡ Stroomverbruik (kW)',
+    rooms: ['Woonkamer','Slaapkamer','Eetkamer','Kantoor'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
+  pl: {
+    lang: 'Polski', flag: 'pl',
+    cardTitle: 'Klimatyzacja',
+    cardSub:   'Inteligentny Dom',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Dzień dobry,';
+      if (h>=11 && h<13) return 'Dobry dzień,';
+      if (h>=13 && h<18) return 'Dzień dobry,';
+      if (h>=18 && h<21) return 'Dobry wieczór,';
+      return 'Dobranoc,';
+    },
+    tempLabel: 'TEMPERATURA',
+    selectRoom: 'WYBIERZ POKÓJ',
+    statusLabel: 'STATUS',
+    statusOn: 'DZIAŁA', statusOff: 'WYŁ',
+    airGood: 'Jakość powietrza dobra', pressOn: 'Naciśnij aby włączyć',
+    dustLabel: 'Pył zawieszony',
+    fanLabel: 'Prędkość wentylatora', swingLabel: 'Kierunek przepływu',
+    allOff: 'Wyłącz wszystkie', allOffSub: 'Naciśnij aby wyłączyć wszystkie pokoje',
+    tapOff: 'Naciśnij aby wyłączyć', tapOn: 'Naciśnij aby włączyć',
+    confirmOff: '⚠ Wyłączyć wszystkie?', confirmSub: function(n) { return 'Wyłączy ' + n + ' klimatyzatorów naraz'; },
+    cancel: 'Anuluj', doOff: '⏻ Wyłącz wszystkie',
+    overlayOn: 'WŁ', overlayOff: 'WYŁ',
+    modes: { cool:'Chłodzenie', heat:'Ogrzewanie', dry:'Osuszanie', fan_only:'Wentylator', off:'Wyłącz' },
+    fans:   ['Auto','Niski','Średni','Wysoki'],
+    swings: ['Stały','Góra/Dół','Lewo/Prawo','Wszystkie'],
+    comfort: { dry:'Suche powietrze', fan_only:'Lekka świeża bryza', off:'Aktualnie wyłączone' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Bardzo zimno, ubierz się!';
+      if (t<=23) return 'Idealna temperatura, zrelaksuj się';
+      if (t<=27) return 'Wygodnie i przyjemnie';
+      if (t<=31) return 'Trochę ciepło, więcej chłodzić';
+      return 'Zbyt gorąco! Dostosuj temperaturę';
+    },
+    timerBtn: 'Timer',
+    bgLabel: 'Tło gradientowe', bgPresets: 'Ustawienie wstępne',
+    colorLabel: 'Kolory', accentColor: 'Kolor akcentu', textColor: 'Kolor tekstu',
+    color1: 'Kolor 1 (lewy górny)', color2: 'Kolor 2 (prawy dolny)',
+    edLang: 'Język',
+    edEntities: 'Encje',
+    edOwnerName: '👤 Nazwa wyświetlana (Inteligentny Dom)',
+    edRoomCountLabel: function(n) { return '🏠 Liczba pokojów (1–8, domyślnie 4)'; },
+    edRoomsHeader: function(n) { return '❄ Klimatyzatory (' + n + ' pokoje)'; },
+    edRooms: '❄ Klimatyzatory',
+    edSensors: '📡 Czujniki środowiskowe',
+    edColors: 'Kolory',
+    edBg: 'Tło',
+    edAcEntity: '❄ Encja klimatyzatora (climate.*)',
+    edAcName: '🏷 Nazwa wyświetlana',
+    edAcIcon: '🎨 Ikona (emoji)',
+    edPm25: '🌫 Pył zawieszony PM2.5',
+    edOutdoorTemp: '🌡 Temperatura zewnętrzna',
+    edHumidity: '💧 Wilgotność zewnętrzna',
+    edPower: '⚡ Zużycie energii (kW)',
+    rooms: ['Salon','Sypialnia','Jadalnia','Biuro'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
+  sv: {
+    lang: 'Svenska', flag: 'se',
+    cardTitle: 'Luftkonditionering',
+    cardSub:   'Smart Hem',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'God morgon,';
+      if (h>=11 && h<13) return 'God dag,';
+      if (h>=13 && h<18) return 'God eftermiddag,';
+      if (h>=18 && h<21) return 'God kväll,';
+      return 'God natt,';
+    },
+    tempLabel: 'TEMPERATUR',
+    selectRoom: 'VÄLJ RUM',
+    statusLabel: 'STATUS',
+    statusOn: 'IGÅNG', statusOff: 'AV',
+    airGood: 'Luftkvalitet bra', pressOn: 'Tryck för att slå på',
+    dustLabel: 'Fint damm',
+    fanLabel: 'Fläkthastighet', swingLabel: 'Luftriktning',
+    allOff: 'Stäng av alla', allOffSub: 'Stäng av alla rum',
+    tapOff: 'Tryck för att stänga av', tapOn: 'Tryck för att slå på',
+    confirmOff: '⚠ Stäng av alla?', confirmSub: function(n) { return 'Stänger av ' + n + ' AC-enheter'; },
+    cancel: 'Avbryt', doOff: '⏻ Stäng av alla',
+    overlayOn: 'PÅ', overlayOff: 'AV',
+    modes: { cool:'Kyla', heat:'Värme', dry:'Avfuktning', fan_only:'Fläkt', off:'Av' },
+    fans:   ['Auto','Låg','Medel','Hög'],
+    swings: ['Fast','Upp/Ned','Vänster/Höger','Alla'],
+    comfort: { dry:'Torr luft', fan_only:'Lätt fräsch bris', off:'För närvarande av' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Mycket kallt, ta på dig något!';
+      if (t<=23) return 'Idealisk temperatur, koppla av';
+      if (t<=27) return 'Bekväm och trevlig';
+      if (t<=31) return 'Lite varmt, kyl mer';
+      return 'För varmt! Justera temperaturen';
+    },
+    timerBtn: 'Timer',
+    bgLabel: 'Gradientbakgrund', bgPresets: 'Förinställning',
+    colorLabel: 'Färger', accentColor: 'Accentfärg', textColor: 'Textfärg',
+    color1: 'Färg 1 (övre vänster)', color2: 'Färg 2 (nedre höger)',
+    edLang: 'Språk',
+    edEntities: 'Entiteter',
+    edOwnerName: '👤 Visningsnamn (Smart Hem)',
+    edRoomCountLabel: function(n) { return '🏠 Antal rum (1–8, standard 4)'; },
+    edRoomsHeader: function(n) { return '❄ Luftkonditioneringar (' + n + ' rum)'; },
+    edRooms: '❄ Luftkonditioneringar',
+    edSensors: '📡 Miljösensorer',
+    edColors: 'Färger',
+    edBg: 'Bakgrund',
+    edAcEntity: '❄ AC-entitet (climate.*)',
+    edAcName: '🏷 Visningsnamn',
+    edAcIcon: '🎨 Ikon (emoji)',
+    edPm25: '🌫 Fint damm PM2.5',
+    edOutdoorTemp: '🌡 Utomhustemperatur',
+    edHumidity: '💧 Utomhusfuktighet',
+    edPower: '⚡ Elförbrukning (kW)',
+    rooms: ['Vardagsrum','Sovrum','Matsal','Kontor'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
+  hu: {
+    lang: 'Magyar', flag: 'hu',
+    cardTitle: 'Légkondicionáló',
+    cardSub:   'Okos Otthon',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Jó reggelt,';
+      if (h>=11 && h<13) return 'Jó napot,';
+      if (h>=13 && h<18) return 'Jó napot,';
+      if (h>=18 && h<21) return 'Jó estét,';
+      return 'Jó éjszakát,';
+    },
+    tempLabel: 'HŐMÉRSÉKLET',
+    selectRoom: 'SZOBA VÁLASZTÁSA',
+    statusLabel: 'ÁLLAPOT',
+    statusOn: 'MŰKÖDİK', statusOff: 'KI',
+    airGood: 'Levegőminőség jó', pressOn: 'Nyomja meg a bekapcsoláshoz',
+    dustLabel: 'Finom por',
+    fanLabel: 'Ventilátorsebesség', swingLabel: 'Légáramlás iránya',
+    allOff: 'Mindet kikapcsolni', allOffSub: 'Összes szoba kikapcsolása',
+    tapOff: 'Érintse ki a kikapcsoláshoz', tapOn: 'Érintse meg a bekapcsoláshoz',
+    confirmOff: '⚠ Mindet kikapcsolni?', confirmSub: function(n) { return n + ' légkondicionálót kapcsol ki egyszerre'; },
+    cancel: 'Mégse', doOff: '⏻ Mindet ki',
+    overlayOn: 'BE', overlayOff: 'KI',
+    modes: { cool:'Hűtés', heat:'Fűtés', dry:'Párátlanítás', fan_only:'Ventilátor', off:'Ki' },
+    fans:   ['Auto','Alacsony','Közepes','Magas'],
+    swings: ['Rögzített','Fel/Le','Bal/Jobb','Mindkettő'],
+    comfort: { dry:'Száraz levegő', fan_only:'Könnyű friss szellő', off:'Jelenleg kikapcsolt' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Nagyon hideg, vegyél fel valamit!';
+      if (t<=23) return 'Ideális hőmérséklet, pihenj';
+      if (t<=27) return 'Kényelmes és kellemes';
+      if (t<=31) return 'Kicsit meleg, jobban hűteni';
+      return 'Túl meleg! Állítsa be a hőmérsékletet';
+    },
+    timerBtn: 'Időzítő',
+    bgLabel: 'Gradiens háttér', bgPresets: 'Előbeállítás',
+    colorLabel: 'Színek', accentColor: 'Kiemelőszín', textColor: 'Szövegszín',
+    color1: 'Szín 1 (bal felső)', color2: 'Szín 2 (jobb alsó)',
+    edLang: 'Nyelv',
+    edEntities: 'Entitások',
+    edOwnerName: '👤 Megjelenítési név (Okos Otthon)',
+    edRoomCountLabel: function(n) { return '🏠 Szobák száma (1–8, alapértelmezett 4)'; },
+    edRoomsHeader: function(n) { return '❄ Légkondicionáló (' + n + ' szoba)'; },
+    edRooms: '❄ Légkondicionáló',
+    edSensors: '📡 Környezeti érzékelők',
+    edColors: 'Színek',
+    edBg: 'Háttér',
+    edAcEntity: '❄ Légkondicionáló entitás (climate.*)',
+    edAcName: '🏷 Megjelenítési név',
+    edAcIcon: '🎨 Ikon (emoji)',
+    edPm25: '🌫 Finom por PM2.5',
+    edOutdoorTemp: '🌡 Kültéri hőmérséklet',
+    edHumidity: '💧 Kültéri páratartalom',
+    edPower: '⚡ Energiafogyasztás (kW)',
+    rooms: ['Nappali','Hálószoba','Étkező','Iroda'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
+  cs: {
+    lang: 'Čeština', flag: 'cz',
+    cardTitle: 'Klimatizace',
+    cardSub:   'Chytrý Dům',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Dobré ráno,';
+      if (h>=11 && h<13) return 'Dobrý den,';
+      if (h>=13 && h<18) return 'Dobré odpoledne,';
+      if (h>=18 && h<21) return 'Dobrý večer,';
+      return 'Dobrou noc,';
+    },
+    tempLabel: 'TEPLOTA',
+    selectRoom: 'VYBRAT MÍSTNOST',
+    statusLabel: 'STAV',
+    statusOn: 'BĚŽÍ', statusOff: 'VYPNUTO',
+    airGood: 'Kvalita vzduchu dobrá', pressOn: 'Stiskněte pro zapnutí',
+    dustLabel: 'Jemný prach',
+    fanLabel: 'Rychlost ventilátoru', swingLabel: 'Směr proudění',
+    allOff: 'Vše vypnout', allOffSub: 'Vypnout všechny místnosti',
+    tapOff: 'Stiskněte pro vypnutí', tapOn: 'Stiskněte pro zapnutí',
+    confirmOff: '⚠ Vše vypnout?', confirmSub: function(n) { return 'Vypne ' + n + ' klimatizací najednou'; },
+    cancel: 'Zrušit', doOff: '⏻ Vše vypnout',
+    overlayOn: 'ZAP', overlayOff: 'VYP',
+    modes: { cool:'Chlazení', heat:'Topení', dry:'Odvlhčování', fan_only:'Ventilátor', off:'Vypnout' },
+    fans:   ['Auto','Nízká','Střední','Vysoká'],
+    swings: ['Pevný','Nahoru/Dolů','Vlevo/Vpravo','Vše'],
+    comfort: { dry:'Suchý vzduch', fan_only:'Lehký svěží vánek', off:'Momentálně vypnuto' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Velmi chladno, oblečte se!';
+      if (t<=23) return 'Ideální teplota, relaxujte';
+      if (t<=27) return 'Pohodlné a příjemné';
+      if (t<=31) return 'Trochu teplo, více chladit';
+      return 'Příliš horko! Nastavte teplotu';
+    },
+    timerBtn: 'Časovač',
+    bgLabel: 'Přechodové pozadí', bgPresets: 'Předvolba',
+    colorLabel: 'Barvy', accentColor: 'Barva zvýraznění', textColor: 'Barva textu',
+    color1: 'Barva 1 (vlevo nahoře)', color2: 'Barva 2 (vpravo dole)',
+    edLang: 'Jazyk',
+    edEntities: 'Entity',
+    edOwnerName: '👤 Zobrazovaný název (Chytrý Dům)',
+    edRoomCountLabel: function(n) { return '🏠 Počet místností (1–8, výchozí 4)'; },
+    edRoomsHeader: function(n) { return '❄ Klimatizace (' + n + ' místností)'; },
+    edRooms: '❄ Klimatizace',
+    edSensors: '📡 Senzory prostředí',
+    edColors: 'Barvy',
+    edBg: 'Pozadí',
+    edAcEntity: '❄ Entita klimatizace (climate.*)',
+    edAcName: '🏷 Zobrazovaný název',
+    edAcIcon: '🎨 Ikona (emoji)',
+    edPm25: '🌫 Jemný prach PM2.5',
+    edOutdoorTemp: '🌡 Venkovní teplota',
+    edHumidity: '💧 Venkovní vlhkost',
+    edPower: '⚡ Spotřeba energie (kW)',
+    rooms: ['Obývací pokoj','Ložnice','Jídelna','Kancelář'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
+  it: {
+    lang: 'Italiano', flag: 'it',
+    cardTitle: 'Condizionatore',
+    cardSub:   'Casa Intelligente',
+    greet: function() {
+      var h = new Date().getHours();
+      if (h>=6  && h<11) return 'Buongiorno,';
+      if (h>=11 && h<13) return 'Buon pomeriggio,';
+      if (h>=13 && h<18) return 'Buon pomeriggio,';
+      if (h>=18 && h<21) return 'Buonasera,';
+      return 'Buonanotte,';
+    },
+    tempLabel: 'TEMPERATURA',
+    selectRoom: 'SELEZIONA STANZA',
+    statusLabel: 'STATO',
+    statusOn: 'IN FUNZIONE', statusOff: 'SPENTO',
+    airGood: 'Qualità dell\'aria buona', pressOn: 'Premi per accendere',
+    dustLabel: 'Polvere fine',
+    fanLabel: 'Velocità ventilatore', swingLabel: 'Direzione flusso',
+    allOff: 'Spegni tutti', allOffSub: 'Spegni tutte le stanze',
+    tapOff: 'Premi per spegnere', tapOn: 'Premi per accendere',
+    confirmOff: '⚠ Spegnere tutto?', confirmSub: function(n) { return 'Spegnerà ' + n + ' condizionatori contemporaneamente'; },
+    cancel: 'Annulla', doOff: '⏻ Spegni tutti',
+    overlayOn: 'ACCESO', overlayOff: 'SPENTO',
+    modes: { cool:'Raffreddamento', heat:'Riscaldamento', dry:'Deumidificazione', fan_only:'Ventilatore', off:'Spento' },
+    fans:   ['Auto','Bassa','Media','Alta'],
+    swings: ['Fisso','Su/Giù','Sinistra/Destra','Tutti'],
+    comfort: { dry:'Aria secca', fan_only:'Brezza leggera e fresca', off:'Attualmente spento' },
+    comfortTemp: function(t) {
+      t = Math.round(t);
+      if (t<=19) return 'Molto freddo, mettiti qualcosa!';
+      if (t<=23) return 'Temperatura ideale, rilassati';
+      if (t<=27) return 'Comodo e piacevole';
+      if (t<=31) return 'Un po\' caldo, raffreddare di più';
+      return 'Troppo caldo! Regola la temperatura';
+    },
+    timerBtn: 'Timer',
+    bgLabel: 'Sfondo sfumato', bgPresets: 'Preimpostazione',
+    colorLabel: 'Colori', accentColor: 'Colore accento', textColor: 'Colore testo',
+    color1: 'Colore 1 (in alto a sinistra)', color2: 'Colore 2 (in basso a destra)',
+    edLang: 'Lingua',
+    edEntities: 'Entità',
+    edOwnerName: '👤 Nome visualizzato (Casa Intelligente)',
+    edRoomCountLabel: function(n) { return '🏠 Numero di stanze (1–8, predefinito 4)'; },
+    edRoomsHeader: function(n) { return '❄ Condizionatori (' + n + ' stanze)'; },
+    edRooms: '❄ Condizionatori',
+    edSensors: '📡 Sensori ambientali',
+    edColors: 'Colori',
+    edBg: 'Sfondo',
+    edAcEntity: '❄ Entità condizionatore (climate.*)',
+    edAcName: '🏷 Nome visualizzato',
+    edAcIcon: '🎨 Icona (emoji)',
+    edPm25: '🌫 Polvere fine PM2.5',
+    edOutdoorTemp: '🌡 Temperatura esterna',
+    edHumidity: '💧 Umidità esterna',
+    edPower: '⚡ Consumo energetico (kW)',
+    rooms: ['Soggiorno','Camera da letto','Sala da pranzo','Ufficio'],
+    roomIcons: ['🛋','🛌','🍳','💼'],
+  },
 };
 
 // ─── Background presets (y hệt Gate Card) ─────────────────────────────────────
@@ -80,9 +628,9 @@ const AC_BG_PRESETS = [
 
 function acPresetGradient(preset, c1, c2) {
   const p = AC_BG_PRESETS.find(x => x.id === preset) || AC_BG_PRESETS[0];
-  const gc1 = (preset === 'custom' ? c1 : p.c1) || '#001e2b';
-  const gc2 = (preset === 'custom' ? c2 : p.c2) || '#12c6f3';
-    return 'linear-gradient(135deg, ' + gc1 + ' 0%, ' + gc2 + ' 100%)';
+    const gc1 = (preset === 'custom' ? c1 : p.c1) || '#001e2b'; 
+    const gc2 = (preset === 'custom' ? c2 : p.c2) || '#12c6f3'; 
+  return 'linear-gradient(135deg, ' + gc1 + 'bb 0%, ' + gc2 + '44 100%)';
 }
 
 const AC_DEFAULT_CONFIG = {
@@ -94,17 +642,10 @@ const AC_DEFAULT_CONFIG = {
   text_color: '#ffffff',
   room_count: 4,
   features: {
-    greet: true,
-    eco: true,
-    avg_temp: true,
-    modes: { cool:true, heat:true, dry:true, fan_only:true },
-    fan: true,
-    swing: true,
-      chips: { eco:true, fav:true, clean:true, },
-    pm25: true,
-    temperature: true,
-    humidity: true,
-    power: true,
+    show_avg_temp: true,
+    show_welcome: true,
+    show_eco: true,
+    modes: { cool: true, heat: true, dry: true, fan_only: true }
   },
 };
 
@@ -542,17 +1083,20 @@ class AcControllerCardV2 extends HTMLElement {
 
   static getStubConfig() {
     return {
-      type: 'custom:multi-air-conditioner-card',
-      language: 'en',
-      room_count: 4,
       entities: [
-        { entity_id: 'climate.living_room' },
-        { entity_id: 'climate.bedroom' },
-        { entity_id: 'climate.kitchen' },
-        { entity_id: 'climate.office' }
-      ]
+        { entity_id: 'climate.dieu_hoa_living',         label: 'Phòng khách', area: '25 m²', icon: '🛋' },
+        { entity_id: 'climate.bed_air_conditioning',     label: 'Phòng ngủ',   area: '18 m²', icon: '🛌' },
+        { entity_id: 'climate.kitchen_air_conditioning', label: 'Phòng ăn',    area: '20 m²', icon: '🍳' },
+        { entity_id: 'climate.dieu_hoa_office',          label: 'Văn phòng',   area: '15 m²', icon: '💼' },
+      ],
+      pm25_entity:      'sensor.pm25',
+      outdoor_temp_entity: 'sensor.outdoor_temperature',
+      humidity_entity:  'sensor.outdoor_humidity',
+      power_entity:     'sensor.ac_power_kwh',
     };
   }
+  getCardSize() { return 8; }
+
   _s(id)       { return this._stateOf(this._hass, id); }
   _a(id, k)    { return this._attrOf(this._hass, id, k); }
   _call(d,s,x) { this._hass.callService(d, s, x); }
@@ -761,11 +1305,13 @@ class AcControllerCardV2 extends HTMLElement {
 
     // Mode buttons
     var modeKeys = ['cool','heat','dry','fan_only'];
+    // feature flags may hide individual modes (defined later too)
+    var features = (this._config && this._config.features) || {};
+    var featureModes = (features.modes && typeof features.modes === 'object') ? features.modes : { cool:true,heat:true,dry:true,fan_only:true };
     var modeBtns = '';
-    var featModes = (cfg.features && cfg.features.modes) || {};
     for (var m = 0; m < modeKeys.length; m++) {
       var mk = modeKeys[m];
-      if (!featModes[mk]) continue; // skip mode if disabled in features
+      if (featureModes[mk] === false) continue;
       var mc = Object.assign({}, MODE_CFG[mk], { lbl: tr.modes[mk] || MODE_CFG[mk].lbl });
       var act = hvac === mk;
       var st  = act ? ('--bc:' + mc.color + ';--bg:' + mc.glow + ';') : '';
@@ -812,128 +1358,51 @@ class AcControllerCardV2 extends HTMLElement {
       powerVal = parseFloat(this._hass.states[cfg.power_entity].state).toFixed(1) + ' kW';
     }
 
+    // Features flags (configurable)
+    var features = cfg.features || {};
+    var showAvg    = features.show_avg_temp !== false;
+    var showWelcome= features.show_welcome !== false;
+    var showEco    = features.show_eco !== false;
+    var featureModes = (features.modes && typeof features.modes === 'object') ? features.modes : { cool:true,heat:true,dry:true,fan_only:true };
+
+    // build header pieces
+    var hdrBrand = '<div class="hdr">'
+      + '  <div class="hdr-brand">'
+      + '    <div class="hdr-ico">' + mode.icon + '</div>'
+      + '    <div><div class="hdr-title">' + tr.cardTitle + '</div><div class="hdr-sub">' + tr.cardSub + '</div></div>'
+      + '  </div>'
+      + '  <div class="hdr-icons">'
+      + '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="' + wifiColor + '" stroke-width="1.8" style="filter:' + wifiGlow + ';transition:all 0.4s"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>'
+      + '    <button id="btn-gear" style="background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;line-height:0">'
+      + '      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>'
+      + '    </button>'
+      + '  </div>'
+      + '</div>';
+
+    var greetPart = '';
+    if (showWelcome) {
+      greetPart = '<div class="greet-row">'
+        + '  <div>'
+        + '    <div class="greet-sub">' + tr.greet() + '</div>'
+        + '    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>'
+        + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div>') : '')
+        + '  </div>'
+        + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">&#127807; ' + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
+        + '</div>';
+    } else {
+      if (showAvg) {
+        greetPart = '<div class="greet-row"><div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div></div></div>';
+      } else {
+        greetPart = '<div style="height:0.5px"></div>';
+      }
+    }
+
     // ── Không có <link>/<style> ở đây – đã inject ở connectedCallback
-    var html = `
-      <div class="card" style="--accent:${mode.color};--glow:${mode.glow};background:${bgGrad}">
-        <div class="left">
-          <div class="hdr">
-            <div class="hdr-brand">
-              <div class="hdr-ico">${mode.icon}</div>
-              <div><div class="hdr-title">${tr.cardTitle}</div><div class="hdr-sub">${tr.cardSub}</div></div>
-            </div>
-            <div class="hdr-icons">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="${wifiColor}" stroke-width="1.8" style="filter:${wifiGlow};transition:all 0.4s"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>
-              <button id="btn-gear" style="background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;line-height:0">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <div class="greet-row">
-            <div>
-              ${cfg.features && cfg.features.greet ? `<div class="greet-sub">${tr.greet()}</div>` : ''}
-              ${cfg.features && cfg.features.greet ? `<div class="greet-name">${cfg.owner_name || 'Smart Home'}</div>` : ''}
-              ${cfg.features && cfg.features.avg_temp ? `<div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ${avgTempVal}</div>` : ''}
-            </div>
-            ${cfg.features && cfg.features.eco ? `<button id="btn-eco" class="eco-badge ${ecoOn ? 'eco-on' : 'eco-off'}">🌿 ${ecoOn ? 'ECO ON' : 'ECO'}</button>` : ''}
-          </div>
-
-          <div class="dial-wrap">
-            <svg width="220" height="220" viewBox="0 0 220 220" style="overflow:visible">
-              <defs></defs>
-              <circle cx="110" cy="110" r="72" fill="rgba(180,220,255,0.25)" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>
-              <circle cx="110" cy="110" r="68" fill="url(#innerGlow)"/>
-              ${arcFillSvg || ''}
-              ${dotSvg || ''}
-              ${ticks}
-            </svg>
-
-            <div class="dial-controls">
-              <div class="temp-controls">
-                <button id="btn-temp-down" class="temp-btn">-</button>
-                <div class="temp-display">${Math.round(curTemp)}°C</div>
-                <button id="btn-temp-up" class="temp-btn">+</button>
-              </div>
-              <div class="mode-grid">${modeBtns}</div>
-              ${cfg.features && (cfg.features.fan || cfg.features.swing) ? `<div class="fan-swing-row">${cfg.features && cfg.features.fan ? `<div class="fan-card"><div class="fc-head"><span class="fc-label">${tr.fanLabel}</span><span class="fc-val">${fanLabels[fi]}</span></div><button class="fan-tap" id="btn-fan-cycle"><span class="fan-ico">${fanIconSvg}</span><div class="fan-bars">${fanBarHtml}</div></button></div>` : ''}${cfg.features && cfg.features.swing ? `<div class="swing-card"><div class="fc-head"><span class="fc-label">${tr.swingLabel}</span></div>${swingBtn}</div>` : ''}</div>` : ''}
-              ${cfg.features && cfg.features.chips ? `<div class="chips">${cfg.features.chips.eco ? `<button id="btn-eco-chip" class="chip ${ecoOn ? 'chip--g' : ''}">🌿 Eco</button>` : ''}${cfg.features.chips.fav ? `<button class="chip chip--a">★ Fav</button>` : ''}${cfg.features.chips.clean ? `<button class="chip chip--b">✦ Clean</button>` : ''}</div>` : ''}
-            </div>
-            
-            <div class="bottom-row">
-              <button class="power-row" id="btn-power">
-                <div class="pw-btn ${pwClass}">⏻</div>
-                <div style="flex:1;min-width:0"><div class="pw-sub pw-sub--big">${pwSub}</div></div>
-                <span class="pw-arrow">›</span>
-              </button>
-              <button class="timer-btn${this._timers[this._activeIdx] ? ' timer-btn--active' : ''}" id="btn-timer">
-                <span class="timer-ico">⏰</span>
-                <span class="timer-lbl">${tr.timerBtn}</span>
-                <span class="timer-cd" id="timer-cd">${this._timers[this._activeIdx] ? this._fmtRemain(this._activeIdx) : ''}</span>
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="right">
-          <div class="room-image">
-            <img id="room-photo" class="room-img-el" src="${ROOM_IMAGES[this._activeIdx]}" alt="room">
-            <div class="ac-overlay">
-              <span class="ac-led ${isOn ? 'led-on' : 'led-off'}"></span>
-              <span class="ac-overlay-txt">${isOn ? tr.overlayOn : tr.overlayOff}</span>
-              ${modeChip}
-            </div>
-            <div class="img-temp-badge">${Math.round(curTemp)}<span>°C</span></div>
-            <div class="img-room-name">${room.label}</div>
-          </div>
-
-          <div class="status-block">
-            <div class="status-header">
-              <div>
-                <div class="st-title">${tr.statusLabel}</div>
-                <div class="${isOn ? 'st-on' : 'st-off'}">${isOn ? tr.statusOn : tr.statusOff}</div>
-                <div class="st-sub">${isOn ? tr.airGood : tr.pressOn}</div>
-              </div>
-              ${cfg.features && cfg.features.pm25 ? `<div class="pm-ring"><div class="pm-val">${pm25Val}</div><div class="pm-unit">${tr.dustLabel}</div></div>` : ''}
-            </div>
-            <div class="metrics">
-              ${cfg.features && cfg.features.temperature ? `<div class="met"><span class="met-ico">🌡</span><span class="met-val" id="met-outdoor-temp">${outdoorTempVal}</span></div>` : ''}
-              ${cfg.features && cfg.features.humidity ? `<div class="met"><span class="met-ico">💧</span><span class="met-val" id="met-humidity">${humidityVal}</span></div>` : ''}
-              ${cfg.features && cfg.features.power ? `<div class="met"><span class="met-ico">⚡</span><span class="met-val" id="met-power">${powerVal}</span></div>` : ''}
-            </div>
-          </div>
-
-          <div class="room-tabs"><div class="rt-header">${tr.selectRoom}</div><div class="room-tabs-inner${ROOMS.length >= 5 ? ' scrollable' : ''}">${roomTabs}</div></div>
-
-          <button class="all-off-btn" id="btn-all-off">
-            <div class="all-off-ico">⏻</div>
-            <div class="all-off-info"><div class="all-off-title">${tr.allOff}</div><div class="all-off-sub">${tr.allOffSub}</div></div>
-            <div class="all-off-arr">›</div>
-          </button>
-        </div>
-      </div>`;
+    var html = '<div class="card" style="--accent:' + mode.color + ';--glow:' + mode.glow + ';background:' + bgGrad + '">'
 + '<div class="left">'
 
-+ '<div class="hdr">'
-+ '  <div class="hdr-brand">'
-+ '    <div class="hdr-ico">' + mode.icon + '</div>'
-+ '    <div><div class="hdr-title">' + tr.cardTitle + '</div><div class="hdr-sub">' + tr.cardSub + '</div></div>'
-+ '  </div>'
-+ '  <div class="hdr-icons">'
-+ '    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="' + wifiColor + '" stroke-width="1.8" style="filter:' + wifiGlow + ';transition:all 0.4s"><path d="M5 12.55a11 11 0 0114.08 0M1.42 9a16 16 0 0121.16 0M8.53 16.11a6 6 0 016.95 0M12 20h.01"/></svg>'
-+ '    <button id="btn-gear" style="background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;line-height:0">'
-+ '      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>'
-+ '    </button>'
-+ '  </div>'
-+ '</div>'
-
-+ '<div class="greet-row">'
-  + '  <div>'
-  + (cfg.features && cfg.features.greet ? ('    <div class="greet-sub">' + tr.greet() + '</div>') : '')
-  + (cfg.features && cfg.features.greet ? ('    <div class="greet-name">' + (cfg.owner_name || 'Smart Home') + '</div>') : '')
-  + (cfg.features && cfg.features.avg_temp ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div>') : '')
-  + '  </div>'
-  + ((cfg.features && cfg.features.eco) ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">&#127807; ' + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
-  + '</div>'
+ + hdrBrand
+ + greetPart
 
 + '<div class="dial-wrap">'
 + '<svg width="220" height="220" viewBox="0 0 220 220" style="overflow:visible">'
@@ -951,72 +1420,44 @@ class AcControllerCardV2 extends HTMLElement {
 + '<circle cx="110" cy="110" r="72" fill="rgba(180,220,255,0.25)" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>'
 + '<circle cx="110" cy="110" r="68" fill="url(#innerGlow)"/>'
 + '<path d="' + arcTrack + '" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" stroke-linecap="round"/>'
-+ (arcFillSvg || '')
-+ (dotSvg || '')
 + ticks
++ arcFillSvg
++ dotSvg
 + '</svg>'
-
-+ '<div class="dial-controls">'
-+ '  <div class="temp-controls">'
-+ '    <button id="btn-temp-down" class="temp-btn">-</button>'
-+ '    <div class="temp-display">' + Math.round(curTemp) + '&#176;C</div>'
-+ '    <button id="btn-temp-up" class="temp-btn">+</button>'
-+ '  </div>'
-+ '  <div class="mode-grid">' + modeBtns + '</div>'
-+ ((cfg.features && (cfg.features.fan || cfg.features.swing)) ? (
-+   '<div class="fan-swing-row">' +
-+   (cfg.features && cfg.features.fan ? (
-+     '<div class="fan-card">'
-+     '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
-+     '    <button class="fan-tap" id="btn-fan-cycle">'
-+     '      <span class="fan-ico">' + fanIconSvg + '</span>'
-+     '      <div class="fan-bars">' + fanBarHtml + '</div>'
-+     '    </button>'
-+     '  </div>'
-+   ) : '') +
-+   (cfg.features && cfg.features.swing ? (
-+     '<div class="swing-card">'
-+     '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
-  + swingBtn
-+     '  </div>'
-+   ) : '') +
-+   '</div>'
-+ ) : '')
++ '<div class="dial-center">'
++ '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
++ '  <div class="dial-temp">' + Math.round(curTemp) + '<span class="dial-deg">&#176;</span></div>'
++ '  <div class="dial-feel">' + comfortTxt + '</div>'
 + '</div>'
- 
-  + '<div class="dial-controls">'
-  + '  <div class="temp-controls">'
-  + '    <button id="btn-temp-down" class="temp-btn">-</button>'
-  + '    <div class="temp-display">' + Math.round(curTemp) + '&#176;C</div>'
-  + '    <button id="btn-temp-up" class="temp-btn">+</button>'
-  + '  </div>'
-  + '  <div class="mode-grid">' + modeBtns + '</div>'
-  + ((cfg.features && (cfg.features.fan || cfg.features.swing)) ? (
-  +   '  <div class="fan-swing-row">'
-  +   + (cfg.features && cfg.features.fan ? (
-  +     '    <div class="fan-card">'
-  +     + '      <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
-  +     + '      <button class="fan-tap" id="btn-fan-cycle">'
-  +     + '        <span class="fan-ico">' + fanIconSvg + '</span>'
-  +     + '        <div class="fan-bars">' + fanBarHtml + '</div>'
-  +     + '      </button>'
-  +     + '    </div>'
-  +   ) : '')
-  +   + (cfg.features && cfg.features.swing ? (
-  +     '    <div class="swing-card">'
-  +     + '      <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
-  +     + swingBtn
-  +     + '    </div>'
-  +   ) : '')
-  +   + '  </div>'
-  + ) : '')
-  + ((cfg.features && cfg.features.chips) ? (
-  +  '  <div class="chips">'
-  +    + (cfg.features.chips.eco ? ('    <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>') : '')
-  +    + (cfg.features.chips.fav ? ('    <button class="chip chip--a">&#11088; Fav</button>') : '')
-  +    + (cfg.features.chips.clean ? ('    <button class="chip chip--b">&#10024; Clean</button>') : '')
-  +  + '  </div>'
-  + ) : '')
++ '</div>'
+
++ '<div class="temp-ctrl">'
++ '  <button class="temp-btn" id="btn-temp-down">&#8722;</button>'
++ '  <span class="temp-set">' + setTemp + '&#176;C</span>'
++ '  <button class="temp-btn" id="btn-temp-up">+</button>'
++ '</div>'
+
++ '<div class="mode-grid">' + modeBtns + '</div>'
+
++ '<div class="fan-swing-row">'
++ '  <div class="fan-card">'
++ '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
++ '    <button class="fan-tap" id="btn-fan-cycle">'
++ '      <span class="fan-ico">' + fanIconSvg + '</span>'
++ '      <div class="fan-bars">' + fanBarHtml + '</div>'
++ '    </button>'
++ '  </div>'
++ '  <div class="swing-card">'
++ '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
++ '    ' + swingBtn
++ '  </div>'
++ '</div>'
+
++ '<div class="chips">'
++ (showEco ? ('  <button id="btn-eco-chip" class="chip ' + (ecoOn ? 'chip--g' : '') + '">&#127807; Eco</button>') : '')
++ '  <button class="chip chip--a">&#11088; Fav</button>'
++ '  <button class="chip chip--b">&#10024; Clean</button>'
++ '</div>'
 
 + '<div class="bottom-row">'
 + '<button class="power-row" id="btn-power">'
@@ -1055,13 +1496,13 @@ class AcControllerCardV2 extends HTMLElement {
 + '      <div class="' + (isOn ? 'st-on' : 'st-off') + '">' + (isOn ? tr.statusOn : tr.statusOff) + '</div>'
 + '      <div class="st-sub">' + (isOn ? tr.airGood : tr.pressOn) + '</div>'
 + '    </div>'
-+ '    ' + (cfg.features && cfg.features.pm25 ? ('<div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>') : '') +
-+ '  </div>' +
-+ '  <div class="metrics">' +
-+ '    ' + (cfg.features && cfg.features.temperature ? ('<div class="met"><span class="met-ico">&#127777;</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>') : '') +
-+ '    ' + (cfg.features && cfg.features.humidity ? ('<div class="met"><span class="met-ico">&#128167;</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>') : '') +
-+ '    ' + (cfg.features && cfg.features.power ? ('<div class="met"><span class="met-ico">&#9889;</span><span class="met-val" id="met-power">' + powerVal + '</span></div>') : '') +
-+ '  </div>' +
++ '    <div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>'
++ '  </div>'
++ '  <div class="metrics">'
++ '    <div class="met"><span class="met-ico">&#127777;</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>'
++ '    <div class="met"><span class="met-ico">&#128167;</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>'
++ '    <div class="met"><span class="met-ico">&#9889;</span><span class="met-val" id="met-power">' + powerVal + '</span></div>'
++ '  </div>'
 + '</div>'
 
 + '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
@@ -1759,6 +2200,35 @@ class MultiAcCardEditor extends HTMLElement {
     </div>
   </div>
 
+  <!-- 3.5 Features -->
+  <div class="acc-wrap">
+    <div class="acc-head" id="head-features">
+      <ha-icon icon="mdi:star-circle"></ha-icon> Features
+      <span class="acc-arrow" id="arrow-features">${this._open.features?'▾':'▸'}</span>
+    </div>
+    <div class="acc-body" id="body-features" style="display:${this._open.features?'block':'none'}">
+      <div class="row">
+        <label>Show average temperature (header)</label>
+        <input type="checkbox" id="feat-show-avg" ${ (this._config.features && this._config.features.show_avg_temp !== false) ? 'checked' : '' } />
+      </div>
+      <div class="row">
+        <label>Show welcome message</label>
+        <input type="checkbox" id="feat-show-welcome" ${ (this._config.features && this._config.features.show_welcome !== false) ? 'checked' : '' } />
+      </div>
+      <div class="row">
+        <label>Show Eco button</label>
+        <input type="checkbox" id="feat-show-eco" ${ (this._config.features && this._config.features.show_eco !== false) ? 'checked' : '' } />
+      </div>
+      <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Modes</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-cool" ${ (this._config.features && this._config.features.modes && this._config.features.modes.cool !== false) ? 'checked' : '' } /> Cool</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-heat" ${ (this._config.features && this._config.features.modes && this._config.features.modes.heat !== false) ? 'checked' : '' } /> Heat</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-dry" ${ (this._config.features && this._config.features.modes && this._config.features.modes.dry !== false) ? 'checked' : '' } /> Dry</label>
+        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-fan_only" ${ (this._config.features && this._config.features.modes && this._config.features.modes.fan_only !== false) ? 'checked' : '' } /> Fan</label>
+      </div>
+    </div>
+  </div>
+
   <!-- 2. Số phòng -->
   <div class="acc-wrap">
     <div class="acc-head" id="head-roomcount">
@@ -1802,57 +2272,6 @@ class MultiAcCardEditor extends HTMLElement {
       ${this._entityField('outdoor_temp_entity',   t.edOutdoorTemp, 'sensor')}
       ${this._entityField('humidity_entity',       t.edHumidity,    'sensor')}
       ${this._entityField('power_entity',          t.edPower,       'sensor')}
-    </div>
-  </div>
-
-  <!-- 3.5 Features -->
-  <div class="acc-wrap">
-    <div class="acc-head" id="head-features">
-      <ha-icon icon="mdi:eye-settings"></ha-icon> Features
-      <span class="acc-arrow" id="arrow-features">${this._open.features?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-features" style="display:${this._open.features?'block':'none'}">
-      <div class="row">
-        <label>Header / Greeting</label>
-        <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
-          <label><input type="checkbox" id="feat-greet" ${this._config.features && this._config.features.greet ? 'checked' : ''}/> Show greeting</label>
-          <label style="margin-left:12px;"><input type="checkbox" id="feat-avg" ${this._config.features && this._config.features.avg_temp ? 'checked' : ''}/> Show average temp</label>
-          <label style="margin-left:12px;"><input type="checkbox" id="feat-eco" ${this._config.features && this._config.features.eco ? 'checked' : ''}/> Show ECO button</label>
-        </div>
-      </div>
-      <div class="row">
-        <label>Modes (show buttons)</label>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-          <label><input type="checkbox" id="feat-mode-cool" ${this._config.features && this._config.features.modes && this._config.features.modes.cool ? 'checked' : ''}/> Cool</label>
-          <label><input type="checkbox" id="feat-mode-heat" ${this._config.features && this._config.features.modes && this._config.features.modes.heat ? 'checked' : ''}/> Heat</label>
-          <label><input type="checkbox" id="feat-mode-dry" ${this._config.features && this._config.features.modes && this._config.features.modes.dry ? 'checked' : ''}/> Dry</label>
-          <label><input type="checkbox" id="feat-mode-fanonly" ${this._config.features && this._config.features.modes && this._config.features.modes.fan_only ? 'checked' : ''}/> Fan only</label>
-        </div>
-      </div>
-      <div class="row">
-        <label>Controls</label>
-        <div style="display:flex;gap:12px;align-items:center;margin-top:6px;">
-          <label><input type="checkbox" id="feat-fan" ${this._config.features && this._config.features.fan ? 'checked' : ''}/> Fan speed</label>
-          <label><input type="checkbox" id="feat-swing" ${this._config.features && this._config.features.swing ? 'checked' : ''}/> Airflow</label>
-        </div>
-      </div>
-      <div class="row">
-        <label>Chips</label>
-        <div style="display:flex;gap:12px;align-items:center;margin-top:6px;">
-          <label><input type="checkbox" id="feat-chip-eco" ${this._config.features && this._config.features.chips && this._config.features.chips.eco ? 'checked' : ''}/> Eco chip</label>
-          <label><input type="checkbox" id="feat-chip-fav" ${this._config.features && this._config.features.chips && this._config.features.chips.fav ? 'checked' : ''}/> Fav chip</label>
-          <label><input type="checkbox" id="feat-chip-clean" ${this._config.features && this._config.features.chips && this._config.features.chips.clean ? 'checked' : ''}/> Clean chip</label>
-        </div>
-      </div>
-      <div class="row">
-        <label>Metrics</label>
-        <div style="display:flex;gap:12px;align-items:center;margin-top:6px;flex-wrap:wrap;">
-          <label><input type="checkbox" id="feat-pm25" ${this._config.features && this._config.features.pm25 ? 'checked' : ''}/> Fine dust</label>
-          <label><input type="checkbox" id="feat-temp" ${this._config.features && this._config.features.temperature ? 'checked' : ''}/> Temperature</label>
-          <label><input type="checkbox" id="feat-hum" ${this._config.features && this._config.features.humidity ? 'checked' : ''}/> Humidity</label>
-          <label><input type="checkbox" id="feat-power" ${this._config.features && this._config.features.power ? 'checked' : ''}/> Power</label>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -1909,33 +2328,6 @@ class MultiAcCardEditor extends HTMLElement {
         this._fire();
         this._render();
       }));
-
-    // features toggles
-    const setFeat = (k, v) => {
-      const f = Object.assign({}, this._config.features || {});
-      // nested keys like modes.cool or chips.eco
-      if (k.indexOf('.') === -1) f[k] = v;
-      else {
-        const parts = k.split('.');
-        f[parts[0]] = Object.assign({}, f[parts[0]] || {});
-        f[parts[0]][parts[1]] = v;
-      }
-      this._config = { ...this._config, features: f };
-      this._fire();
-      this._render();
-    };
-    const mappings = [
-      ['feat-greet','greet'],['feat-eco','eco'],['feat-avg','avg_temp'],
-      ['feat-mode-cool','modes.cool'],['feat-mode-heat','modes.heat'],['feat-mode-dry','modes.dry'],['feat-mode-fanonly','modes.fan_only'],
-      ['feat-fan','fan'],['feat-swing','swing'],
-      ['feat-chip-eco','chips.eco'],['feat-chip-fav','chips.fav'],['feat-chip-clean','chips.clean'],
-      ['feat-pm25','pm25'],['feat-temp','temperature'],['feat-hum','humidity'],['feat-power','power']
-    ];
-    mappings.forEach(([id,key]) => {
-      const el = sr.getElementById(id);
-      if (!el) return;
-      el.addEventListener('change', () => setFeat(key, !!el.checked));
-    });
 
     // color picker header toggle
     sr.querySelectorAll('[data-cp]').forEach(hdr =>
@@ -2105,6 +2497,35 @@ class MultiAcCardEditor extends HTMLElement {
         this._config = c;
         this._fire();
       }));
+
+    // Features toggles
+    const setFeature = (key, val) => {
+      const f = Object.assign({}, this._config.features || {});
+      f[key] = val;
+      this._config = { ...this._config, features: f };
+      this._fire();
+      this._render();
+    };
+    const elAvg = sr.getElementById('feat-show-avg');
+    if (elAvg) elAvg.addEventListener('change', () => setFeature('show_avg_temp', elAvg.checked));
+    const elWelcome = sr.getElementById('feat-show-welcome');
+    if (elWelcome) elWelcome.addEventListener('change', () => setFeature('show_welcome', elWelcome.checked));
+    const elEco = sr.getElementById('feat-show-eco');
+    if (elEco) elEco.addEventListener('change', () => setFeature('show_eco', elEco.checked));
+    // modes
+    const modeIds = ['cool','heat','dry','fan_only'];
+    modeIds.forEach(m => {
+      const eid = sr.getElementById('feat-mode-' + m);
+      if (!eid) return;
+      eid.addEventListener('change', () => {
+        const f = Object.assign({}, this._config.features || {});
+        f.modes = Object.assign({}, f.modes || {});
+        f.modes[m] = eid.checked;
+        this._config = { ...this._config, features: f };
+        this._fire();
+        this._render();
+      });
+    });
   }
 }
 
