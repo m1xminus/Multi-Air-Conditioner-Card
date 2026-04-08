@@ -1403,17 +1403,6 @@ class AcControllerCardV2 extends HTMLElement {
 + '<circle cx="110" cy="110" r="68" fill="url(#innerGlow)"/>'
 + '<path d="' + arcTrack + '" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="12" stroke-linecap="round"/>'
 + ticks
-      return {
-        type: 'custom:multi-air-conditioner-card',
-        language: 'en',
-        room_count: 4,
-        entities: [
-          { entity_id: 'climate.living_room' },
-          { entity_id: 'climate.bedroom' },
-          { entity_id: 'climate.kitchen' },
-          { entity_id: 'climate.office' }
-        ]
-      };
 + '</div>'
 
 + '<div class="chips">'
@@ -1453,19 +1442,19 @@ class AcControllerCardV2 extends HTMLElement {
 + '</div>'
 
 + '<div class="status-block">'
-  '    <div class="status-header'>
-  '    <div>'
-  '      <div class="st-title">' + tr.statusLabel + '</div>'
-  '      <div class="' + (isOn ? 'st-on' : 'st-off') + '">' + (isOn ? tr.statusOn : tr.statusOff) + '</div>'
-  '      <div class="st-sub">' + (isOn ? tr.airGood : tr.pressOn) + '</div>'
-  '    </div>'
-  '    ' + (cfg.features && cfg.features.pm25 ? ('<div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>') : '') +
-  '  </div>'
-  '  <div class="metrics'>
-  '    ' + (cfg.features && cfg.features.temperature ? ('<div class="met"><span class="met-ico">&#127777;</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>') : '') +
-  '    ' + (cfg.features && cfg.features.humidity ? ('<div class="met"><span class="met-ico">&#128167;</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>') : '') +
-  '    ' + (cfg.features && cfg.features.power ? ('<div class="met"><span class="met-ico">&#9889;</span><span class="met-val" id="met-power">' + powerVal + '</span></div>') : '') +
-  '  </div>'
++ '  <div class="status-header">'
++ '    <div>'
++ '      <div class="st-title">' + tr.statusLabel + '</div>'
++ '      <div class="' + (isOn ? 'st-on' : 'st-off') + '">' + (isOn ? tr.statusOn : tr.statusOff) + '</div>'
++ '      <div class="st-sub">' + (isOn ? tr.airGood : tr.pressOn) + '</div>'
++ '    </div>'
++ '    ' + (cfg.features && cfg.features.pm25 ? ('<div class="pm-ring"><div class="pm-val">' + pm25Val + '</div><div class="pm-unit">' + tr.dustLabel + '</div></div>') : '') +
++ '  </div>' +
++ '  <div class="metrics">' +
++ '    ' + (cfg.features && cfg.features.temperature ? ('<div class="met"><span class="met-ico">&#127777;</span><span class="met-val" id="met-outdoor-temp">' + outdoorTempVal + '</span></div>') : '') +
++ '    ' + (cfg.features && cfg.features.humidity ? ('<div class="met"><span class="met-ico">&#128167;</span><span class="met-val" id="met-humidity">' + humidityVal + '</span></div>') : '') +
++ '    ' + (cfg.features && cfg.features.power ? ('<div class="met"><span class="met-ico">&#9889;</span><span class="met-val" id="met-power">' + powerVal + '</span></div>') : '') +
++ '  </div>' +
 + '</div>'
 
 + '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
