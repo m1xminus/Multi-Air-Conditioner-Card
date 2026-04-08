@@ -835,24 +835,24 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .dial-deg{font-size:24px;font-weight:400;vertical-align:super;line-height:0}
 .dial-feel{font-size:10px;color:rgba(255,255,255,0.6);margin-top:5px;font-weight:300;text-align:center}
 .temp-ctrl{display:flex;align-items:center;justify-content:center}
-.temp-btn{width:40px;height:40px;border-radius:50%;background:rgba(0,20,50,0.25);
-  border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.9);font-size:24px;
+.temp-btn{width:36px;height:36px;border-radius:50%;background:rgba(0,20,50,0.25);
+  border:1px solid rgba(255,255,255,0.25);color:rgba(255,255,255,0.9);font-size:18px;
   display:flex;align-items:center;justify-content:center;cursor:pointer;outline:none;transition:all 0.15s;font-family:'Sora',sans-serif}
 .temp-btn:hover{background:rgba(0,30,70,0.4);border-color:var(--accent);color:var(--accent);box-shadow:0 0 18px var(--glow)}
 .temp-btn:active{transform:scale(0.88)}
-.temp-set{min-width:100px;text-align:center;font-family:'Orbitron',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.85)}
+.temp-set{min-width:100px;text-align:center;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85)}
 .mode-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
 .mode-btn{background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
-  padding:9px 3px 7px;display:flex;flex-direction:column;align-items:center;gap:4px;
-  cursor:pointer;outline:none;color:rgba(255,255,255,0.75);font-size:8.5px;font-weight:600;
+  padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;outline:none;color:rgba(255,255,255,0.75);font-size:8px;font-weight:600;
   font-family:'Sora',sans-serif;transition:all 0.2s}
 .mode-btn:hover{background:rgba(0,30,70,0.45);border-color:rgba(255,255,255,0.5);transform:translateY(-1px)}
 .mode-btn:active{transform:scale(0.94)}
 .mode-btn--active{background:linear-gradient(160deg,color-mix(in srgb,var(--bc,var(--accent)) 55%,rgba(0,15,40,0.5)),color-mix(in srgb,var(--bc,var(--accent)) 35%,rgba(0,15,40,0.4)));
   border-color:color-mix(in srgb,var(--bc,var(--accent)) 80%,transparent);color:#ffffff;
   box-shadow:0 0 24px var(--bg,var(--glow)),inset 0 1px 0 rgba(255,255,255,0.25)}
-.mode-icon{font-size:22px;line-height:1}
-.mode-lbl{font-size:8.5px}
+.mode-icon{font-size:18px;line-height:1}
+.mode-lbl{font-size:8px}
 .fan-swing-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .fan-card,.swing-card{background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.22);
   border-radius:14px;padding:9px 12px;display:flex;flex-direction:column;gap:6px}
@@ -873,8 +873,8 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .swing-lbl{font-size:9px;color:rgba(255,255,255,0.7);font-weight:600}
 .chips{display:flex;gap:7px}
 .chip{flex:1;background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.25);
-  border-radius:12px;padding:7px 4px;display:flex;align-items:center;justify-content:center;gap:4px;
-  cursor:pointer;outline:none;font-size:9px;font-weight:600;font-family:'Sora',sans-serif;
+  border-radius:12px;padding:6px 4px;display:flex;align-items:center;justify-content:center;gap:4px;
+  cursor:pointer;outline:none;font-size:8px;font-weight:600;font-family:'Sora',sans-serif;
   color:rgba(255,255,255,0.75);transition:all 0.2s;white-space:nowrap}
 .chip:hover{background:rgba(0,30,70,0.45);transform:translateY(-1px)}
 .chip:active{transform:scale(0.95)}
@@ -886,13 +886,13 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   cursor:pointer;outline:none;text-align:left;transition:all 0.2s;font-family:'Sora',sans-serif;width:100%}
 .power-row:hover{background:rgba(0,30,70,0.45)}
 .power-row:active{transform:scale(0.98)}
-.pw-btn{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:19px;transition:all 0.35s}
+.pw-btn{width:36px;height:36px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 0.35s}
 .pw-on{background:linear-gradient(135deg,#3b9eff,#1a5faa);
   box-shadow:0 0 26px rgba(59,158,255,0.7),0 0 50px rgba(59,158,255,0.25);animation:pwP 2.5s ease-in-out infinite}
 .pw-off{background:rgba(0,20,50,0.25);border:1px solid rgba(255,255,255,0.5)}
 @keyframes pwP{0%,100%{box-shadow:0 0 26px rgba(59,158,255,0.7),0 0 50px rgba(59,158,255,0.25)}50%{box-shadow:0 0 40px rgba(59,158,255,0.95),0 0 70px rgba(59,158,255,0.45)}}
 .pw-sub{font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px}
-.pw-sub--big{font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);letter-spacing:0.2px}
+.pw-sub--big{font-size:11px;font-weight:600;color:rgba(255,255,255,0.85);letter-spacing:0.2px}
 .confirm-popup{position:fixed;z-index:9999;
   background:rgba(6,10,24,0.98);backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8);
   border:1px solid rgba(255,80,80,0.35);border-radius:20px;padding:18px 16px 14px;width:220px;
@@ -1304,7 +1304,8 @@ class AcControllerCardV2 extends HTMLElement {
       arcFillSvg += '<path d="' + arcFillAct + '" fill="none" stroke="' + activeColor + '" stroke-width="12" stroke-linecap="round"' + (activeGlow ? ' filter="' + activeGlow + '"' : '') + ' opacity="' + (isOn ? 0.95 : 0.22) + '"/>';
     }
     if (pctSet > 0.02) {
-      arcFillSvg += '<path d="' + arcFillSet + '" fill="none" stroke="' + activeColor + '" stroke-width="6" stroke-linecap="round" opacity="0.6"/>';
+      // inner arc uses round linecap so its end appears as the target dot
+      arcFillSvg += '<path d="' + arcFillSet + '" fill="none" stroke="' + activeColor + '" stroke-width="8" stroke-linecap="round" opacity="0.9"/>';
     }
     var dotSvg = '';
     if (pctActual > 0.02) {
