@@ -27,7 +27,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Tắt tất cả', allOffSub: 'Nhấn để tắt mọi phòng',
     tapOff: 'Nhấn để tắt', tapOn: 'Nhấn để bật',
     confirmOff: 'Tắt tất cả?', confirmSub: function(n) { return 'Sẽ tắt ' + n + ' điều hòa cùng lúc'; },
-    cancel: 'Hủy', doOff: '⏻ Tắt hết',
+    cancel: 'Hủy', doOff: 'Tắt hết',
     overlayOn: 'ĐANG BẬT', overlayOff: 'TẮT',
     modes: { cool:'Làm lạnh', heat:'Sưởi', dry:'Hút ẩm', fan_only:'Quạt', off:'Tắt' },
     fans:   ['Tự động','Thấp','Vừa','Cao'],
@@ -42,6 +42,7 @@ const AC_TRANSLATIONS = {
       return 'Quá nóng! Hãy điều chỉnh nhiệt độ';
     },
     timerBtn: 'Hẹn giờ',
+    avgLabel: 'Nhiệt Độ Trung Bình',
     bgLabel: 'Màu nền gradient', bgPresets: 'Preset', bgOpacity: 'Độ trong suốt nền',
     colorLabel: 'Màu sắc', accentColor: 'Màu nhấn (accent)', textColor: 'Màu chữ',
     color1: 'Màu 1 (trên trái)', color2: 'Màu 2 (dưới phải)',
@@ -86,7 +87,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Desligar tudo', allOffSub: 'Premir para desligar todas as divisões',
     tapOff: 'Premir para desligar', tapOn: 'Premir para ligar',
     confirmOff: 'Desligar tudo?', confirmSub: function(n) { return 'Irá desligar ' + n + ' aparelhos de AC de uma só vez'; },
-    cancel: 'Cancelar', doOff: '⏻ Desligar tudo',
+    cancel: 'Cancelar', doOff: 'Desligar tudo',
     overlayOn: 'LIGADO', overlayOff: 'DESLIGADO',
     modes: { cool:'Arrefecer', heat:'Aquecimento', dry:'Desumidificar', fan_only:'Ventilador', off:'Desligado' },
     fans:   ['Auto','Baixo','Médio','Alto'],
@@ -101,6 +102,7 @@ const AC_TRANSLATIONS = {
       return 'Demasiado quente! Ajuste a temperatura';
     },
     timerBtn: 'Temporizador',
+    avgLabel: 'Temperatura Média',
     bgLabel: 'Fundo em gradiente', bgPresets: 'Predefinição', bgOpacity: 'Transparência do fundo',
     colorLabel: 'Cores', accentColor: 'Cor de destaque', textColor: 'Cor do texto',
     color1: 'Cor 1 (superior esquerdo)', color2: 'Cor 2 (inferior direito)',
@@ -145,7 +147,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Turn all off', allOffSub: 'Tap to turn off all rooms',
     tapOff: 'Tap to turn off', tapOn: 'Tap to turn on',
     confirmOff: 'Turn all off?', confirmSub: function(n) { return 'Will turn off ' + n + ' AC units at once'; },
-    cancel: 'Cancel', doOff: '⏻ Turn all off',
+    cancel: 'Cancel', doOff: 'Turn all off',
     overlayOn: 'ON', overlayOff: 'OFF',
     modes: { cool:'Cool', heat:'Heat', dry:'Dry', fan_only:'Fan', off:'Off' },
     fans:   ['Auto','Low','Medium','High'],
@@ -160,6 +162,7 @@ const AC_TRANSLATIONS = {
       return 'Too hot! Adjust the temperature';
     },
     timerBtn: 'Timer',
+    avgLabel: 'Average Temperature',
     bgLabel: 'Gradient background', bgPresets: 'Preset', bgOpacity: 'Background transparency',
     colorLabel: 'Colors', accentColor: 'Accent color', textColor: 'Text color',
     color1: 'Color 1 (top left)', color2: 'Color 2 (bottom right)',
@@ -204,7 +207,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Alle ausschalten', allOffSub: 'Alle Räume ausschalten',
     tapOff: 'Zum Ausschalten', tapOn: 'Zum Einschalten',
     confirmOff: 'Alle ausschalten?', confirmSub: function(n) { return n + ' Klimaanlagen gleichzeitig ausschalten'; },
-    cancel: 'Abbrechen', doOff: '⏻ Alle aus',
+    cancel: 'Abbrechen', doOff: 'Alle aus',
     overlayOn: 'AN', overlayOff: 'AUS',
     modes: { cool:'Kühlen', heat:'Heizen', dry:'Entfeuchten', fan_only:'Lüfter', off:'Aus' },
     fans:   ['Auto','Niedrig','Mittel','Hoch'],
@@ -219,6 +222,7 @@ const AC_TRANSLATIONS = {
       return 'Zu heiß! Temperatur anpassen';
     },
     timerBtn: 'Timer',
+    avgLabel: 'Durchschnittstemperatur',
     bgLabel: 'Verlaufshintergrund', bgPresets: 'Voreinstellung', bgOpacity: 'Hintergrund-Transparenz',
     colorLabel: 'Farben', accentColor: 'Akzentfarbe', textColor: 'Textfarbe',
     color1: 'Farbe 1 (oben links)', color2: 'Farbe 2 (unten rechts)',
@@ -263,7 +267,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Tout éteindre', allOffSub: 'Éteindre toutes les pièces',
     tapOff: 'Appuyer pour éteindre', tapOn: 'Appuyer pour allumer',
     confirmOff: 'Tout éteindre?', confirmSub: function(n) { return 'Éteindra ' + n + ' climatiseurs à la fois'; },
-    cancel: 'Annuler', doOff: '⏻ Tout éteindre',
+    cancel: 'Annuler', doOff: 'Tout éteindre',
     overlayOn: 'ALLUMÉ', overlayOff: 'ÉTEINT',
     modes: { cool:'Refroidir', heat:'Chauffer', dry:'Déshumidifier', fan_only:'Ventilateur', off:'Éteint' },
     fans:   ['Auto','Faible','Moyen','Élevé'],
@@ -278,6 +282,7 @@ const AC_TRANSLATIONS = {
       return 'Trop chaud! Ajustez la température';
     },
     timerBtn: 'Minuterie',
+    avgLabel: 'Température Moyenne',
     bgLabel: 'Dégradé de fond', bgPresets: 'Préréglage', bgOpacity: 'Transparence du fond',
     colorLabel: 'Couleurs', accentColor: 'Couleur d\'accent', textColor: 'Couleur du texte',
     color1: 'Couleur 1 (haut gauche)', color2: 'Couleur 2 (bas droite)',
@@ -322,7 +327,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Alles uitschakelen', allOffSub: 'Alle kamers uitschakelen',
     tapOff: 'Tik om uit te schakelen', tapOn: 'Tik om in te schakelen',
     confirmOff: 'Alles uitschakelen?', confirmSub: function(n) { return n + ' airconditioners tegelijk uitschakelen'; },
-    cancel: 'Annuleren', doOff: '⏻ Alles uit',
+    cancel: 'Annuleren', doOff: 'Alles uit',
     overlayOn: 'AAN', overlayOff: 'UIT',
     modes: { cool:'Koelen', heat:'Verwarmen', dry:'Ontvochtigen', fan_only:'Ventilator', off:'Uit' },
     fans:   ['Auto','Laag','Medium','Hoog'],
@@ -337,6 +342,7 @@ const AC_TRANSLATIONS = {
       return 'Te heet! Temperatuur aanpassen';
     },
     timerBtn: 'Timer',
+    avgLabel: 'Gemiddelde Temperatuur',
     bgLabel: 'Verloopachtergrond', bgPresets: 'Voorinstelling', bgOpacity: 'Achtergrond transparantie',
     colorLabel: 'Kleuren', accentColor: 'Accentkleur', textColor: 'Tekstkleur',
     color1: 'Kleur 1 (linksboven)', color2: 'Kleur 2 (rechtsonder)',
@@ -381,7 +387,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Wyłącz wszystkie', allOffSub: 'Naciśnij aby wyłączyć wszystkie pokoje',
     tapOff: 'Naciśnij aby wyłączyć', tapOn: 'Naciśnij aby włączyć',
     confirmOff: 'Wyłączyć wszystkie?', confirmSub: function(n) { return 'Wyłączy ' + n + ' klimatyzatorów naraz'; },
-    cancel: 'Anuluj', doOff: '⏻ Wyłącz wszystkie',
+    cancel: 'Anuluj', doOff: 'Wyłącz wszystkie',
     overlayOn: 'WŁ', overlayOff: 'WYŁ',
     modes: { cool:'Chłodzenie', heat:'Ogrzewanie', dry:'Osuszanie', fan_only:'Wentylator', off:'Wyłącz' },
     fans:   ['Auto','Niski','Średni','Wysoki'],
@@ -396,6 +402,7 @@ const AC_TRANSLATIONS = {
       return 'Zbyt gorąco! Dostosuj temperaturę';
     },
     timerBtn: 'Timer',
+    avgLabel: 'Średnia Temperatura',
     bgLabel: 'Tło gradientowe', bgPresets: 'Ustawienie wstępne', bgOpacity: 'Przezroczystość tła',
     colorLabel: 'Kolory', accentColor: 'Kolor akcentu', textColor: 'Kolor tekstu',
     color1: 'Kolor 1 (lewy górny)', color2: 'Kolor 2 (prawy dolny)',
@@ -440,7 +447,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Stäng av alla', allOffSub: 'Stäng av alla rum',
     tapOff: 'Tryck för att stänga av', tapOn: 'Tryck för att slå på',
     confirmOff: 'Stäng av alla?', confirmSub: function(n) { return 'Stänger av ' + n + ' AC-enheter'; },
-    cancel: 'Avbryt', doOff: '⏻ Stäng av alla',
+    cancel: 'Avbryt', doOff: 'Stäng av alla',
     overlayOn: 'PÅ', overlayOff: 'AV',
     modes: { cool:'Kyla', heat:'Värme', dry:'Avfuktning', fan_only:'Fläkt', off:'Av' },
     fans:   ['Auto','Låg','Medel','Hög'],
@@ -455,6 +462,7 @@ const AC_TRANSLATIONS = {
       return 'För varmt! Justera temperaturen';
     },
     timerBtn: 'Timer',
+    avgLabel: 'Medeltemperatur',
     bgLabel: 'Gradientbakgrund', bgPresets: 'Förinställning', bgOpacity: 'Bakgrundstransparens',
     colorLabel: 'Färger', accentColor: 'Accentfärg', textColor: 'Textfärg',
     color1: 'Färg 1 (övre vänster)', color2: 'Färg 2 (nedre höger)',
@@ -499,7 +507,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Mindet kikapcsolni', allOffSub: 'Összes szoba kikapcsolása',
     tapOff: 'Érintse ki a kikapcsoláshoz', tapOn: 'Érintse meg a bekapcsoláshoz',
     confirmOff: 'Mindet kikapcsolni?', confirmSub: function(n) { return n + ' légkondicionálót kapcsol ki egyszerre'; },
-    cancel: 'Mégse', doOff: '⏻ Mindet ki',
+    cancel: 'Mégse', doOff: 'Mindet ki',
     overlayOn: 'BE', overlayOff: 'KI',
     modes: { cool:'Hűtés', heat:'Fűtés', dry:'Párátlanítás', fan_only:'Ventilátor', off:'Ki' },
     fans:   ['Auto','Alacsony','Közepes','Magas'],
@@ -514,6 +522,7 @@ const AC_TRANSLATIONS = {
       return 'Túl meleg! Állítsa be a hőmérsékletet';
     },
     timerBtn: 'Időzítő',
+    avgLabel: 'Átlaghőmérséklet',
     bgLabel: 'Gradiens háttér', bgPresets: 'Előbeállítás', bgOpacity: 'Háttér átlátszóság',
     colorLabel: 'Színek', accentColor: 'Kiemelőszín', textColor: 'Szövegszín',
     color1: 'Szín 1 (bal felső)', color2: 'Szín 2 (jobb alsó)',
@@ -558,7 +567,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Vše vypnout', allOffSub: 'Vypnout všechny místnosti',
     tapOff: 'Stiskněte pro vypnutí', tapOn: 'Stiskněte pro zapnutí',
     confirmOff: 'Vše vypnout?', confirmSub: function(n) { return 'Vypne ' + n + ' klimatizací najednou'; },
-    cancel: 'Zrušit', doOff: '⏻ Vše vypnout',
+    cancel: 'Zrušit', doOff: 'Vše vypnout',
     overlayOn: 'ZAP', overlayOff: 'VYP',
     modes: { cool:'Chlazení', heat:'Topení', dry:'Odvlhčování', fan_only:'Ventilátor', off:'Vypnout' },
     fans:   ['Auto','Nízká','Střední','Vysoká'],
@@ -573,6 +582,7 @@ const AC_TRANSLATIONS = {
       return 'Příliš horko! Nastavte teplotu';
     },
     timerBtn: 'Časovač',
+    avgLabel: 'Průměrná Teplota',
     bgLabel: 'Přechodové pozadí', bgPresets: 'Předvolba', bgOpacity: 'Průhlednost pozadí',
     colorLabel: 'Barvy', accentColor: 'Barva zvýraznění', textColor: 'Barva textu',
     color1: 'Barva 1 (vlevo nahoře)', color2: 'Barva 2 (vpravo dole)',
@@ -617,7 +627,7 @@ const AC_TRANSLATIONS = {
     allOff: 'Spegni tutti', allOffSub: 'Spegni tutte le stanze',
     tapOff: 'Premi per spegnere', tapOn: 'Premi per accendere',
     confirmOff: 'Spegnere tutto?', confirmSub: function(n) { return 'Spegnerà ' + n + ' condizionatori contemporaneamente'; },
-    cancel: 'Annulla', doOff: '⏻ Spegni tutti',
+    cancel: 'Annulla', doOff: 'Spegni tutti',
     overlayOn: 'ACCESO', overlayOff: 'SPENTO',
     modes: { cool:'Raffreddamento', heat:'Riscaldamento', dry:'Deumidificazione', fan_only:'Ventilatore', off:'Spento' },
     fans:   ['Auto','Bassa','Media','Alta'],
@@ -632,6 +642,7 @@ const AC_TRANSLATIONS = {
       return 'Troppo caldo! Regola la temperatura';
     },
     timerBtn: 'Timer',
+    avgLabel: 'Temperatura Media',
     bgLabel: 'Sfondo sfumato', bgPresets: 'Preimpostazione', bgOpacity: 'Trasparenza sfondo',
     colorLabel: 'Colori', accentColor: 'Colore accento', textColor: 'Colore testo',
     color1: 'Colore 1 (in alto a sinistra)', color2: 'Colore 2 (in basso a destra)',
@@ -731,6 +742,12 @@ const AC_DEFAULT_CONFIG = {
     mode_heat: '',
     mode_dry: '',
     mode_fan_only: '',
+  },
+  header_button: {
+    show: false,
+    icon: 'mdi:cog',
+    tap_action: { action: 'default' },
+    hold_action: { action: 'none' },
   },
 };
 
@@ -1516,9 +1533,9 @@ class AcControllerCardV2 extends HTMLElement {
       ? parseFloat(this._hass.states[cfg.pm25_entity].state) || '--'
       : '--';
     // Average temperature sensor (header)
-    var avgTempVal = cfg.avg_temp_entity && this._hass && this._hass.states[cfg.avg_temp_entity]
-      ? Math.round(parseFloat(this._hass.states[cfg.avg_temp_entity].state)) + '°'
-      : '--°';
+    var avgTempRaw = cfg.avg_temp_entity && this._hass && this._hass.states[cfg.avg_temp_entity]
+      ? parseFloat(this._hass.states[cfg.avg_temp_entity].state) : NaN;
+    var avgTempVal = !isNaN(avgTempRaw) ? (Math.round(avgTempRaw * 10) / 10).toFixed(1) + '°' : '--°';
     // Outdoor / displayed temp: prefer per-room temp sensor (already in curTemp), fall back to curTemp
     var outdoorTempVal = '--°';
     if (cfg.outdoor_temp_entity && this._hass && this._hass.states[cfg.outdoor_temp_entity]) {
@@ -1547,11 +1564,17 @@ class AcControllerCardV2 extends HTMLElement {
     }
 
     // build header pieces
-    var hdrBrand = '<div class="hdr">'
+    var hdrBtnCfg = Object.assign({ show: false, icon: 'mdi:cog', tap_action: { action: 'default' }, hold_action: { action: 'none' } }, cfg.header_button || {});
+    var hdrBtnHtml = '';
+    if (hdrBtnCfg.show) {
+      hdrBtnHtml = '<button id="hdr-action-btn" style="background:none;border:none;cursor:pointer;padding:6px;color:inherit;opacity:0.8;display:flex;align-items:center;-webkit-tap-highlight-color:transparent" title="Header button"><ha-icon icon="' + (hdrBtnCfg.icon || 'mdi:cog') + '"></ha-icon></button>';
+    }
+    var hdrBrand = '<div class="hdr" style="display:flex;align-items:center;justify-content:space-between">'
       + '  <div class="hdr-brand">'
       + '    <div class="hdr-ico">' + (headerIcon ? ('<ha-icon icon="' + headerIcon + '"></ha-icon>') : (mode.icon || '')) + '</div>'
       + '    <div><div class="hdr-title">' + tr.cardTitle + '</div></div>'
       + '  </div>'
+      + hdrBtnHtml
       + '</div>';
 
     var greetPart = '';
@@ -1560,13 +1583,13 @@ class AcControllerCardV2 extends HTMLElement {
         + '  <div>'
         + '    <div class="greet-sub">' + tr.greet() + '</div>'
         + '    <div class="greet-name">' + (cfg.owner_name || '') + '</div>'
-        + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div>') : '')
+        + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;display:flex;align-items:center;gap:4px"><ha-icon icon="mdi:home-thermometer" style="--mdi-icon-size:16px;width:16px;height:16px"></ha-icon><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div>') : '')
         + '  </div>'
         + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoIcon ? ('<ha-icon icon="' + ecoIcon + '"></ha-icon> ') : '') + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
         + '</div>';
     } else {
       if (showAvg) {
-        greetPart = '<div class="greet-row"><div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px">Avg: ' + avgTempVal + '</div></div></div>';
+        greetPart = '<div class="greet-row"><div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;display:flex;align-items:center;gap:4px"><ha-icon icon="mdi:home-thermometer" style="--mdi-icon-size:16px;width:16px;height:16px"></ha-icon><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div></div></div>';
       } else {
         greetPart = '<div style="height:0.5px"></div>';
       }
@@ -1722,6 +1745,56 @@ class AcControllerCardV2 extends HTMLElement {
 
     function onTapAll(els, fn) {
       els.forEach(function(b) { onTap(b, function(e) { fn(b, e); }); });
+    }
+
+    // ── Header button action handler ─────────────────────────────────────────
+    var _execAction = function(actionCfg) {
+      if (!actionCfg || !actionCfg.action || actionCfg.action === 'none') return;
+      var act = actionCfg.action;
+      if (act === 'default' || act === 'toggle') {
+        var id = ROOMS[self._activeIdx].id;
+        if (id && id.split && id.split('.')[0] === 'climate') {
+          self._call('climate','set_hvac_mode',{entity_id:id, hvac_mode: self._s(id)!=='off'?'off':'cool'});
+        }
+      } else if (act === 'more-info') {
+        var moreId = ROOMS[self._activeIdx].id;
+        if (moreId) {
+          var evt = new CustomEvent('hass-more-info', { composed: true, bubbles: true, detail: { entityId: moreId } });
+          self.dispatchEvent(evt);
+        }
+      } else if (act === 'navigate') {
+        if (actionCfg.navigation_path) window.history.pushState(null, '', actionCfg.navigation_path);
+      } else if (act === 'url') {
+        if (actionCfg.url_path) window.open(actionCfg.url_path, '_blank');
+      } else if (act === 'perform-action') {
+        if (actionCfg.perform_action) {
+          var parts = actionCfg.perform_action.split('.');
+          if (parts.length === 2) {
+            var svcData = {};
+            if (actionCfg.target && actionCfg.target.entity_id) svcData.entity_id = actionCfg.target.entity_id;
+            self._call(parts[0], parts[1], svcData);
+          }
+        }
+      } else if (act === 'assist') {
+        var assistEvt = new CustomEvent('show-dialog', { composed: true, bubbles: true, detail: { dialogTag: 'ha-voice-command-dialog', dialogImport: null, dialogParams: {} } });
+        self.dispatchEvent(assistEvt);
+      }
+    };
+
+    var hdrActionBtn = r.getElementById('hdr-action-btn');
+    if (hdrActionBtn) {
+      var hbCfg = (self._config && self._config.header_button) || {};
+      onTap(hdrActionBtn, function() { _execAction(hbCfg.tap_action); });
+      var holdTimer = null;
+      hdrActionBtn.addEventListener('touchstart', function(e) {
+        holdTimer = setTimeout(function() { holdTimer = null; _execAction(hbCfg.hold_action); }, 500);
+      }, { passive: true });
+      hdrActionBtn.addEventListener('touchend', function() { if (holdTimer) clearTimeout(holdTimer); });
+      hdrActionBtn.addEventListener('touchcancel', function() { if (holdTimer) clearTimeout(holdTimer); });
+      hdrActionBtn.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        _execAction(hbCfg.hold_action);
+      });
     }
 
     onTap(r.getElementById('btn-temp-up'), function() {
@@ -2098,7 +2171,7 @@ class MultiAcCardEditor extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this._config = { ...AC_DEFAULT_CONFIG };
     this._hass   = null;
-    this._open   = { lang: true, roomcount: true, rooms: true, sensors: true, features: true, icons: false, colors: false, bg: true };
+    this._open   = { lang: true, roomcount: true, rooms: true, sensors: true, features: true, hdrBtn: false, icons: false, colors: false, bg: true };
     this._picker = null;
   }
 
@@ -2215,6 +2288,7 @@ class MultiAcCardEditor extends HTMLElement {
     const cfg  = this._config;
     const t    = this.t;
     const icons = cfg.icons || {};
+    const hdrBtnCfg = Object.assign({ show: false, icon: 'mdi:cog', tap_action: { action: 'default' }, hold_action: { action: 'none' } }, cfg.header_button || {});
     const bgP  = cfg.background_preset || 'default';
     const lang = cfg.language || 'vi';
     const roomCount = Math.max(1, Math.min(8, parseInt(cfg.room_count) || 4));
@@ -2443,6 +2517,93 @@ class MultiAcCardEditor extends HTMLElement {
     </div>
   </div>
 
+    <!-- 3.6 Header Button -->
+    <div class="acc-wrap">
+      <div class="acc-head" id="head-hdrBtn">
+        <ha-icon icon="mdi:button-cursor"></ha-icon> Header Button
+        <span class="acc-arrow" id="arrow-hdrBtn">${this._open.hdrBtn?'▾':'▸'}</span>
+      </div>
+      <div class="acc-body" id="body-hdrBtn" style="display:${this._open.hdrBtn?'block':'none'}">
+        <div class="row">
+          <label>Show header button</label>
+          <input type="checkbox" id="hdr-btn-show" ${ (hdrBtnCfg.show) ? 'checked' : '' } />
+        </div>
+        <div class="row">
+          <label>Icon</label>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <input class="txt-inp" type="text" id="hdr-btn-icon" placeholder="mdi:cog" value="${hdrBtnCfg.icon||''}" />
+            <span id="preview-hdr-btn-icon" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
+          </div>
+        </div>
+        <div class="row">
+          <label>Tap action</label>
+          <select id="hdr-btn-tap-action" style="padding:6px 8px;border-radius:6px;border:1px solid var(--divider-color);background:var(--card-background-color);color:var(--primary-text-color);font-size:13px;">
+            <option value="default" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'default' ? 'selected' : '' }>Default (toggle)</option>
+            <option value="toggle" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'toggle' ? 'selected' : '' }>Toggle</option>
+            <option value="more-info" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'more-info' ? 'selected' : '' }>More info</option>
+            <option value="navigate" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'navigate' ? 'selected' : '' }>Navigate</option>
+            <option value="url" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'url' ? 'selected' : '' }>URL</option>
+            <option value="perform-action" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'perform-action' ? 'selected' : '' }>Perform action</option>
+            <option value="assist" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'assist' ? 'selected' : '' }>Assist</option>
+            <option value="none" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'none' ? 'selected' : '' }>Nothing</option>
+          </select>
+        </div>
+        <div id="hdr-btn-tap-extra" style="display:${ (hdrBtnCfg.tap_action && (hdrBtnCfg.tap_action.action === 'navigate' || hdrBtnCfg.tap_action.action === 'url' || hdrBtnCfg.tap_action.action === 'perform-action')) ? 'block' : 'none' };">
+          <div class="row" id="hdr-btn-tap-nav-row" style="display:${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'navigate' ? 'flex' : 'none' }">
+            <label>Navigation path</label>
+            <input class="txt-inp" type="text" id="hdr-btn-tap-nav" placeholder="/lovelace/0" value="${ (hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.navigation_path) || '' }" />
+          </div>
+          <div class="row" id="hdr-btn-tap-url-row" style="display:${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'url' ? 'flex' : 'none' }">
+            <label>URL</label>
+            <input class="txt-inp" type="text" id="hdr-btn-tap-url" placeholder="https://..." value="${ (hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.url_path) || '' }" />
+          </div>
+          <div id="hdr-btn-tap-svc-row" style="display:${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'perform-action' ? 'block' : 'none' }">
+            <div class="row">
+              <label>Action (domain.service)</label>
+              <input class="txt-inp" type="text" id="hdr-btn-tap-svc" placeholder="light.toggle" value="${ (hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.perform_action) || '' }" />
+            </div>
+            <div class="row">
+              <label>Target entity</label>
+              <input class="txt-inp" type="text" id="hdr-btn-tap-svc-target" placeholder="light.living_room" value="${ (hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.target && hdrBtnCfg.tap_action.target.entity_id) || '' }" />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <label>Hold action</label>
+          <select id="hdr-btn-hold-action" style="padding:6px 8px;border-radius:6px;border:1px solid var(--divider-color);background:var(--card-background-color);color:var(--primary-text-color);font-size:13px;">
+            <option value="none" ${ !hdrBtnCfg.hold_action || hdrBtnCfg.hold_action.action === 'none' ? 'selected' : '' }>Nothing</option>
+            <option value="default" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'default' ? 'selected' : '' }>Default (toggle)</option>
+            <option value="toggle" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'toggle' ? 'selected' : '' }>Toggle</option>
+            <option value="more-info" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'more-info' ? 'selected' : '' }>More info</option>
+            <option value="navigate" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'navigate' ? 'selected' : '' }>Navigate</option>
+            <option value="url" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'url' ? 'selected' : '' }>URL</option>
+            <option value="perform-action" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'perform-action' ? 'selected' : '' }>Perform action</option>
+            <option value="assist" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'assist' ? 'selected' : '' }>Assist</option>
+          </select>
+        </div>
+        <div id="hdr-btn-hold-extra" style="display:${ (hdrBtnCfg.hold_action && (hdrBtnCfg.hold_action.action === 'navigate' || hdrBtnCfg.hold_action.action === 'url' || hdrBtnCfg.hold_action.action === 'perform-action')) ? 'block' : 'none' };">
+          <div class="row" id="hdr-btn-hold-nav-row" style="display:${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'navigate' ? 'flex' : 'none' }">
+            <label>Navigation path</label>
+            <input class="txt-inp" type="text" id="hdr-btn-hold-nav" placeholder="/lovelace/0" value="${ (hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.navigation_path) || '' }" />
+          </div>
+          <div class="row" id="hdr-btn-hold-url-row" style="display:${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'url' ? 'flex' : 'none' }">
+            <label>URL</label>
+            <input class="txt-inp" type="text" id="hdr-btn-hold-url" placeholder="https://..." value="${ (hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.url_path) || '' }" />
+          </div>
+          <div id="hdr-btn-hold-svc-row" style="display:${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'perform-action' ? 'block' : 'none' }">
+            <div class="row">
+              <label>Action (domain.service)</label>
+              <input class="txt-inp" type="text" id="hdr-btn-hold-svc" placeholder="light.toggle" value="${ (hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.perform_action) || '' }" />
+            </div>
+            <div class="row">
+              <label>Target entity</label>
+              <input class="txt-inp" type="text" id="hdr-btn-hold-svc-target" placeholder="light.living_room" value="${ (hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.target && hdrBtnCfg.hold_action.target.entity_id) || '' }" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 3. Icons -->
     <div class="acc-wrap">
       <div class="acc-head" id="head-icons">
@@ -2621,7 +2782,7 @@ class MultiAcCardEditor extends HTMLElement {
     const sr = this.shadowRoot;
 
     // accordion
-    ['lang','roomcount','rooms','sensors','features','icons','bg'].forEach(id => {
+    ['lang','roomcount','rooms','sensors','features','hdrBtn','icons','bg'].forEach(id => {
       const hdr = sr.getElementById('head-' + id);
       if (hdr) hdr.addEventListener('click', () => this._toggleSection(id));
     });
@@ -2881,6 +3042,63 @@ class MultiAcCardEditor extends HTMLElement {
     if (elTimerText) elTimerText.addEventListener('change', () => setFeature('show_timer_text', elTimerText.checked));
     const elTimerIcon = sr.getElementById('feat-show-timer-icon');
     if (elTimerIcon) elTimerIcon.addEventListener('change', () => setFeature('show_timer_icon', elTimerIcon.checked));
+
+    // Header button wiring
+    const setHdrBtn = (key, val) => {
+      const hb = Object.assign({}, this._config.header_button || {});
+      hb[key] = val;
+      this._config = { ...this._config, header_button: hb };
+      this._fire();
+    };
+    const setHdrBtnAction = (which, key, val) => {
+      const hb = Object.assign({}, this._config.header_button || {});
+      hb[which] = Object.assign({}, hb[which] || {});
+      hb[which][key] = val;
+      this._config = { ...this._config, header_button: hb };
+      this._fire();
+    };
+    const elHdrShow = sr.getElementById('hdr-btn-show');
+    if (elHdrShow) elHdrShow.addEventListener('change', () => setHdrBtn('show', elHdrShow.checked));
+    const elHdrIcon = sr.getElementById('hdr-btn-icon');
+    if (elHdrIcon) {
+      const prevIcon = sr.getElementById('preview-hdr-btn-icon');
+      if (prevIcon) prevIcon.innerHTML = elHdrIcon.value ? '<ha-icon icon="' + elHdrIcon.value + '"></ha-icon>' : '';
+      wireTextInput(elHdrIcon, val => {
+        setHdrBtn('icon', val);
+        if (prevIcon) prevIcon.innerHTML = val ? '<ha-icon icon="' + val + '"></ha-icon>' : '';
+      });
+    }
+    const showHdrActionExtra = (prefix, action) => {
+      const extra = sr.getElementById(prefix + '-extra');
+      const navRow = sr.getElementById(prefix + '-nav-row');
+      const urlRow = sr.getElementById(prefix + '-url-row');
+      const svcRow = sr.getElementById(prefix + '-svc-row');
+      if (extra) extra.style.display = (action === 'navigate' || action === 'url' || action === 'perform-action') ? 'block' : 'none';
+      if (navRow) navRow.style.display = action === 'navigate' ? 'flex' : 'none';
+      if (urlRow) urlRow.style.display = action === 'url' ? 'flex' : 'none';
+      if (svcRow) svcRow.style.display = action === 'perform-action' ? 'block' : 'none';
+    };
+    const elTapAction = sr.getElementById('hdr-btn-tap-action');
+    if (elTapAction) elTapAction.addEventListener('change', () => {
+      setHdrBtnAction('tap_action', 'action', elTapAction.value);
+      showHdrActionExtra('hdr-btn-tap', elTapAction.value);
+    });
+    const elHoldAction = sr.getElementById('hdr-btn-hold-action');
+    if (elHoldAction) elHoldAction.addEventListener('change', () => {
+      setHdrBtnAction('hold_action', 'action', elHoldAction.value);
+      showHdrActionExtra('hdr-btn-hold', elHoldAction.value);
+    });
+    ['tap', 'hold'].forEach(which => {
+      const navEl = sr.getElementById('hdr-btn-' + which + '-nav');
+      if (navEl) wireTextInput(navEl, val => setHdrBtnAction(which + '_action', 'navigation_path', val));
+      const urlEl = sr.getElementById('hdr-btn-' + which + '-url');
+      if (urlEl) wireTextInput(urlEl, val => setHdrBtnAction(which + '_action', 'url_path', val));
+      const svcEl = sr.getElementById('hdr-btn-' + which + '-svc');
+      if (svcEl) wireTextInput(svcEl, val => setHdrBtnAction(which + '_action', 'perform_action', val));
+      const tgtEl = sr.getElementById('hdr-btn-' + which + '-svc-target');
+      if (tgtEl) wireTextInput(tgtEl, val => setHdrBtnAction(which + '_action', 'target', { entity_id: val }));
+    });
+
     // Icons inputs
     const iconMapping = [
       ['eco','inp-icon-eco'],['fav','inp-icon-fav'],['clean','inp-icon-clean'],['power','inp-icon-power'],['timer','inp-icon-timer'],['all_off','inp-icon-alloff'],
