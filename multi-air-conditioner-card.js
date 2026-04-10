@@ -862,7 +862,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .fc-head{display:flex;align-items:center;justify-content:flex-start;gap:6px}
 .fc-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:700}
 .fc-val{font-size:10px;color:rgba(255,255,255,0.95);font-weight:700}
-.fan-bars{margin:0;display:flex;align-items:flex-end;gap:3px;height:clamp(16px,3vw,32px);flex-shrink:0;width:auto;max-width:100%}
+.fan-bars{margin:0;display:flex;align-items:flex-end;gap:2px;height:clamp(12px,2.5vw,32px);flex-shrink:0;width:auto;max-width:100%}
 .fan-card .fan-tap{width:auto;padding:0;margin-left:auto;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;outline:none}
 .fbar{width:6px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:0}
 .fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
@@ -948,11 +948,11 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   font-size:11px;font-weight:600;color:rgba(255,255,255,0.7);text-align:right}
 .status-block{padding:8px 12px 6px;display:flex;flex-direction:column;gap:7px;
   background:linear-gradient(to bottom,rgba(10,12,16,0.92) 0%,rgba(10,20,40,0.55) 100%);
-  margin-top:-2px}
-.status-header{display:flex;align-items:center;justify-content:space-between}
+  margin-top:-2px;box-sizing:border-box;min-width:0;overflow:hidden}
+.status-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap;min-width:0}
 .st-title{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:600}
-.st-on{font-size:13px;font-weight:700;color:#34d399;margin-top:2px}
-.st-off{font-size:13px;font-weight:700;color:rgba(255,255,255,0.45);margin-top:2px}
+.st-on{font-size:clamp(11px,4vw,13px);font-weight:700;color:#34d399;margin-top:2px;word-wrap:break-word;overflow-wrap:break-word}
+.st-off{font-size:clamp(11px,4vw,13px);font-weight:700;color:rgba(255,255,255,0.45);margin-top:2px;word-wrap:break-word;overflow-wrap:break-word}
 .st-sub{display:none}
 .pm-ring{width:52px;height:52px;border-radius:50%;
   background:radial-gradient(circle,rgba(52,211,153,0.22) 0%,rgba(52,211,153,0.08) 60%,rgba(0,20,50,0.4) 100%);
