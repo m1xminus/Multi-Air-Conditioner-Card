@@ -42,7 +42,7 @@ const AC_TRANSLATIONS = {
       return 'Quá nóng! Hãy điều chỉnh nhiệt độ';
     },
     timerBtn: 'Hẹn giờ',
-    bgLabel: 'Màu nền gradient', bgPresets: 'Preset',
+    bgLabel: 'Màu nền gradient', bgPresets: 'Preset', bgOpacity: 'Độ trong suốt nền',
     colorLabel: 'Màu sắc', accentColor: 'Màu nhấn (accent)', textColor: 'Màu chữ',
     color1: 'Màu 1 (trên trái)', color2: 'Màu 2 (dưới phải)',
     edLang: 'Ngôn ngữ',
@@ -101,7 +101,7 @@ const AC_TRANSLATIONS = {
       return 'Demasiado quente! Ajuste a temperatura';
     },
     timerBtn: 'Temporizador',
-    bgLabel: 'Fundo em gradiente', bgPresets: 'Predefinição',
+    bgLabel: 'Fundo em gradiente', bgPresets: 'Predefinição', bgOpacity: 'Transparência do fundo',
     colorLabel: 'Cores', accentColor: 'Cor de destaque', textColor: 'Cor do texto',
     color1: 'Cor 1 (superior esquerdo)', color2: 'Cor 2 (inferior direito)',
     edLang: 'Idioma',
@@ -160,7 +160,7 @@ const AC_TRANSLATIONS = {
       return 'Too hot! Adjust the temperature';
     },
     timerBtn: 'Timer',
-    bgLabel: 'Gradient background', bgPresets: 'Preset',
+    bgLabel: 'Gradient background', bgPresets: 'Preset', bgOpacity: 'Background transparency',
     colorLabel: 'Colors', accentColor: 'Accent color', textColor: 'Text color',
     color1: 'Color 1 (top left)', color2: 'Color 2 (bottom right)',
     edLang: 'Language',
@@ -219,7 +219,7 @@ const AC_TRANSLATIONS = {
       return 'Zu heiß! Temperatur anpassen';
     },
     timerBtn: 'Timer',
-    bgLabel: 'Verlaufshintergrund', bgPresets: 'Voreinstellung',
+    bgLabel: 'Verlaufshintergrund', bgPresets: 'Voreinstellung', bgOpacity: 'Hintergrund-Transparenz',
     colorLabel: 'Farben', accentColor: 'Akzentfarbe', textColor: 'Textfarbe',
     color1: 'Farbe 1 (oben links)', color2: 'Farbe 2 (unten rechts)',
     edLang: 'Sprache',
@@ -278,7 +278,7 @@ const AC_TRANSLATIONS = {
       return 'Trop chaud! Ajustez la température';
     },
     timerBtn: 'Minuterie',
-    bgLabel: 'Dégradé de fond', bgPresets: 'Préréglage',
+    bgLabel: 'Dégradé de fond', bgPresets: 'Préréglage', bgOpacity: 'Transparence du fond',
     colorLabel: 'Couleurs', accentColor: 'Couleur d\'accent', textColor: 'Couleur du texte',
     color1: 'Couleur 1 (haut gauche)', color2: 'Couleur 2 (bas droite)',
     edLang: 'Langue',
@@ -337,7 +337,7 @@ const AC_TRANSLATIONS = {
       return 'Te heet! Temperatuur aanpassen';
     },
     timerBtn: 'Timer',
-    bgLabel: 'Verloopachtergrond', bgPresets: 'Voorinstelling',
+    bgLabel: 'Verloopachtergrond', bgPresets: 'Voorinstelling', bgOpacity: 'Achtergrond transparantie',
     colorLabel: 'Kleuren', accentColor: 'Accentkleur', textColor: 'Tekstkleur',
     color1: 'Kleur 1 (linksboven)', color2: 'Kleur 2 (rechtsonder)',
     edLang: 'Taal',
@@ -396,7 +396,7 @@ const AC_TRANSLATIONS = {
       return 'Zbyt gorąco! Dostosuj temperaturę';
     },
     timerBtn: 'Timer',
-    bgLabel: 'Tło gradientowe', bgPresets: 'Ustawienie wstępne',
+    bgLabel: 'Tło gradientowe', bgPresets: 'Ustawienie wstępne', bgOpacity: 'Przezroczystość tła',
     colorLabel: 'Kolory', accentColor: 'Kolor akcentu', textColor: 'Kolor tekstu',
     color1: 'Kolor 1 (lewy górny)', color2: 'Kolor 2 (prawy dolny)',
     edLang: 'Język',
@@ -455,7 +455,7 @@ const AC_TRANSLATIONS = {
       return 'För varmt! Justera temperaturen';
     },
     timerBtn: 'Timer',
-    bgLabel: 'Gradientbakgrund', bgPresets: 'Förinställning',
+    bgLabel: 'Gradientbakgrund', bgPresets: 'Förinställning', bgOpacity: 'Bakgrundstransparens',
     colorLabel: 'Färger', accentColor: 'Accentfärg', textColor: 'Textfärg',
     color1: 'Färg 1 (övre vänster)', color2: 'Färg 2 (nedre höger)',
     edLang: 'Språk',
@@ -514,7 +514,7 @@ const AC_TRANSLATIONS = {
       return 'Túl meleg! Állítsa be a hőmérsékletet';
     },
     timerBtn: 'Időzítő',
-    bgLabel: 'Gradiens háttér', bgPresets: 'Előbeállítás',
+    bgLabel: 'Gradiens háttér', bgPresets: 'Előbeállítás', bgOpacity: 'Háttér átlátszóság',
     colorLabel: 'Színek', accentColor: 'Kiemelőszín', textColor: 'Szövegszín',
     color1: 'Szín 1 (bal felső)', color2: 'Szín 2 (jobb alsó)',
     edLang: 'Nyelv',
@@ -573,7 +573,7 @@ const AC_TRANSLATIONS = {
       return 'Příliš horko! Nastavte teplotu';
     },
     timerBtn: 'Časovač',
-    bgLabel: 'Přechodové pozadí', bgPresets: 'Předvolba',
+    bgLabel: 'Přechodové pozadí', bgPresets: 'Předvolba', bgOpacity: 'Průhlednost pozadí',
     colorLabel: 'Barvy', accentColor: 'Barva zvýraznění', textColor: 'Barva textu',
     color1: 'Barva 1 (vlevo nahoře)', color2: 'Barva 2 (vpravo dole)',
     edLang: 'Jazyk',
@@ -632,7 +632,7 @@ const AC_TRANSLATIONS = {
       return 'Troppo caldo! Regola la temperatura';
     },
     timerBtn: 'Timer',
-    bgLabel: 'Sfondo sfumato', bgPresets: 'Preimpostazione',
+    bgLabel: 'Sfondo sfumato', bgPresets: 'Preimpostazione', bgOpacity: 'Trasparenza sfondo',
     colorLabel: 'Colori', accentColor: 'Colore accento', textColor: 'Colore testo',
     color1: 'Colore 1 (in alto a sinistra)', color2: 'Colore 2 (in basso a destra)',
     edLang: 'Lingua',
@@ -676,11 +676,14 @@ const AC_BG_PRESETS = [
   { id: 'custom',  label: 'Custom', c1: null,      c2: null       },
 ];
 
-function acPresetGradient(preset, c1, c2) {
+function acPresetGradient(preset, c1, c2, opacity) {
   const p = AC_BG_PRESETS.find(x => x.id === preset) || AC_BG_PRESETS[0];
      const gc1 = (preset === 'custom' ? c1 : p.c1) || '#001e2b';
      const gc2 = (preset === 'custom' ? c2 : p.c2) || '#12c6f3';
-  return 'linear-gradient(135deg, ' + gc1 + 'bb 0%, ' + gc2 + '44 100%)';
+  var op = typeof opacity === 'number' ? Math.round(Math.min(100, Math.max(0, opacity))) : 75;
+  var a1 = Math.round(op * 2.55).toString(16).padStart(2, '0');
+  var a2 = Math.round(op * 0.65 * 2.55).toString(16).padStart(2, '0');
+  return 'linear-gradient(135deg, ' + gc1 + a1 + ' 0%, ' + gc2 + a2 + ' 100%)';
 }
 
 const AC_DEFAULT_CONFIG = {
@@ -688,6 +691,7 @@ const AC_DEFAULT_CONFIG = {
   background_preset: 'default',
   bg_color1: '#001e2b',
   bg_color2: '#12c6f3',
+  bg_opacity: 75,
     accent_color: '#00ffcc',
   text_color: '#ffffff',
   room_count: 4,
@@ -862,9 +866,9 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .fc-head{display:flex;align-items:center;justify-content:flex-start;gap:6px}
 .fc-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:700}
 .fc-val{font-size:10px;color:rgba(255,255,255,0.95);font-weight:700}
-.fan-bars{margin:0;display:flex;align-items:flex-end;gap:2px;height:clamp(12px,2.5vw,32px);flex-shrink:0;width:auto;max-width:100%}
-.fan-card .fan-tap{width:auto;padding:0;margin-left:auto;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;outline:none}
-.fbar{width:6px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:0}
+.fan-bars{margin:0;display:flex;align-items:flex-end;gap:2px;height:clamp(16px,2.5vw,32px);flex-shrink:1;overflow:hidden}
+.fan-card .fan-tap{width:auto;padding:0;margin-left:auto;flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;background:none;border:none;cursor:pointer;outline:none;min-width:0;overflow:hidden}
+.fbar{width:6px;min-width:3px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:1}
 .fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
 .fbar.fbar-auto{animation:barFade 1.2s ease-in-out infinite}
 @keyframes barFade{0%,100%{opacity:0.4;box-shadow:0 0 2px var(--glow)}50%{opacity:1;box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}}
@@ -1225,7 +1229,7 @@ class AcControllerCardV2 extends HTMLElement {
     var cfg    = this._config || {};
     var lang   = cfg.language || 'vi';
     var tr     = AC_TRANSLATIONS[lang] || AC_TRANSLATIONS.vi;
-    var bgGrad = acPresetGradient(cfg.background_preset, cfg.bg_color1, cfg.bg_color2);
+    var bgGrad = acPresetGradient(cfg.background_preset, cfg.bg_color1, cfg.bg_color2, cfg.bg_opacity);
     var accent = cfg.accent_color || '#00ffcc';
     var txtClr = cfg.text_color   || '#ffffff';
     // Features config (early so room-tabs can use them)
@@ -2585,18 +2589,17 @@ class MultiAcCardEditor extends HTMLElement {
     <div class="acc-body" id="body-bg" style="display:${this._open.bg?'block':'none'}">
       <div style="font-size:11px;font-weight:700;color:var(--secondary-text-color);margin-bottom:8px;letter-spacing:.4px;">${t.bgPresets}</div>
       <div class="bg-grid">
-        ${AC_BG_PRESETS.map(p => {
-          const c1 = p.c1||'#888', c2 = p.c2||'#444';
-          const isC = p.id === 'custom';
-          return `<div class="bgs ${bgP===p.id?'on':''}" data-bg="${p.id}"
-            style="${isC?'background:linear-gradient(135deg,#e0e0e0,#bdbdbd);color:#555;text-shadow:none;':'background:linear-gradient(135deg,'+c1+'bb 0%,'+c2+'44 100%);'}">${p.label}</div>`;
-        }).join('')}
+        ${(()=>{const _op=typeof cfg.bg_opacity==='number'?Math.round(Math.min(100,Math.max(0,cfg.bg_opacity))):75;const _a1=Math.round(_op*2.55).toString(16).padStart(2,'0');const _a2=Math.round(_op*0.65*2.55).toString(16).padStart(2,'0');return AC_BG_PRESETS.map(p=>{const c1=p.c1||'#888',c2=p.c2||'#444';const isC=p.id==='custom';return`<div class="bgs ${bgP===p.id?'on':''}" data-bg="${p.id}" style="${isC?'background:linear-gradient(135deg,#e0e0e0,#bdbdbd);color:#555;text-shadow:none;':'background:linear-gradient(135deg,'+c1+_a1+' 0%,'+c2+_a2+' 100%);'}">${p.label}</div>`;}).join('')})()}
       </div>
       ${bgP === 'custom' ? `
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
         ${this._colorRow('bg_color1', t.color1)}
         ${this._colorRow('bg_color2', t.color2)}
       </div>` : ''}
+      <div style="margin-top:12px;">
+        <div style="font-size:11px;font-weight:700;color:var(--secondary-text-color);margin-bottom:6px;letter-spacing:.4px;">${t.bgOpacity}: ${typeof cfg.bg_opacity === 'number' ? cfg.bg_opacity : 75}%</div>
+        <input type="range" id="bg-opacity-slider" min="0" max="100" value="${typeof cfg.bg_opacity === 'number' ? cfg.bg_opacity : 75}" style="width:100%;accent-color:var(--primary-color,#03a9f4);cursor:pointer;">
+      </div>
     </div>
   </div>
 </div>`;
@@ -2629,6 +2632,18 @@ class MultiAcCardEditor extends HTMLElement {
         this._fire();
         this._render();
       }));
+
+    // bg opacity slider
+    const opSlider = sr.getElementById('bg-opacity-slider');
+    if (opSlider) {
+      opSlider.addEventListener('input', () => {
+        this._config = { ...this._config, bg_opacity: parseInt(opSlider.value, 10) };
+        this._fire();
+      });
+      opSlider.addEventListener('change', () => {
+        this._render();
+      });
+    }
 
     // color picker header toggle
     sr.querySelectorAll('[data-cp]').forEach(hdr =>
