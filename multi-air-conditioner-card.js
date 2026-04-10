@@ -863,12 +863,13 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .power-card{background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.22);border-radius:14px;padding:9px 12px;display:flex;flex-direction:column;gap:6px}
 .fan-swing-row{display:flex;gap:8px;width:100%;max-width:calc(100vw - 40px);margin:8px auto 6px;justify-content:center;flex-wrap:nowrap}
 .fan-card,.swing-card{background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.22);
-  border-radius:14px;padding:9px 12px;display:flex;flex-direction:row;align-items:center;gap:8px;flex:1;min-width:0}
-.fc-head{display:flex;align-items:center;justify-content:flex-start;gap:6px}
+  border-radius:14px;padding:9px 12px;display:flex;flex-direction:row;align-items:center;gap:8px;flex:1;min-width:0;cursor:pointer;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;transition:background 0.15s}
+.fan-card:active,.swing-card:active{background:rgba(0,20,50,0.5)}
+.fc-head{display:flex;align-items:center;justify-content:flex-start;gap:6px;pointer-events:none}
 .fc-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:700}
 .fc-val{font-size:10px;color:rgba(255,255,255,0.95);font-weight:700}
-.fan-bars{margin:0;display:flex;align-items:flex-end;gap:2px;height:clamp(16px,2.5vw,32px);flex-shrink:1;overflow:hidden}
-.fan-card .fan-tap{width:auto;padding:4px 6px;margin-left:auto;flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;gap:4px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:8px;cursor:pointer;outline:none;min-width:0;overflow:hidden;transition:all 0.2s}
+.fan-bars{margin:0;display:flex;align-items:flex-end;gap:2px;height:clamp(16px,2.5vw,32px);flex-shrink:1;overflow:hidden;pointer-events:none}
+.fan-card .fan-tap{width:auto;padding:0;margin-left:auto;flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;gap:4px;background:none;border:none;cursor:pointer;outline:none;min-width:0;overflow:hidden;pointer-events:none}
 .fbar{width:6px;min-width:3px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:1}
 .fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
 .fbar.fbar-auto{animation:barFade 1.2s ease-in-out infinite}
@@ -928,7 +929,8 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   background:rgba(8,10,20,0.52);backdrop-filter:blur(16px) saturate(1.8);-webkit-backdrop-filter:blur(16px) saturate(1.8);
   border:1px solid rgba(255,255,255,0.18);border-radius:30px;padding:6px 16px;
   display:flex;align-items:center;gap:8px;z-index:3;white-space:nowrap;
-  box-shadow:0 8px 32px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.12)}
+  box-shadow:0 8px 32px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.12);
+  max-width:calc(100% - 16px);flex-wrap:wrap;justify-content:center}
 .ac-led{width:7px;height:7px;border-radius:50%;flex-shrink:0}
 .led-on{background:#34d399;box-shadow:0 0 10px #34d399,0 0 20px rgba(52,211,153,0.5);animation:blink 2.5s infinite}
 .led-off{background:#4b5563}
@@ -1614,7 +1616,7 @@ class AcControllerCardV2 extends HTMLElement {
  + '<div class="mode-grid mode-grid--4col">' + modeBtns + '</div>'
 
  + ((showAirflow || showAirflowBtn) ? ('<div class="fan-swing-row">'
- + (showAirflow ? ('<div class="fan-card">'
+ + (showAirflow ? ('<div class="fan-card" id="fan-card-tap">'
  + '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
  + '    <button class="fan-tap" id="btn-fan-cycle">'
  + '      <div class="fan-bars">' + fanBarHtml + '</div>'
@@ -1766,7 +1768,7 @@ class AcControllerCardV2 extends HTMLElement {
     onTap(r.getElementById('btn-eco'), ecoFn);
     onTap(r.getElementById('btn-eco-chip'), ecoFn);
 
-    onTap(r.getElementById('btn-fan-cycle'), function() {
+    onTap(r.getElementById('fan-card-tap'), function() {
       var id = ROOMS[self._activeIdx].id;
       if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
       var cur = self._a(id,'fan_mode') || 'auto';
