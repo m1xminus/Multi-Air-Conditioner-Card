@@ -3,6 +3,14 @@ doanlong1412 made a great card but it was too much for me, visually. i really li
 
 A custom Home Assistant Lovelace card for multi-room air conditioner control — live temperature dial, fan & swing controls, per-room status tabs, eco mode, timer scheduling, environment sensors, and a full visual editor with up to 8 rooms.
 
+
+<img width="622" height="640" alt="Captura de ecrã 2026-04-10 204333" src="https://github.com/user-attachments/assets/d5207bf6-ddf5-417a-841a-2845e4496594" />
+
+<img width="1219" height="775" alt="Captura de ecrã 2026-04-10 204356" src="https://github.com/user-attachments/assets/ca69d8c1-a38e-43d3-ad80-6ae71d3b6ee9" />
+
+<img width="1245" height="776" alt="Captura de ecrã 2026-04-10 204500" src="https://github.com/user-attachments/assets/0c3752b8-469d-4509-8179-be48bb4275d2" />
+
+
 ## Features
 
 ###  Display & Interface **Every field is possible to hide/show via visual UI so you can adjust it to your needs without effort.**
@@ -12,6 +20,7 @@ A custom Home Assistant Lovelace card for multi-room air conditioner control —
 - 📊 **Status block** — running state, air quality indicator, PM2.5 ring, outdoor temperature, humidity and power consumption
 - 🕐 **Live clock** — real-time date and time display with greeting by time of day
 - 🌿 **Eco mode badge** — toggle eco/preset mode directly from the card header
+- **Custom header button** - A custom button that you can use for anything. Hide or Show, your choice!
 
 ### ❄️ Multi-Room Control (up to 8 rooms)
 - **Room selector tabs** — shows icon, name, current temperature and ON/OFF badge for every room; always displays 4 at a time with smooth scrolling for more
