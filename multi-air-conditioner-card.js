@@ -862,7 +862,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .fc-head{display:flex;align-items:center;justify-content:flex-start;gap:6px}
 .fc-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:700}
 .fc-val{font-size:10px;color:rgba(255,255,255,0.95);font-weight:700}
-.fan-bars{margin:0;display:flex;align-items:flex-end;gap:3px;height:24px;flex-shrink:0}
+.fan-bars{margin:0;display:flex;align-items:flex-end;gap:3px;height:clamp(16px,3vw,32px);flex-shrink:0;width:auto;max-width:100%}
 .fan-card .fan-tap{width:auto;padding:0;margin-left:auto;flex:none;display:flex;align-items:center;justify-content:center;background:none;border:none;cursor:pointer;outline:none}
 .fbar{width:6px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:0}
 .fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
@@ -907,7 +907,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   border-radius:10px;padding:9px;font-size:10px;font-weight:700;font-family:'Sora',sans-serif;
   color:#ff6b6b;cursor:pointer;outline:none;touch-action:manipulation}
 .pw-arrow{color:rgba(255,255,255,0.4);font-size:20px}
-.right{flex:1;background:linear-gradient(160deg,rgba(160,220,240,0.10) 0%,rgba(100,180,210,0.08) 100%);display:flex;flex-direction:column;position:relative;overflow-x:hidden;overflow-y:visible;min-height:0}
+.right{flex:1;background:linear-gradient(160deg,rgba(160,220,240,0.10) 0%,rgba(100,180,210,0.08) 100%);display:flex;flex-direction:column;position:relative;overflow-x:hidden;overflow-y:auto;min-height:0;min-width:0;padding:0 8px}
 .room-image{flex:0 0 150px;position:relative;overflow:hidden}
 .room-img-el{width:100%;height:100%;object-fit:cover;transition:opacity 0.6s ease,transform 0.8s ease;display:block}
 .room-img-el.fade-out{opacity:0;transform:scale(1.04)}
@@ -972,10 +972,10 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .rsb-off{background:rgba(0,20,50,0.25);color:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.3)}
 .all-off-btn{margin:0;background:rgba(255,60,60,0.06);border:1px solid rgba(255,80,80,0.18);
   border-radius:13px;padding:9px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:center;
-  cursor:pointer;outline:none;width:100%;text-align:center;transition:all 0.2s;font-family:'Sora',sans-serif;min-height:72px}
+  cursor:pointer;outline:none;width:100%;text-align:center;transition:all 0.2s;font-family:'Sora',sans-serif;min-height:72px;box-sizing:border-box;min-width:0;overflow:hidden}
 .all-off-btn:hover{background:rgba(255,60,60,0.12);border-color:rgba(255,80,80,0.35)}
 .all-off-btn:active{transform:scale(0.97)}
-.right-top-section{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 10px 0;flex-shrink:0;align-items:stretch}
+.right-top-section{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 2px 0;flex-shrink:0;align-items:stretch;width:100%;box-sizing:border-box}
 .all-off-ico{width:32px;height:32px;border-radius:50%;background:rgba(255,60,60,0.15);border:1px solid rgba(255,80,80,0.3);
   display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
   box-shadow:0 0 14px rgba(255,60,60,0.2)}
@@ -992,7 +992,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .timer-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.22);border-radius:13px;
   padding:9px 12px;cursor:pointer;outline:none;font-family:'Sora',sans-serif;
-  transition:all 0.2s;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+  transition:all 0.2s;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;box-sizing:border-box;min-width:0;overflow:hidden}
 .timer-btn:hover{background:rgba(0,30,70,0.45);border-color:rgba(251,191,36,0.45)}
 .timer-btn--active{border-color:rgba(251,191,36,0.75)!important;background:rgba(251,191,36,0.12)!important;box-shadow:0 0 14px rgba(251,191,36,0.2)}
 .timer-ico{font-size:18px;line-height:1;pointer-events:none}
