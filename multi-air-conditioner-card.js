@@ -827,7 +827,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .dial-wrap{display:flex;justify-content:center;position:relative;margin:-2px 0 -14px}
 .dial-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-38%);
   display:flex;flex-direction:column;align-items:center;pointer-events:none;user-select:none;width:144px;height:144px}
-.dial-power-btn{position:absolute;top:8px;right:8px;width:48px;height:48px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.35s;z-index:5;padding:0;pointer-events:auto}
+.dial-power-btn{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);width:48px;height:48px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.35s;z-index:5;padding:0;pointer-events:auto}
 .dial-pwon{background:linear-gradient(135deg,#3b9eff,#1a5faa);box-shadow:0 0 26px rgba(59,158,255,0.7),0 0 50px rgba(59,158,255,0.25);animation:pwP 2.5s ease-in-out infinite}
 .dial-pwoff{background:rgba(0,20,50,0.4);opacity:0.6;box-shadow:0 0 12px rgba(255,255,255,0.1)}
 .dial-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:500}
@@ -856,25 +856,15 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .mode-icon{font-size:18px;line-height:1}
 .mode-lbl{font-size:8px}
 .power-card{background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.22);border-radius:14px;padding:9px 12px;display:flex;flex-direction:column;gap:6px}
-.fan-swing-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fan-swing-row{display:flex;gap:8px;width:100%;max-width:calc(100vw - 40px);margin:8px auto 6px;justify-content:center;flex-wrap:nowrap}
 .fan-card,.swing-card{background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.22);
-  border-radius:14px;padding:9px 12px;display:flex;flex-direction:column;gap:6px}
-.fc-head{display:flex;align-items:center;justify-content:space-between}
+  border-radius:14px;padding:9px 12px;display:flex;flex-direction:row;align-items:center;gap:8px;flex:1;min-width:0}
+.fc-head{display:flex;align-items:center;justify-content:flex-start;gap:6px}
 .fc-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:700}
 .fc-val{font-size:10px;color:rgba(255,255,255,0.95);font-weight:700}
-.fan-body{display:flex;align-items:flex-end;gap:10px}
-.fan-ico{font-size:22px;opacity:0.9;line-height:1;flex-shrink:0;display:flex;align-items:center;min-width:42px}
-@keyframes fanSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-.fan-bars{display:flex;align-items:flex-end;gap:3px;height:32px}
-.fbar{width:6px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:0}
-.fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
-.fbar.fbar-auto{animation:barFade 1.2s ease-in-out infinite}
-@keyframes barFade{0%,100%{opacity:0.4;box-shadow:0 0 2px var(--glow)}50%{opacity:1;box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}}
-.fan-tap{display:flex;align-items:flex-end;justify-content:center;cursor:pointer;outline:none;
-  background:none;border:none;padding:0;width:100%}
-.swing-body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1}
-.swing-btn{display:flex;flex-direction:column;align-items:center;gap:4px;
-  background:none;border:none;cursor:pointer;outline:none;padding:0;width:100%}
+.fan-bars{margin:0;display:flex;align-items:flex-end;gap:3px;height:24px;flex-shrink:0}
+.fan-card .fan-tap{width:auto;padding:0;margin-left:auto;flex:none;display:flex;align-items:center;justify-content:center}
+.swing-btn{display:flex;flex-direction:row;align-items:center;gap:4px;background:none;border:none;cursor:pointer;outline:none;padding:0;margin-left:auto;flex:none}
 .swing-lbl{font-size:9px;color:rgba(255,255,255,0.7);font-weight:600}
 .chips{display:flex;gap:7px}
 .chip{flex:1;background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.25);
@@ -1625,8 +1615,6 @@ class AcControllerCardV2 extends HTMLElement {
  + (showClean ? ('  <button class="chip chip--b">' + (cleanIcon ? ('<ha-icon icon="' + cleanIcon + '"></ha-icon> ') : '') + 'Clean</button>') : '')
  + '</div>'
 
- + '<div class="bottom-row">' + powerHtml + '</div>'
-
 + '</div>'  // end .left
 
 + '<div class="right">'
@@ -1663,7 +1651,6 @@ class AcControllerCardV2 extends HTMLElement {
 + '  <div class="all-off-ico">' + (allOffIcon ? ('<ha-icon icon="' + allOffIcon + '"></ha-icon>') : '') + '</div>'
 + '  <div class="all-off-info">'
 + '    <div class="all-off-title">' + tr.allOff + '</div>'
-+ '    <div class="all-off-sub">' + tr.allOffSub + '</div>'
 + '  </div>'
 + '  <div class="all-off-arr">&#8250;</div>'
 + '</button>'
