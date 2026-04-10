@@ -1763,7 +1763,22 @@ class AcControllerCardV2 extends HTMLElement {
           self.dispatchEvent(evt);
         }
       } else if (act === 'navigate') {
-        if (actionCfg.navigation_path) window.history.pushState(null, '', actionCfg.navigation_path);
+        if (actionCfg.navigation_path) {
+          var navPath = actionCfg.navigation_path;
+          var hashIdx = navPath.indexOf('#');
+          if (hashIdx !== -1) {
+            var basePath = navPath.substring(0, hashIdx);
+            var hash = navPath.substring(hashIdx);
+            if (basePath && window.location.pathname !== basePath) {
+              window.history.pushState(null, '', basePath);
+              window.dispatchEvent(new CustomEvent('location-changed'));
+            }
+            window.location.hash = hash;
+          } else {
+            window.history.pushState(null, '', navPath);
+            window.dispatchEvent(new CustomEvent('location-changed'));
+          }
+        }
       } else if (act === 'url') {
         if (actionCfg.url_path) window.open(actionCfg.url_path, '_blank');
       } else if (act === 'perform-action') {
@@ -3048,17 +3063,15 @@ class MultiAcCardEditor extends HTMLElement {
       const hb = Object.assign({}, this._config.header_button || {});
       hb[key] = val;
       this._config = { ...this._config, header_button: hb };
-      this._fire();
     };
     const setHdrBtnAction = (which, key, val) => {
       const hb = Object.assign({}, this._config.header_button || {});
       hb[which] = Object.assign({}, hb[which] || {});
       hb[which][key] = val;
       this._config = { ...this._config, header_button: hb };
-      this._fire();
     };
     const elHdrShow = sr.getElementById('hdr-btn-show');
-    if (elHdrShow) elHdrShow.addEventListener('change', () => setHdrBtn('show', elHdrShow.checked));
+    if (elHdrShow) elHdrShow.addEventListener('change', () => { setHdrBtn('show', elHdrShow.checked); this._fire(); });
     const elHdrIcon = sr.getElementById('hdr-btn-icon');
     if (elHdrIcon) {
       const prevIcon = sr.getElementById('preview-hdr-btn-icon');
@@ -3081,11 +3094,13 @@ class MultiAcCardEditor extends HTMLElement {
     const elTapAction = sr.getElementById('hdr-btn-tap-action');
     if (elTapAction) elTapAction.addEventListener('change', () => {
       setHdrBtnAction('tap_action', 'action', elTapAction.value);
+      this._fire();
       showHdrActionExtra('hdr-btn-tap', elTapAction.value);
     });
     const elHoldAction = sr.getElementById('hdr-btn-hold-action');
     if (elHoldAction) elHoldAction.addEventListener('change', () => {
       setHdrBtnAction('hold_action', 'action', elHoldAction.value);
+      this._fire();
       showHdrActionExtra('hdr-btn-hold', elHoldAction.value);
     });
     ['tap', 'hold'].forEach(which => {
