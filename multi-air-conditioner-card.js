@@ -839,8 +839,10 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .temp-btn:hover{background:rgba(0,30,70,0.4);border-color:var(--accent);color:var(--accent);box-shadow:0 0 18px var(--glow)}
 .temp-btn:active{transform:scale(0.88)}
 .temp-set{min-width:100px;text-align:center;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85)}
-  .mode-grid{display:flex;gap:8px;width:220px;margin:8px auto 6px;justify-content:center;flex-wrap:wrap}
-.mode-btn{flex:1 1 calc(50% - 4px);background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
+.mode-grid{display:flex;gap:8px;width:220px;margin:8px auto 6px;justify-content:center;flex-wrap:wrap}
+.mode-grid--2col .mode-btn{flex:1 1 calc(50% - 4px)}
+.mode-grid--3col .mode-btn{flex:1 1 calc(33.333% - 5px)}
+.mode-btn{background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
   padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;
   cursor:pointer;outline:none;color:rgba(255,255,255,0.75);font-size:8px;font-weight:600;
   font-family:'Sora',sans-serif;transition:all 0.2s}
@@ -851,6 +853,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   box-shadow:0 0 24px var(--bg,var(--glow)),inset 0 1px 0 rgba(255,255,255,0.25)}
 .mode-icon{font-size:18px;line-height:1}
 .mode-lbl{font-size:8px}
+.power-card{background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.22);border-radius:14px;padding:9px 12px;display:flex;flex-direction:column;gap:6px}
 .fan-swing-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .fan-card,.swing-card{background:rgba(0,20,50,0.28);border:1px solid rgba(255,255,255,0.22);
   border-radius:14px;padding:9px 12px;display:flex;flex-direction:column;gap:6px}
@@ -863,6 +866,8 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .fan-bars{display:flex;align-items:flex-end;gap:3px;height:32px}
 .fbar{width:6px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:0}
 .fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
+.fbar.fbar-auto{animation:barFade 1.2s ease-in-out infinite}
+@keyframes barFade{0%,100%{opacity:0.4;box-shadow:0 0 2px var(--glow)}50%{opacity:1;box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}}
 .fan-tap{display:flex;align-items:flex-end;justify-content:center;cursor:pointer;outline:none;
   background:none;border:none;padding:0;width:100%}
 .swing-body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1}
@@ -1337,7 +1342,8 @@ class AcControllerCardV2 extends HTMLElement {
     var fanBarHtml = '';
     for (var i = 0; i < 8; i++) {
       var barOn = i < fillCount;
-      fanBarHtml += '<span class="fbar' + (barOn ? ' fbar-on' : '') + '" style="height:' + barHeights[i] + 'px"></span>';
+      var autoClass = fi === 0 ? ' fbar-auto' : '';
+      fanBarHtml += '<span class="fbar' + (barOn ? ' fbar-on' : '') + autoClass + '" style="height:' + barHeights[i] + 'px"></span>';
     }
 
     // Fan icon SVG – cánh béo to, viền sáng, animation khi auto
@@ -1446,9 +1452,11 @@ class AcControllerCardV2 extends HTMLElement {
     // Mode buttons
     var modeKeys = ['cool','heat','dry','fan_only'];
     var modeBtns = '';
+    var modeCount = 0;
     for (var m = 0; m < modeKeys.length; m++) {
       var mk = modeKeys[m];
       if (featureModes[mk] === false) continue;
+      modeCount++;
       var mc = Object.assign({}, MODE_CFG[mk], { lbl: tr.modes[mk] || MODE_CFG[mk].lbl });
       var act = hvac === mk;
       var st  = act ? ('--bc:' + mc.color + ';--bg:' + mc.glow + ';') : '';
@@ -1457,6 +1465,7 @@ class AcControllerCardV2 extends HTMLElement {
         + (showModesText ? ('<span class="mode-lbl">' + mc.lbl + '</span>') : '')
         + '</button>';
     }
+    var modeGridClass = modeCount === 4 ? 'mode-grid mode-grid--2col' : 'mode-grid mode-grid--3col';
 
     var comfortTxt = (hvac === 'cool' || hvac === 'heat') ? tr.comfortTemp(curTemp) : (tr.comfort[hvac] || '');
     var curModeIcon = icons['mode_' + hvac] || mode.icon || '';
@@ -1592,7 +1601,7 @@ class AcControllerCardV2 extends HTMLElement {
 + '  <button class="temp-btn" id="btn-temp-up">+</button>'
 + '</div>'
 
- + '<div class="mode-grid">' + modeBtns + '</div>'
+ + '<div class="mode-grid ' + (modeCount === 4 ? 'mode-grid--2col' : 'mode-grid--3col') + '">' + modeBtns + '</div>'
 
  + ((showAirflow || showAirflowBtn) ? ('<div class="fan-swing-row">'
  + (showAirflow ? ('<div class="fan-card">'
@@ -1604,7 +1613,7 @@ class AcControllerCardV2 extends HTMLElement {
  + (showAirflowBtn ? ('<div class="swing-card">'
  + '    <div class="fc-head"><span class="fc-label">' + tr.swingLabel + '</span></div>'
  + '    ' + swingBtn
- + '  </div>') : '')
+ + '  </div>') : (!showAirflow ? ('<div class="power-card">' + powerHtml + '</div>') : ''))
  + '</div>') : '')
 
  + '<div class="chips">'
