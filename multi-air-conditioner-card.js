@@ -802,7 +802,8 @@ const COMFORT    = {
 const CARD_CSS = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
-:host{display:block;font-family:'Sora',sans-serif}
+:host{display:block;font-family:'Sora',sans-serif;contain:layout style;will-change:contents}
+#ac-card-root{contain:content}
 .card{background:linear-gradient(135deg,rgba(180,220,255,0.22) 0%,rgba(120,200,220,0.18) 50%,rgba(100,180,210,0.22) 100%);
   backdrop-filter:blur(28px) saturate(1.6);-webkit-backdrop-filter:blur(28px) saturate(1.6);
   border-radius:28px;overflow:hidden;display:flex;min-height:520px;
@@ -1062,6 +1063,7 @@ class AcControllerCardV2 extends HTMLElement {
     this._hass        = null;
     this._clockInt    = null;
     this._initialized = false;
+    this._renderRAF   = null;
     // timers: map roomIdx → { end, mode, hrs, int }
     this._timers           = {};
     this._outsideHandler   = null;
@@ -1084,7 +1086,7 @@ class AcControllerCardV2 extends HTMLElement {
     } catch(e) {}
   }
 
-  // ── FIX: So sánh state trước khi render ──────────────────────────────────
+  // ── FIX: So sánh state trước khi render + debounce for Bubble Card compat ──
   set hass(h) {
     var prev = this._hass;
     this._hass = h;
@@ -1115,7 +1117,14 @@ class AcControllerCardV2 extends HTMLElement {
       }
     }
 
-    if (changed) this._renderFull();
+    if (!changed) return;
+    // Debounce: batch rapid hass updates into a single render frame
+    if (this._renderRAF) cancelAnimationFrame(this._renderRAF);
+    var self = this;
+    this._renderRAF = requestAnimationFrame(function() {
+      self._renderRAF = null;
+      self._renderFull();
+    });
   }
 
   // Helpers để đọc state/attr an toàn từ bất kỳ hass object nào
@@ -1672,14 +1681,17 @@ class AcControllerCardV2 extends HTMLElement {
 + '</div>'  // end .right
 + '</div>'; // end .card
 
-    // ── FIX: Chỉ cập nhật phần nội dung, không đụng vào <style> và <link> đã inject
+    // ── FIX: Atomic DOM swap – prevents blink in Bubble Card popups
     var container = this.shadowRoot.getElementById('ac-card-root');
     if (!container) {
       container = document.createElement('div');
       container.id = 'ac-card-root';
       this.shadowRoot.appendChild(container);
     }
-    container.innerHTML = html;
+    var fresh = document.createElement('div');
+    fresh.id = 'ac-card-root';
+    fresh.innerHTML = html;
+    container.parentNode.replaceChild(fresh, container);
 
     this._initialized = true;
     this._bind();
