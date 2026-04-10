@@ -840,7 +840,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .temp-btn:active{transform:scale(0.88)}
 .temp-set{min-width:100px;text-align:center;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85)}
   .mode-grid{display:flex;gap:8px;width:220px;margin:8px auto 6px;justify-content:center;flex-wrap:wrap}
-.mode-btn{background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
+.mode-btn{flex:1 1 calc(50% - 4px);background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
   padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;
   cursor:pointer;outline:none;color:rgba(255,255,255,0.75);font-size:8px;font-weight:600;
   font-family:'Sora',sans-serif;transition:all 0.2s}
@@ -863,7 +863,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .fan-bars{display:flex;align-items:flex-end;gap:3px;height:32px}
 .fbar{width:6px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:0}
 .fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
-.fan-tap{display:flex;align-items:flex-end;gap:10px;cursor:pointer;outline:none;
+.fan-tap{display:flex;align-items:flex-end;justify-content:center;cursor:pointer;outline:none;
   background:none;border:none;padding:0;width:100%}
 .swing-body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;flex:1}
 .swing-btn{display:flex;flex-direction:column;align-items:center;gap:4px;
@@ -974,6 +974,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   cursor:pointer;outline:none;width:calc(100% - 20px);text-align:left;transition:all 0.2s;font-family:'Sora',sans-serif}
 .all-off-btn:hover{background:rgba(255,60,60,0.12);border-color:rgba(255,80,80,0.35)}
 .all-off-btn:active{transform:scale(0.97)}
+.right-buttons-section{display:flex;flex-direction:column;gap:8px;padding:0 10px 10px;margin-top:auto}
 .all-off-ico{width:36px;height:36px;border-radius:50%;background:rgba(255,60,60,0.15);border:1px solid rgba(255,80,80,0.3);
   display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
   box-shadow:0 0 14px rgba(255,60,60,0.2)}
@@ -988,15 +989,15 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .power-row:hover{background:rgba(0,30,70,0.45)}
 .power-row:active{transform:scale(0.98)}
 .timer-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
-  background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.22);border-radius:18px;
-  padding:8px 6px;cursor:pointer;outline:none;font-family:'Sora',sans-serif;
-  transition:all 0.2s;flex:none;width:68px;min-width:0;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+  background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.22);border-radius:13px;
+  padding:9px 12px;cursor:pointer;outline:none;font-family:'Sora',sans-serif;
+  transition:all 0.2s;width:calc(100% - 24px);touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 .timer-btn:hover{background:rgba(0,30,70,0.45);border-color:rgba(251,191,36,0.45)}
 .timer-btn--active{border-color:rgba(251,191,36,0.75)!important;background:rgba(251,191,36,0.12)!important;box-shadow:0 0 14px rgba(251,191,36,0.2)}
 .timer-ico{font-size:18px;line-height:1;pointer-events:none}
 .timer-lbl{font-size:7px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,0.5);text-transform:uppercase;pointer-events:none}
 .timer-cd{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:600;color:rgba(251,191,36,0.9);line-height:1;min-height:13px;pointer-events:none}
-.timer-btn--icon{width:48px;padding:6px}
+.timer-btn--icon{width:calc(100% - 24px);padding:9px 12px}
 .timer-popup{position:fixed;z-index:9999;
   background:rgba(6,10,24,0.98);backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8);
   border:1px solid rgba(255,255,255,0.18);border-radius:20px;padding:15px 13px 13px;width:218px;
@@ -1597,7 +1598,6 @@ class AcControllerCardV2 extends HTMLElement {
  + (showAirflow ? ('<div class="fan-card">'
  + '    <div class="fc-head"><span class="fc-label">' + tr.fanLabel + '</span><span class="fc-val">' + fanLabels[fi] + '</span></div>'
  + '    <button class="fan-tap" id="btn-fan-cycle">'
- + '      <span class="fan-ico">' + fanIconSvg + '</span>'
  + '      <div class="fan-bars">' + fanBarHtml + '</div>'
  + '    </button>'
  + '  </div>') : '')
@@ -1620,7 +1620,7 @@ class AcControllerCardV2 extends HTMLElement {
 + '<div class="right">'
 
 + '<div class="room-image">'
-+ '  <img id="room-photo" class="room-img-el" src="' + ROOM_IMAGES[this._activeIdx] + '" alt="room">'
++ '  <img id="room-photo" class="room-img-el" src="' + (roomCfg.image_url || ROOM_IMAGES[this._activeIdx]) + '" alt="room">'
 + '  <div class="ac-overlay">'
 + '    <span class="ac-led ' + (isOn ? 'led-on' : 'led-off') + '"></span>'
 + '    <span class="ac-overlay-txt">' + (isOn ? tr.overlayOn : tr.overlayOff) + '</span>'
@@ -1648,6 +1648,8 @@ class AcControllerCardV2 extends HTMLElement {
 
 + '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
 
+ + '<div class="right-buttons-section">'
+
  + '<button class="all-off-btn" id="btn-all-off">'
  + '  <div class="all-off-ico">' + (allOffIcon ? ('<ha-icon icon="' + allOffIcon + '"></ha-icon>') : '') + '</div>'
 + '  <div class="all-off-info">'
@@ -1658,6 +1660,8 @@ class AcControllerCardV2 extends HTMLElement {
 + '</button>'
 
 + timerHtml
+
++ '</div>'  // end .right-buttons-section
 
 + '</div>'  // end .right
 + '</div>'; // end .card
@@ -2232,6 +2236,11 @@ class MultiAcCardEditor extends HTMLElement {
       <span id="preview-room-icon-${i}" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
     </div>
   </div>
+  <div class="row">
+    <label>Cover photo URL</label>
+    <input class="txt-inp" type="text" id="inp-room-image-${i}" placeholder="https://..." value="${ent.image_url||''}"/>
+    <span style="font-size:10px;color:var(--secondary-text-color);margin-top:3px;">Leave empty to use default image</span>
+  </div>
 </div>`;
     }
 
@@ -2707,6 +2716,7 @@ class MultiAcCardEditor extends HTMLElement {
     for (let i = 0; i < roomCountBind; i++) {
       const lblEl  = sr.getElementById('inp-room-label-' + i);
       const iconEl = sr.getElementById('inp-room-icon-'  + i);
+      const imageEl = sr.getElementById('inp-room-image-' + i);
       const iconPrev = sr.getElementById('preview-room-icon-' + i);
       wireTextInput(lblEl, val => {
         const ents = (this._config.entities || []).slice();
@@ -2723,6 +2733,13 @@ class MultiAcCardEditor extends HTMLElement {
         const ents = (this._config.entities || []).slice();
         while (ents.length <= i) ents.push({});
         ents[i] = { ...ents[i], icon: val };
+        this._config = { ...this._config, entities: ents };
+      });
+      wireTextInput(imageEl, val => {
+        const ents = (this._config.entities || []).slice();
+        while (ents.length <= i) ents.push({});
+        if (val) ents[i] = { ...ents[i], image_url: val };
+        else if (ents[i]) delete ents[i].image_url;
         this._config = { ...this._config, entities: ents };
       });
     }
