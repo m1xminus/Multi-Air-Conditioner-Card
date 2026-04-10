@@ -828,7 +828,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .dial-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-38%);
   display:flex;flex-direction:column;align-items:center;pointer-events:none;user-select:none;width:144px;height:144px}
 .dial-power-btn{position:absolute;bottom:45px;left:50%;transform:translateX(-50%);width:40px;height:40px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.35s;z-index:5;padding:0;pointer-events:auto}
-.dial-pwon{background:linear-gradient(135deg,#3b9eff,#1a5faa);box-shadow:0 0 26px rgba(59,158,255,0.7),0 0 50px rgba(59,158,255,0.25);animation:pwP 2.5s ease-in-out infinite}
+.dial-pwon{background:linear-gradient(135deg,var(--bc),color-mix(in srgb,var(--bc) 70%,rgba(0,15,40,0.4)));box-shadow:0 0 26px var(--glow,var(--bg)),0 0 50px color-mix(in srgb,var(--bg) 30%,transparent);animation:pwP 2.5s ease-in-out infinite}
 .dial-pwoff{background:none;opacity:0.5;box-shadow:none;color:rgba(255,255,255,0.6)}
 .dial-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:500}
 .dial-temp{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:800;color:#ffffff;line-height:1;
@@ -1584,7 +1584,7 @@ class AcControllerCardV2 extends HTMLElement {
 + arcFillSvg
 + dotSvg
 + '</svg>'
-+ '<button id="btn-dial-power" class="dial-power-btn ' + (isOn ? 'dial-pwon' : 'dial-pwoff') + '" title="' + tr.tapOff + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '⏻') + '</button>'
++ '<button id="btn-dial-power" class="dial-power-btn ' + (isOn ? 'dial-pwon' : 'dial-pwoff') + '" style="' + (isOn ? '--bc:' + mode.color + ';--bg:' + mode.glow + ';' : '') + '" title="' + tr.tapOff + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '⏻') + '</button>'
 + '<div class="dial-center">'
 + '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
 + '  <div class="dial-temp">' + curTempStr + '<span class="dial-deg">&#176;</span></div>'
