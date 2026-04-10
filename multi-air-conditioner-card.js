@@ -827,6 +827,9 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .dial-wrap{display:flex;justify-content:center;position:relative;margin:-2px 0 -14px}
 .dial-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-38%);
   display:flex;flex-direction:column;align-items:center;pointer-events:none;user-select:none;width:144px;height:144px}
+.dial-power-btn{position:absolute;top:8px;right:8px;width:48px;height:48px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.35s;z-index:5;padding:0;pointer-events:auto}
+.dial-pwon{background:linear-gradient(135deg,#3b9eff,#1a5faa);box-shadow:0 0 26px rgba(59,158,255,0.7),0 0 50px rgba(59,158,255,0.25);animation:pwP 2.5s ease-in-out infinite}
+.dial-pwoff{background:rgba(0,20,50,0.4);opacity:0.6;box-shadow:0 0 12px rgba(255,255,255,0.1)}
 .dial-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:500}
 .dial-temp{font-family:'Orbitron',sans-serif;font-size:48px;font-weight:800;color:#ffffff;line-height:1;
   text-shadow:0 0 26px var(--glow),0 0 50px var(--glow)}
@@ -839,13 +842,12 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .temp-btn:hover{background:rgba(0,30,70,0.4);border-color:var(--accent);color:var(--accent);box-shadow:0 0 18px var(--glow)}
 .temp-btn:active{transform:scale(0.88)}
 .temp-set{min-width:100px;text-align:center;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.85)}
-.mode-grid{display:flex;gap:8px;width:220px;margin:8px auto 6px;justify-content:center;flex-wrap:wrap}
-.mode-grid--2col .mode-btn{flex:1 1 calc(50% - 4px)}
-.mode-grid--3col .mode-btn{flex:1 1 calc(33.333% - 5px)}
-.mode-btn{background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
+.mode-grid{display:flex;gap:8px;width:100%;max-width:calc(100vw - 40px);margin:8px auto 6px;justify-content:center;flex-wrap:nowrap}
+.mode-grid--4col .mode-btn{flex:0 1 calc(25% - 6px)}
+.mode-btn{flex:0 1 calc(25% - 6px);background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.25);border-radius:13px;
   padding:8px 3px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;
   cursor:pointer;outline:none;color:rgba(255,255,255,0.75);font-size:8px;font-weight:600;
-  font-family:'Sora',sans-serif;transition:all 0.2s}
+  font-family:'Sora',sans-serif;transition:all 0.2s;min-width:0}
 .mode-btn:hover{background:rgba(0,30,70,0.45);border-color:rgba(255,255,255,0.5);transform:translateY(-1px)}
 .mode-btn:active{transform:scale(0.94)}
 .mode-btn--active{background:linear-gradient(160deg,color-mix(in srgb,var(--bc,var(--accent)) 55%,rgba(0,15,40,0.5)),color-mix(in srgb,var(--bc,var(--accent)) 35%,rgba(0,15,40,0.4)));
@@ -974,19 +976,19 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .room-status-badge{font-size:9px;font-weight:700;letter-spacing:0.3px;padding:3px 8px;border-radius:7px;flex-shrink:0;line-height:1.5;min-width:32px;text-align:center;align-self:center}
 .rsb-on{background:color-mix(in srgb,var(--accent) 55%,rgba(0,10,30,0.4));color:#ffffff;border:1px solid color-mix(in srgb,var(--accent) 80%,transparent)}
 .rsb-off{background:rgba(0,20,50,0.25);color:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.3)}
-.all-off-btn{margin:0 10px 6px;background:rgba(255,60,60,0.06);border:1px solid rgba(255,80,80,0.18);
-  border-radius:13px;padding:9px 12px;display:flex;align-items:center;gap:10px;
-  cursor:pointer;outline:none;width:calc(100% - 20px);text-align:left;transition:all 0.2s;font-family:'Sora',sans-serif}
+.all-off-btn{margin:0;background:rgba(255,60,60,0.06);border:1px solid rgba(255,80,80,0.18);
+  border-radius:13px;padding:9px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:center;
+  cursor:pointer;outline:none;width:100%;text-align:center;transition:all 0.2s;font-family:'Sora',sans-serif;min-height:72px}
 .all-off-btn:hover{background:rgba(255,60,60,0.12);border-color:rgba(255,80,80,0.35)}
 .all-off-btn:active{transform:scale(0.97)}
-.right-buttons-section{display:flex;flex-direction:column;gap:8px;padding:0 10px 10px;margin-top:auto}
-.all-off-ico{width:36px;height:36px;border-radius:50%;background:rgba(255,60,60,0.15);border:1px solid rgba(255,80,80,0.3);
-  display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+.right-top-section{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 10px 0;flex-shrink:0;align-items:stretch}
+.all-off-ico{width:32px;height:32px;border-radius:50%;background:rgba(255,60,60,0.15);border:1px solid rgba(255,80,80,0.3);
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
   box-shadow:0 0 14px rgba(255,60,60,0.2)}
-.all-off-info{flex:1}
+.all-off-info{flex:none;text-align:center;width:100%}
 .all-off-title{font-size:11px;font-weight:600;color:rgba(255,150,150,0.85)}
 .all-off-sub{font-size:8.5px;color:rgba(255,255,255,0.5);margin-top:1px}
-.all-off-arr{color:rgba(255,100,100,0.35);font-size:18px}
+.all-off-arr{display:none;color:rgba(255,100,100,0.35);font-size:18px}
 .bottom-row{display:flex;gap:8px;width:220px;margin:0 auto;justify-content:space-between}
 .power-row{display:flex;align-items:center;gap:8px;background:rgba(0,20,50,0.3);
   border:1px solid rgba(255,255,255,0.25);border-radius:18px;padding:10px 10px;
@@ -996,7 +998,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .timer-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
   background:rgba(0,20,50,0.3);border:1px solid rgba(255,255,255,0.22);border-radius:13px;
   padding:9px 12px;cursor:pointer;outline:none;font-family:'Sora',sans-serif;
-  transition:all 0.2s;width:calc(100% - 24px);touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+  transition:all 0.2s;width:100%;touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 .timer-btn:hover{background:rgba(0,30,70,0.45);border-color:rgba(251,191,36,0.45)}
 .timer-btn--active{border-color:rgba(251,191,36,0.75)!important;background:rgba(251,191,36,0.12)!important;box-shadow:0 0 14px rgba(251,191,36,0.2)}
 .timer-ico{font-size:18px;line-height:1;pointer-events:none}
@@ -1465,7 +1467,7 @@ class AcControllerCardV2 extends HTMLElement {
         + (showModesText ? ('<span class="mode-lbl">' + mc.lbl + '</span>') : '')
         + '</button>';
     }
-    var modeGridClass = modeCount === 4 ? 'mode-grid mode-grid--2col' : 'mode-grid mode-grid--3col';
+    var modeGridClass = 'mode-grid mode-grid--4col';
 
     var comfortTxt = (hvac === 'cool' || hvac === 'heat') ? tr.comfortTemp(curTemp) : (tr.comfort[hvac] || '');
     var curModeIcon = icons['mode_' + hvac] || mode.icon || '';
@@ -1588,6 +1590,7 @@ class AcControllerCardV2 extends HTMLElement {
 + arcFillSvg
 + dotSvg
 + '</svg>'
++ '<button id="btn-dial-power" class="dial-power-btn ' + (isOn ? 'dial-pwon' : 'dial-pwoff') + '" title="' + tr.tapOff + '">' + (powerIcon ? ('<ha-icon icon="' + powerIcon + '"></ha-icon>') : '⏻') + '</button>'
 + '<div class="dial-center">'
 + '  <div class="dial-lbl">' + tr.tempLabel + '</div>'
 + '  <div class="dial-temp">' + curTempStr + '<span class="dial-deg">&#176;</span></div>'
@@ -1601,7 +1604,7 @@ class AcControllerCardV2 extends HTMLElement {
 + '  <button class="temp-btn" id="btn-temp-up">+</button>'
 + '</div>'
 
- + '<div class="mode-grid ' + (modeCount === 4 ? 'mode-grid--2col' : 'mode-grid--3col') + '">' + modeBtns + '</div>'
+ + '<div class="mode-grid mode-grid--4col">' + modeBtns + '</div>'
 
  + ((showAirflow || showAirflowBtn) ? ('<div class="fan-swing-row">'
  + (showAirflow ? ('<div class="fan-card">'
@@ -1655,12 +1658,9 @@ class AcControllerCardV2 extends HTMLElement {
 + '  </div>'
 + '</div>'
 
-+ '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
-
- + '<div class="right-buttons-section">'
-
- + '<button class="all-off-btn" id="btn-all-off">'
- + '  <div class="all-off-ico">' + (allOffIcon ? ('<ha-icon icon="' + allOffIcon + '"></ha-icon>') : '') + '</div>'
++ '<div class="right-top-section">'
++ '<button class="all-off-btn" id="btn-all-off">'
++ '  <div class="all-off-ico">' + (allOffIcon ? ('<ha-icon icon="' + allOffIcon + '"></ha-icon>') : '') + '</div>'
 + '  <div class="all-off-info">'
 + '    <div class="all-off-title">' + tr.allOff + '</div>'
 + '    <div class="all-off-sub">' + tr.allOffSub + '</div>'
@@ -1670,7 +1670,9 @@ class AcControllerCardV2 extends HTMLElement {
 
 + timerHtml
 
-+ '</div>'  // end .right-buttons-section
++ '</div>'
+
++ '<div class="room-tabs"><div class="rt-header">' + tr.selectRoom + '</div><div class="room-tabs-inner' + (ROOMS.length >= 5 ? ' scrollable' : '') + '">' + roomTabs + '</div></div>'
 
 + '</div>'  // end .right
 + '</div>'; // end .card
@@ -1738,6 +1740,12 @@ class AcControllerCardV2 extends HTMLElement {
     });
 
     onTap(r.getElementById('btn-power'), function() {
+      var id = ROOMS[self._activeIdx].id;
+      if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
+      self._call('climate','set_hvac_mode',{entity_id:id, hvac_mode: self._s(id)!=='off'?'off':'cool'});
+    });
+
+    onTap(r.getElementById('btn-dial-power'), function() {
       var id = ROOMS[self._activeIdx].id;
       if (!id || (id.split && id.split('.')[0] !== 'climate')) return;
       self._call('climate','set_hvac_mode',{entity_id:id, hvac_mode: self._s(id)!=='off'?'off':'cool'});
