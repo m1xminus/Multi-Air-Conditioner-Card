@@ -830,8 +830,8 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   position:relative;border-right:1px solid rgba(255,255,255,0.2);overflow:hidden}
 .left::before{content:"";position:absolute;top:-120px;left:-70px;width:380px;height:380px;
   background:radial-gradient(circle,var(--glow) 0%,transparent 65%);pointer-events:none;opacity:0.25}
-.hdr{display:flex;align-items:center;justify-content:space-between}
-.hdr-brand{display:flex;align-items:center;gap:10px}
+.hdr{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.hdr-brand{display:flex;align-items:center;gap:10px;min-width:0;overflow:hidden}
 .hdr-ico{width:40px;height:40px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 45%,#000));
   border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 24px var(--glow)}
 .hdr-title{font-size:11px;font-weight:600;letter-spacing:2px;color:rgba(255,255,255,0.85);text-transform:uppercase}
@@ -1567,9 +1567,9 @@ class AcControllerCardV2 extends HTMLElement {
     var hdrBtnCfg = Object.assign({ show: false, icon: 'mdi:cog', tap_action: { action: 'default' }, hold_action: { action: 'none' } }, cfg.header_button || {});
     var hdrBtnHtml = '';
     if (hdrBtnCfg.show) {
-      hdrBtnHtml = '<button id="hdr-action-btn" style="background:none;border:none;cursor:pointer;padding:6px;color:inherit;opacity:0.8;display:flex;align-items:center;-webkit-tap-highlight-color:transparent" title="Header button"><ha-icon icon="' + (hdrBtnCfg.icon || 'mdi:cog') + '"></ha-icon></button>';
+      hdrBtnHtml = '<button id="hdr-action-btn" style="background:none;border:none;cursor:pointer;padding:6px;color:inherit;opacity:0.8;display:flex;align-items:center;flex-shrink:0;-webkit-tap-highlight-color:transparent" title="Header button"><ha-icon icon="' + (hdrBtnCfg.icon || 'mdi:cog') + '"></ha-icon></button>';
     }
-    var hdrBrand = '<div class="hdr" style="display:flex;align-items:center;justify-content:space-between">'
+    var hdrBrand = '<div class="hdr">'
       + '  <div class="hdr-brand">'
       + '    <div class="hdr-ico">' + (headerIcon ? ('<ha-icon icon="' + headerIcon + '"></ha-icon>') : (mode.icon || '')) + '</div>'
       + '    <div><div class="hdr-title">' + tr.cardTitle + '</div></div>'
@@ -1583,13 +1583,13 @@ class AcControllerCardV2 extends HTMLElement {
         + '  <div>'
         + '    <div class="greet-sub">' + tr.greet() + '</div>'
         + '    <div class="greet-name">' + (cfg.owner_name || '') + '</div>'
-        + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;display:flex;align-items:center;gap:4px"><ha-icon icon="mdi:home-thermometer" style="--mdi-icon-size:16px;width:16px;height:16px"></ha-icon><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div>') : '')
+        + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;display:flex;align-items:center;gap:4px"><ha-icon icon="mdi:home-thermometer" style="--mdi-icon-size:14px;width:14px;height:14px;flex-shrink:0"></ha-icon><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div>') : '')
         + '  </div>'
         + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoIcon ? ('<ha-icon icon="' + ecoIcon + '"></ha-icon> ') : '') + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
         + '</div>';
     } else {
       if (showAvg) {
-        greetPart = '<div class="greet-row"><div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;display:flex;align-items:center;gap:4px"><ha-icon icon="mdi:home-thermometer" style="--mdi-icon-size:16px;width:16px;height:16px"></ha-icon><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div></div></div>';
+        greetPart = '<div class="greet-row"><div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;display:flex;align-items:center;gap:4px"><ha-icon icon="mdi:home-thermometer" style="--mdi-icon-size:14px;width:14px;height:14px;flex-shrink:0"></ha-icon><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div></div></div>';
       } else {
         greetPart = '<div style="height:0.5px"></div>';
       }
@@ -1773,7 +1773,9 @@ class AcControllerCardV2 extends HTMLElement {
               window.history.pushState(null, '', basePath);
               window.dispatchEvent(new CustomEvent('location-changed'));
             }
-            window.location.hash = hash;
+            window.history.pushState(null, '', window.location.pathname + hash);
+            window.dispatchEvent(new PopStateEvent('popstate'));
+            window.dispatchEvent(new HashChangeEvent('hashchange'));
           } else {
             window.history.pushState(null, '', navPath);
             window.dispatchEvent(new CustomEvent('location-changed'));
