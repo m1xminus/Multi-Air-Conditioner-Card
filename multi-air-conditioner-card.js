@@ -26,7 +26,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Tốc độ quạt', swingLabel: 'Hướng gió',
     allOff: 'Tắt tất cả', allOffSub: 'Nhấn để tắt mọi phòng',
     tapOff: 'Nhấn để tắt', tapOn: 'Nhấn để bật',
-    confirmOff: '⚠ Tắt tất cả?', confirmSub: function(n) { return 'Sẽ tắt ' + n + ' điều hòa cùng lúc'; },
+    confirmOff: 'Tắt tất cả?', confirmSub: function(n) { return 'Sẽ tắt ' + n + ' điều hòa cùng lúc'; },
     cancel: 'Hủy', doOff: '⏻ Tắt hết',
     overlayOn: 'ĐANG BẬT', overlayOff: 'TẮT',
     modes: { cool:'Làm lạnh', heat:'Sưởi', dry:'Hút ẩm', fan_only:'Quạt', off:'Tắt' },
@@ -85,7 +85,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Velocidade do ventilador', swingLabel: 'Direção do ar',
     allOff: 'Desligar tudo', allOffSub: 'Premir para desligar todas as divisões',
     tapOff: 'Premir para desligar', tapOn: 'Premir para ligar',
-    confirmOff: '⚠ Desligar tudo?', confirmSub: function(n) { return 'Irá desligar ' + n + ' aparelhos de AC de uma só vez'; },
+    confirmOff: 'Desligar tudo?', confirmSub: function(n) { return 'Irá desligar ' + n + ' aparelhos de AC de uma só vez'; },
     cancel: 'Cancelar', doOff: '⏻ Desligar tudo',
     overlayOn: 'LIGADO', overlayOff: 'DESLIGADO',
     modes: { cool:'Arrefecer', heat:'Aquecimento', dry:'Desumidificar', fan_only:'Ventilador', off:'Desligado' },
@@ -144,7 +144,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Fan speed', swingLabel: 'Airflow',
     allOff: 'Turn all off', allOffSub: 'Tap to turn off all rooms',
     tapOff: 'Tap to turn off', tapOn: 'Tap to turn on',
-    confirmOff: '⚠ Turn all off?', confirmSub: function(n) { return 'Will turn off ' + n + ' AC units at once'; },
+    confirmOff: 'Turn all off?', confirmSub: function(n) { return 'Will turn off ' + n + ' AC units at once'; },
     cancel: 'Cancel', doOff: '⏻ Turn all off',
     overlayOn: 'ON', overlayOff: 'OFF',
     modes: { cool:'Cool', heat:'Heat', dry:'Dry', fan_only:'Fan', off:'Off' },
@@ -203,7 +203,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Lüfterstufe', swingLabel: 'Luftrichtung',
     allOff: 'Alle ausschalten', allOffSub: 'Alle Räume ausschalten',
     tapOff: 'Zum Ausschalten', tapOn: 'Zum Einschalten',
-    confirmOff: '⚠ Alle ausschalten?', confirmSub: function(n) { return n + ' Klimaanlagen gleichzeitig ausschalten'; },
+    confirmOff: 'Alle ausschalten?', confirmSub: function(n) { return n + ' Klimaanlagen gleichzeitig ausschalten'; },
     cancel: 'Abbrechen', doOff: '⏻ Alle aus',
     overlayOn: 'AN', overlayOff: 'AUS',
     modes: { cool:'Kühlen', heat:'Heizen', dry:'Entfeuchten', fan_only:'Lüfter', off:'Aus' },
@@ -262,7 +262,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Vitesse ventilateur', swingLabel: 'Direction d\'air',
     allOff: 'Tout éteindre', allOffSub: 'Éteindre toutes les pièces',
     tapOff: 'Appuyer pour éteindre', tapOn: 'Appuyer pour allumer',
-    confirmOff: '⚠ Tout éteindre?', confirmSub: function(n) { return 'Éteindra ' + n + ' climatiseurs à la fois'; },
+    confirmOff: 'Tout éteindre?', confirmSub: function(n) { return 'Éteindra ' + n + ' climatiseurs à la fois'; },
     cancel: 'Annuler', doOff: '⏻ Tout éteindre',
     overlayOn: 'ALLUMÉ', overlayOff: 'ÉTEINT',
     modes: { cool:'Refroidir', heat:'Chauffer', dry:'Déshumidifier', fan_only:'Ventilateur', off:'Éteint' },
@@ -321,7 +321,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Ventilatorsnelheid', swingLabel: 'Luchtrichting',
     allOff: 'Alles uitschakelen', allOffSub: 'Alle kamers uitschakelen',
     tapOff: 'Tik om uit te schakelen', tapOn: 'Tik om in te schakelen',
-    confirmOff: '⚠ Alles uitschakelen?', confirmSub: function(n) { return n + ' airconditioners tegelijk uitschakelen'; },
+    confirmOff: 'Alles uitschakelen?', confirmSub: function(n) { return n + ' airconditioners tegelijk uitschakelen'; },
     cancel: 'Annuleren', doOff: '⏻ Alles uit',
     overlayOn: 'AAN', overlayOff: 'UIT',
     modes: { cool:'Koelen', heat:'Verwarmen', dry:'Ontvochtigen', fan_only:'Ventilator', off:'Uit' },
@@ -380,7 +380,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Prędkość wentylatora', swingLabel: 'Kierunek przepływu',
     allOff: 'Wyłącz wszystkie', allOffSub: 'Naciśnij aby wyłączyć wszystkie pokoje',
     tapOff: 'Naciśnij aby wyłączyć', tapOn: 'Naciśnij aby włączyć',
-    confirmOff: '⚠ Wyłączyć wszystkie?', confirmSub: function(n) { return 'Wyłączy ' + n + ' klimatyzatorów naraz'; },
+    confirmOff: 'Wyłączyć wszystkie?', confirmSub: function(n) { return 'Wyłączy ' + n + ' klimatyzatorów naraz'; },
     cancel: 'Anuluj', doOff: '⏻ Wyłącz wszystkie',
     overlayOn: 'WŁ', overlayOff: 'WYŁ',
     modes: { cool:'Chłodzenie', heat:'Ogrzewanie', dry:'Osuszanie', fan_only:'Wentylator', off:'Wyłącz' },
@@ -439,7 +439,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Fläkthastighet', swingLabel: 'Luftriktning',
     allOff: 'Stäng av alla', allOffSub: 'Stäng av alla rum',
     tapOff: 'Tryck för att stänga av', tapOn: 'Tryck för att slå på',
-    confirmOff: '⚠ Stäng av alla?', confirmSub: function(n) { return 'Stänger av ' + n + ' AC-enheter'; },
+    confirmOff: 'Stäng av alla?', confirmSub: function(n) { return 'Stänger av ' + n + ' AC-enheter'; },
     cancel: 'Avbryt', doOff: '⏻ Stäng av alla',
     overlayOn: 'PÅ', overlayOff: 'AV',
     modes: { cool:'Kyla', heat:'Värme', dry:'Avfuktning', fan_only:'Fläkt', off:'Av' },
@@ -498,7 +498,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Ventilátorsebesség', swingLabel: 'Légáramlás iránya',
     allOff: 'Mindet kikapcsolni', allOffSub: 'Összes szoba kikapcsolása',
     tapOff: 'Érintse ki a kikapcsoláshoz', tapOn: 'Érintse meg a bekapcsoláshoz',
-    confirmOff: '⚠ Mindet kikapcsolni?', confirmSub: function(n) { return n + ' légkondicionálót kapcsol ki egyszerre'; },
+    confirmOff: 'Mindet kikapcsolni?', confirmSub: function(n) { return n + ' légkondicionálót kapcsol ki egyszerre'; },
     cancel: 'Mégse', doOff: '⏻ Mindet ki',
     overlayOn: 'BE', overlayOff: 'KI',
     modes: { cool:'Hűtés', heat:'Fűtés', dry:'Párátlanítás', fan_only:'Ventilátor', off:'Ki' },
@@ -557,7 +557,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Rychlost ventilátoru', swingLabel: 'Směr proudění',
     allOff: 'Vše vypnout', allOffSub: 'Vypnout všechny místnosti',
     tapOff: 'Stiskněte pro vypnutí', tapOn: 'Stiskněte pro zapnutí',
-    confirmOff: '⚠ Vše vypnout?', confirmSub: function(n) { return 'Vypne ' + n + ' klimatizací najednou'; },
+    confirmOff: 'Vše vypnout?', confirmSub: function(n) { return 'Vypne ' + n + ' klimatizací najednou'; },
     cancel: 'Zrušit', doOff: '⏻ Vše vypnout',
     overlayOn: 'ZAP', overlayOff: 'VYP',
     modes: { cool:'Chlazení', heat:'Topení', dry:'Odvlhčování', fan_only:'Ventilátor', off:'Vypnout' },
@@ -616,7 +616,7 @@ const AC_TRANSLATIONS = {
     fanLabel: 'Velocità ventilatore', swingLabel: 'Direzione flusso',
     allOff: 'Spegni tutti', allOffSub: 'Spegni tutte le stanze',
     tapOff: 'Premi per spegnere', tapOn: 'Premi per accendere',
-    confirmOff: '⚠ Spegnere tutto?', confirmSub: function(n) { return 'Spegnerà ' + n + ' condizionatori contemporaneamente'; },
+    confirmOff: 'Spegnere tutto?', confirmSub: function(n) { return 'Spegnerà ' + n + ' condizionatori contemporaneamente'; },
     cancel: 'Annulla', doOff: '⏻ Spegni tutti',
     overlayOn: 'ACCESO', overlayOff: 'SPENTO',
     modes: { cool:'Raffreddamento', heat:'Riscaldamento', dry:'Deumidificazione', fan_only:'Ventilatore', off:'Spento' },
@@ -803,7 +803,7 @@ const CARD_CSS = `
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 :host{display:block;font-family:'Sora',sans-serif;contain:layout style;will-change:contents}
-#ac-card-root{contain:content}
+#ac-card-root{contain:content;position:relative}
 .card{background:linear-gradient(135deg,rgba(180,220,255,0.22) 0%,rgba(120,200,220,0.18) 50%,rgba(100,180,210,0.22) 100%);
   backdrop-filter:blur(28px) saturate(1.6);-webkit-backdrop-filter:blur(28px) saturate(1.6);
   border-radius:28px;overflow:hidden;display:flex;min-height:520px;min-width:0;
@@ -899,9 +899,9 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .pw-sub{font-size:9px;color:rgba(255,255,255,0.5);margin-top:2px}
 .pw-sub--big{font-size:11px;font-weight:600;color:rgba(255,255,255,0.85);letter-spacing:0.2px}
 .power-row--icon{width:48px;padding:6px;justify-content:center}
-.confirm-popup{position:fixed;z-index:9999;
+.confirm-popup{position:absolute;z-index:9999;top:50%;left:50%;transform:translate(-50%,-50%);
   background:rgba(6,10,24,0.98);backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8);
-  border:1px solid rgba(255,80,80,0.35);border-radius:20px;padding:18px 16px 14px;width:220px;
+  border:1px solid rgba(255,80,80,0.35);border-radius:20px;padding:18px 16px 14px;width:220px;max-width:85%;
   box-shadow:0 8px 48px rgba(0,0,0,0.7),inset 0 1px 0 rgba(255,255,255,0.1)}
 .cp-title{font-size:13px;font-weight:700;color:#ffffff;text-align:center;margin-bottom:5px}
 .cp-sub{font-size:9px;color:rgba(255,150,150,0.75);text-align:center;margin-bottom:14px;letter-spacing:0.3px}
@@ -1006,9 +1006,9 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .timer-lbl{font-size:7px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,0.5);text-transform:uppercase;pointer-events:none}
 .timer-cd{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:600;color:rgba(251,191,36,0.9);line-height:1;min-height:13px;pointer-events:none}
 .timer-btn--icon{width:calc(100% - 24px);padding:9px 12px}
-.timer-popup{position:fixed;z-index:9999;
+.timer-popup{position:absolute;z-index:9999;top:50%;left:50%;transform:translate(-50%,-50%);
   background:rgba(6,10,24,0.98);backdrop-filter:blur(28px) saturate(1.8);-webkit-backdrop-filter:blur(28px) saturate(1.8);
-  border:1px solid rgba(255,255,255,0.18);border-radius:20px;padding:15px 13px 13px;width:218px;
+  border:1px solid rgba(255,255,255,0.18);border-radius:20px;padding:15px 13px 13px;width:218px;max-width:85%;
   box-shadow:0 8px 48px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.06),inset 0 1px 0 rgba(255,255,255,0.12)}
 .tp-title{font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:rgba(255,255,255,0.45);
   font-weight:700;text-align:center;margin-bottom:10px}
@@ -1791,12 +1791,10 @@ class AcControllerCardV2 extends HTMLElement {
       var allOffBtn = r.getElementById('btn-all-off');
       var oldP = sr2.getElementById('confirm-popup-el');
       if (oldP) { oldP.remove(); return; }
+      var cardRoot = sr2.getElementById('ac-card-root');
       var cpop = document.createElement('div');
       cpop.id = 'confirm-popup-el';
       cpop.className = 'confirm-popup';
-      var rect2 = allOffBtn.getBoundingClientRect();
-      cpop.style.bottom = (window.innerHeight - rect2.top + 10) + 'px';
-      cpop.style.right  = (window.innerWidth  - rect2.right + 12) + 'px';
       var trPop = AC_TRANSLATIONS[(self._config && self._config.language) || 'vi'] || AC_TRANSLATIONS.vi;
       cpop.innerHTML =
         '<div class="cp-title">' + (trPop.confirmOff || 'Confirm') + '</div>'
@@ -1805,7 +1803,7 @@ class AcControllerCardV2 extends HTMLElement {
       +   '<button id="cp-cancel-btn" class="tp-cancel">' + (trPop.cancel || 'Cancel') + '</button>'
       +   '<button class="cp-ok" id="cp-ok-btn">' + (trPop.doOff || 'Turn off') + '</button>'
       + '</div>';
-      sr2.appendChild(cpop);
+      cardRoot.appendChild(cpop);
       cpop.querySelector('#cp-cancel-btn').onclick = function(ev) { ev.stopPropagation(); cpop.remove(); };
       cpop.querySelector('#cp-ok-btn').onclick = function(ev) {
         ev.stopPropagation();
@@ -1957,10 +1955,6 @@ class AcControllerCardV2 extends HTMLElement {
       pop.id = 'timer-popup-el';
       pop.className = 'timer-popup';
 
-      var rect = btn.getBoundingClientRect();
-      pop.style.bottom = (window.innerHeight - rect.top + 8) + 'px';
-      pop.style.right  = (window.innerWidth  - rect.right)  + 'px';
-
       function renderPop() {
         var hasTimer = !!(self._timers[roomIdx] && self._timers[roomIdx].end);
         pop.innerHTML =
@@ -2058,7 +2052,8 @@ class AcControllerCardV2 extends HTMLElement {
       }
 
       renderPop();
-      sr.appendChild(pop);
+      var cardRoot2 = sr.getElementById('ac-card-root');
+      cardRoot2.appendChild(pop);
 
       self._popupJustOpened = true;
       setTimeout(function() { self._popupJustOpened = false; }, 80);
