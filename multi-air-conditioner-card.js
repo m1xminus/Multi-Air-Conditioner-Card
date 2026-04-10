@@ -806,7 +806,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 #ac-card-root{contain:content}
 .card{background:linear-gradient(135deg,rgba(180,220,255,0.22) 0%,rgba(120,200,220,0.18) 50%,rgba(100,180,210,0.22) 100%);
   backdrop-filter:blur(28px) saturate(1.6);-webkit-backdrop-filter:blur(28px) saturate(1.6);
-  border-radius:28px;overflow:hidden;display:flex;min-height:520px;
+  border-radius:28px;overflow:hidden;display:flex;min-height:520px;min-width:0;
   box-shadow:0 0 0 1px rgba(255,255,255,0.28),0 40px 120px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.45)}
 .left{flex:1.2;background:linear-gradient(160deg,rgba(200,235,255,0.18) 0%,rgba(140,210,230,0.12) 100%);
   display:flex;flex-direction:column;padding:16px 16px 14px;gap:8px;
@@ -868,7 +868,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .fc-label{font-size:8px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:700}
 .fc-val{font-size:10px;color:rgba(255,255,255,0.95);font-weight:700}
 .fan-bars{margin:0;display:flex;align-items:flex-end;gap:2px;height:clamp(16px,2.5vw,32px);flex-shrink:1;overflow:hidden}
-.fan-card .fan-tap{width:auto;padding:0;margin-left:auto;flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;background:none;border:none;cursor:pointer;outline:none;min-width:0;overflow:hidden}
+.fan-card .fan-tap{width:auto;padding:4px 6px;margin-left:auto;flex:1 1 auto;display:flex;align-items:center;justify-content:flex-end;gap:4px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.15);border-radius:8px;cursor:pointer;outline:none;min-width:0;overflow:hidden;transition:all 0.2s}
 .fbar{width:6px;min-width:3px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:1}
 .fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
 .fbar.fbar-auto{animation:barFade 1.2s ease-in-out infinite}
@@ -912,7 +912,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   border-radius:10px;padding:9px;font-size:10px;font-weight:700;font-family:'Sora',sans-serif;
   color:#ff6b6b;cursor:pointer;outline:none;touch-action:manipulation}
 .pw-arrow{color:rgba(255,255,255,0.4);font-size:20px}
-.right{flex:1;background:linear-gradient(160deg,rgba(160,220,240,0.10) 0%,rgba(100,180,210,0.08) 100%);display:flex;flex-direction:column;position:relative;overflow-x:hidden;overflow-y:auto;min-height:0;min-width:0;padding:0 8px}
+.right{flex:1;background:linear-gradient(160deg,rgba(160,220,240,0.10) 0%,rgba(100,180,210,0.08) 100%);display:flex;flex-direction:column;position:relative;overflow-x:hidden;overflow-y:auto;min-height:0;min-width:0;padding:0 8px;max-width:100%}
 .room-image{flex:0 0 150px;position:relative;overflow:hidden}
 .room-img-el{width:100%;height:100%;object-fit:cover;transition:opacity 0.6s ease,transform 0.8s ease;display:block}
 .room-img-el.fade-out{opacity:0;transform:scale(1.04)}
@@ -980,7 +980,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
   cursor:pointer;outline:none;width:100%;text-align:center;transition:all 0.2s;font-family:'Sora',sans-serif;min-height:72px;box-sizing:border-box;min-width:0;overflow:hidden}
 .all-off-btn:hover{background:rgba(255,60,60,0.12);border-color:rgba(255,80,80,0.35)}
 .all-off-btn:active{transform:scale(0.97)}
-.right-top-section{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 2px 0;flex-shrink:0;align-items:stretch;width:100%;box-sizing:border-box}
+.right-top-section{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 2px 0;flex-shrink:1;align-items:stretch;width:100%;box-sizing:border-box;min-width:0}
 .all-off-ico{width:32px;height:32px;border-radius:50%;background:rgba(255,60,60,0.15);border:1px solid rgba(255,80,80,0.3);
   display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
   box-shadow:0 0 14px rgba(255,60,60,0.2)}
@@ -1037,7 +1037,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .tp-ok-off{background:rgba(251,191,36,0.2);border:1px solid rgba(251,191,36,0.6);color:#fbbf24}
 .tp-ok-on{background:rgba(52,211,153,0.2);border:1px solid rgba(52,211,153,0.6);color:#34d399}
 .rt-header{font-size:8.5px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);font-weight:600;margin-bottom:4px;margin-top:6px;text-align:center}
-.room-tabs{padding:0 10px 6px;display:flex;flex-direction:column;gap:4px;flex-shrink:0}
+.room-tabs{padding:0 10px 6px;display:flex;flex-direction:column;gap:4px;flex-shrink:1;min-width:0}
 .room-tabs-inner{background:rgba(0,15,40,0.45);border:1px solid rgba(255,255,255,0.16);border-radius:14px;padding:7px;display:flex;flex-direction:column;gap:6px;box-shadow:0 4px 20px rgba(0,0,0,0.25),inset 0 1px 0 rgba(255,255,255,0.08)}
 .room-tabs-inner.scrollable{max-height:calc(4 * 58px + 3 * 6px + 14px);overflow-y:auto !important;overflow-x:hidden !important;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.25) rgba(0,0,0,0.15)}
 .room-tabs-inner.scrollable::-webkit-scrollbar{width:5px}
