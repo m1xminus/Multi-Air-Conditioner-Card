@@ -827,7 +827,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .dial-wrap{display:flex;justify-content:center;position:relative;margin:-2px 0 -14px}
 .dial-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-38%);
   display:flex;flex-direction:column;align-items:center;pointer-events:none;user-select:none;width:144px;height:144px}
-.dial-power-btn{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);width:48px;height:48px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.35s;z-index:5;padding:0;pointer-events:auto}
+.dial-power-btn{position:absolute;bottom:45px;left:50%;transform:translateX(-50%);width:40px;height:40px;border-radius:50%;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all 0.35s;z-index:5;padding:0;pointer-events:auto}
 .dial-pwon{background:linear-gradient(135deg,#3b9eff,#1a5faa);box-shadow:0 0 26px rgba(59,158,255,0.7),0 0 50px rgba(59,158,255,0.25);animation:pwP 2.5s ease-in-out infinite}
 .dial-pwoff{background:rgba(0,20,50,0.4);opacity:0.6;box-shadow:0 0 12px rgba(255,255,255,0.1)}
 .dial-lbl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.55);font-weight:500}
@@ -864,6 +864,10 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .fc-val{font-size:10px;color:rgba(255,255,255,0.95);font-weight:700}
 .fan-bars{margin:0;display:flex;align-items:flex-end;gap:3px;height:24px;flex-shrink:0}
 .fan-card .fan-tap{width:auto;padding:0;margin-left:auto;flex:none;display:flex;align-items:center;justify-content:center}
+.fbar{width:6px;border-radius:3px 3px 2px 2px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.18);transition:all 0.3s;flex-shrink:0}
+.fbar.fbar-on{background:var(--accent);border-color:rgba(255,255,255,0.55);box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}
+.fbar.fbar-auto{animation:barFade 1.2s ease-in-out infinite}
+@keyframes barFade{0%,100%{opacity:0.4;box-shadow:0 0 2px var(--glow)}50%{opacity:1;box-shadow:0 0 8px var(--glow),0 0 3px rgba(255,255,255,0.3),inset 0 1px 0 rgba(255,255,255,0.35)}}
 .swing-btn{display:flex;flex-direction:row;align-items:center;gap:4px;background:none;border:none;cursor:pointer;outline:none;padding:0;margin-left:auto;flex:none}
 .swing-lbl{font-size:9px;color:rgba(255,255,255,0.7);font-weight:600}
 .chips{display:flex;gap:7px}
