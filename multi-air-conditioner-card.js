@@ -2139,25 +2139,20 @@ class AcControllerCardV2 extends HTMLElement {
               }
             }
             // Update room tab timer for this room (always update)
-            var tabTimer = sr.querySelector('[data-room="' + roomIdx + '"] .room-tab-timer');
-            if (tabTimer) {
-              tabTimer.textContent = displayed;
-            } else {
-              // Create timer element if it doesn't exist (fallback)
-              var btn = sr.querySelector('[data-room="' + roomIdx + '"]');
-              if (btn) {
-                var info = btn.querySelector('.room-tab-info');
-                if (info && !info.querySelector('.room-tab-timer')) {
-                  var timerSpan = document.createElement('span');
-                  timerSpan.className = 'room-tab-timer';
-                  timerSpan.textContent = displayed;
-                  info.appendChild(timerSpan);
-                }
-              }
-            }
-            // Also update room status badge (ON/OFF) when AC state changes during timer countdown
             var roomBtn = sr.querySelector('[data-room="' + roomIdx + '"]');
             if (roomBtn) {
+              var tabTimer = roomBtn.querySelector('.room-tab-timer');
+              if (tabTimer) {
+                // Update existing timer element
+                tabTimer.textContent = displayed;
+              } else {
+                // Create timer span if it doesn't exist
+                var timerSpan = document.createElement('span');
+                timerSpan.className = 'room-tab-timer';
+                timerSpan.textContent = displayed;
+                roomBtn.appendChild(timerSpan);
+              }
+              // Also update status badge and room styling
               var statusBadge = roomBtn.querySelector('.room-status-badge');
               var id = ROOMS[roomIdx].id;
               if (statusBadge && self._hass) {
