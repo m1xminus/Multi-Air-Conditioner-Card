@@ -953,6 +953,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .led-off{background:#4b5563}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0.35}}
 .ac-overlay-txt{font-size:9.5px;font-weight:700;color:rgba(255,255,255,0.85);letter-spacing:1.5px}
+.ac-overlay-timer{font-size:9.5px;font-weight:700;color:#ff9800;letter-spacing:1.5px}
 .ac-mode-chip{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:var(--accent);
   font-size:8.5px;font-weight:600;padding:2px 9px;border-radius:10px}
 .img-temp-badge{position:absolute;bottom:18px;left:14px;z-index:3;
@@ -1071,6 +1072,7 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .room-tab-ico{font-size:22px;line-height:1;flex-shrink:0;width:28px;text-align:center}
 .room-tab-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .room-tab-name{font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.room-tab-timer{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:600;color:#ff9800}
 .room-tab-temp{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,0.5)}
 `;
 
@@ -1472,6 +1474,7 @@ class AcControllerCardV2 extends HTMLElement {
         + '<span class="room-tab-ico">' + rIconHtml + '</span>'
         + '<span class="room-tab-info">'
         + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
+        + (this._timers[j] ? ('  <span class="room-tab-timer">' + this._fmtRemain(j) + '</span>') : '')
         + '</span>'
         + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (showRoomTemp ? (hasTempSensor ? rTempStr : (ron ? 'ON' : 'OFF')) : (ron ? 'ON' : 'OFF')) + '</span>'
         + '</button>';
@@ -1598,13 +1601,13 @@ class AcControllerCardV2 extends HTMLElement {
         + '  <div>'
         + '    <div class="greet-sub">' + tr.greet() + '</div>'
         + '    <div class="greet-name">' + (cfg.owner_name || '') + '</div>'
-        + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;display:flex;align-items:center;gap:4px"><ha-icon icon="mdi:home-thermometer" style="--mdi-icon-size:14px;width:14px;height:14px;flex-shrink:0"></ha-icon><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div>') : '')
+        + (showAvg ? ('    <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px"><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div>') : '')
         + '  </div>'
         + (showEco ? ('  <button id="btn-eco" class="eco-badge ' + (ecoOn ? 'eco-on' : 'eco-off') + '">' + (ecoIcon ? ('<ha-icon icon="' + ecoIcon + '"></ha-icon> ') : '') + (ecoOn ? 'ECO ON' : 'ECO') + '</button>') : '')
         + '</div>';
     } else {
       if (showAvg) {
-        greetPart = '<div class="greet-row"><div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px;display:flex;align-items:center;gap:4px"><ha-icon icon="mdi:home-thermometer" style="--mdi-icon-size:14px;width:14px;height:14px;flex-shrink:0"></ha-icon><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div></div></div>';
+        greetPart = '<div class="greet-row"><div><div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:4px"><strong>' + tr.avgLabel + ' - ' + avgTempVal + '</strong></div></div></div>';
       } else {
         greetPart = '<div style="height:0.5px"></div>';
       }
@@ -1680,7 +1683,9 @@ class AcControllerCardV2 extends HTMLElement {
 + '  <img id="room-photo" class="room-img-el" src="' + (roomCfg.image_url || ROOM_IMAGES[this._activeIdx]) + '" alt="room">'
 + '  <div class="ac-overlay">'
 + '    <span class="ac-led ' + (isOn ? 'led-on' : 'led-off') + '"></span>'
-+ '    <span class="ac-overlay-txt">' + (isOn ? tr.overlayOn : tr.overlayOff) + '</span>'
++ (this._timers[this._activeIdx] 
+    ? '    <span class="ac-overlay-timer">Timer ' + (this._timers[this._activeIdx].mode === 'on' ? 'ON' : 'OFF') + ' in ' + this._fmtRemainHHMM(this._activeIdx) + '</span>'
+    : '    <span class="ac-overlay-txt">' + (isOn ? tr.overlayOn : tr.overlayOff) + '</span>')
 + modeChip
 + '  </div>'
 + '  <div class="img-temp-badge">' + curTempStr + '<span>&#176;C</span></div>'
@@ -1976,6 +1981,18 @@ class AcControllerCardV2 extends HTMLElement {
     var m = Math.ceil(rem / 60000);
     var h = Math.floor(m / 60); m = m % 60;
     return h > 0 ? h + 'h' + (m ? m + 'm' : '') : m + 'm';
+  }
+
+  _fmtRemainHHMM(roomIdx) {
+    var t = this._timers[roomIdx];
+    if (!t || !t.end) return '';
+    var rem = t.end - Date.now();
+    if (rem <= 0) return '';
+    var m = Math.ceil(rem / 60000);
+    var h = Math.floor(m / 60); m = m % 60;
+    var hStr = h < 10 ? '0' + h : '' + h;
+    var mStr = m < 10 ? '0' + m : '' + m;
+    return hStr + ':' + mStr;
   }
 
   _timerSave() {
