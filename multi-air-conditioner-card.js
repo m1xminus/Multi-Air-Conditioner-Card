@@ -2020,6 +2020,13 @@ class AcControllerCardV2 extends HTMLElement {
     if (!t || !t.end) return '';
     var rem = t.end - Date.now();
     if (rem <= 0) return '';
+    
+    // Show seconds if below 1 minute
+    if (rem < 60000) {
+      var s = Math.ceil(rem / 1000);
+      return s + 's';
+    }
+    
     var m = Math.ceil(rem / 60000);
     var h = Math.floor(m / 60); m = m % 60;
     return h > 0 ? h + 'h' + (m ? m + 'm' : '') : m + 'm';
@@ -2106,14 +2113,14 @@ class AcControllerCardV2 extends HTMLElement {
               overlayTimer.remove();
               var overlayTxt = sr.createElement('span');
               overlayTxt.className = 'ac-overlay-txt';
-              overlayTxt.textContent = tr.overlayOff || 'OFF';
+              overlayTxt.textContent = 'OFF';
               var overlay = sr.querySelector('.ac-overlay');
               if (overlay) overlay.appendChild(overlayTxt);
             }
           }
         }
         var id = ROOMS[roomIdx].id;
-        self._call('climate', 'set_hvac_mode', { entity_id: id, hvac_mode: tr2.mode === 'on' ? 'cool' : 'off' });
+        self._call('climate', 'set_hvac_mode', { entity_id: id, hvac_mode: tr2.mode === 'off' ? 'off' : 'cool' });
       } else {
         // Update room tab timer for all devices viewing this card
         var sr = self.shadowRoot;
@@ -2148,10 +2155,15 @@ class AcControllerCardV2 extends HTMLElement {
                 }
               }
             }
+            // Force re-render when timer display updates (under 1min transitions to seconds)
+            // This ensures the room tab stays current when switching rooms
+            if (rem < 120000) {  // Within 2 minutes, periodically re-render to ensure UI stays fresh
+              self._render();
+            }
           }
         }
       }
-    }, 1000);  // Update every 1 second for smooth countdown (updated from 60s)
+    }, 500);  // Update every 500ms for smooth countdown and immediate updates
   }
 
   _bindTimer() {
