@@ -2805,15 +2805,22 @@ class MultiAcCardEditor extends HTMLElement {
   _bindEvents() {
     const sr = this.shadowRoot;
 
-    // Chip toggles
+    // Chip toggles - click on header opens/closes the chip body
     ['lang','ac','features','sensors','visual'].forEach(id => {
       const hdr = sr.getElementById('chip-' + id);
-      if (hdr) hdr.addEventListener('click', () => this._toggleSection(id));
+      if (hdr) {
+        hdr.addEventListener('click', (e) => {
+          // Toggle chip section - stop propagation to prevent interference
+          this._toggleSection(id);
+          e.stopPropagation();
+        });
+      }
     });
 
     // language buttons
     sr.querySelectorAll('[data-lang]').forEach(btn =>
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         this._config = { ...this._config, language: btn.dataset.lang };
         this._fire();
         this._render();
@@ -2821,27 +2828,33 @@ class MultiAcCardEditor extends HTMLElement {
 
     // bg preset tiles
     sr.querySelectorAll('[data-bg]').forEach(tile =>
-      tile.addEventListener('click', () => {
+      tile.addEventListener('click', (e) => {
+        e.stopPropagation();
         this._config = { ...this._config, background_preset: tile.dataset.bg };
         this._fire();
         this._render();
       }));
 
-    // bg opacity slider
+    // bg opacity slider - prevent event propagation so it doesn't trigger chip toggle
     const opSlider = sr.getElementById('bg-opacity-slider');
     if (opSlider) {
-      opSlider.addEventListener('input', () => {
+      opSlider.addEventListener('input', (e) => {
+        e.stopPropagation();
         this._config = { ...this._config, bg_opacity: parseInt(opSlider.value, 10) };
         this._fire();
       });
-      opSlider.addEventListener('change', () => {
+      opSlider.addEventListener('change', (e) => {
+        e.stopPropagation();
         this._render();
       });
+      opSlider.addEventListener('mousedown', (e) => e.stopPropagation());
+      opSlider.addEventListener('touchstart', (e) => e.stopPropagation());
     }
 
     // color picker header toggle
     sr.querySelectorAll('[data-cp]').forEach(hdr =>
-      hdr.addEventListener('click', () => {
+      hdr.addEventListener('click', (e) => {
+        e.stopPropagation();
         const k = hdr.dataset.cp;
         this._picker = this._picker === k ? null : k;
         this._render();
@@ -2849,7 +2862,8 @@ class MultiAcCardEditor extends HTMLElement {
 
     // native color input
     sr.querySelectorAll('[data-cp-native]').forEach(inp => {
-      inp.addEventListener('input', () => {
+      inp.addEventListener('input', (e) => {
+        e.stopPropagation();
         const ci   = inp.closest('.ci');
         const sw   = ci?.querySelector('.ci-swatch');
         const code = ci?.querySelector('.ci-code');
@@ -2860,16 +2874,20 @@ class MultiAcCardEditor extends HTMLElement {
         this._config[inp.dataset.cpNative] = inp.value;
         this._fire();
       });
-      inp.addEventListener('change', () => {
+      inp.addEventListener('change', (e) => {
+        e.stopPropagation();
         this._config[inp.dataset.cpNative] = inp.value;
         this._fire();
         this._render();
       });
+      inp.addEventListener('mousedown', (e) => e.stopPropagation());
+      inp.addEventListener('touchstart', (e) => e.stopPropagation());
     });
 
     // hex text input
     sr.querySelectorAll('[data-cp-hex]').forEach(inp =>
-      inp.addEventListener('change', () => {
+      inp.addEventListener('change', (e) => {
+        e.stopPropagation();
         const val = '#' + inp.value.replace('#','');
         if (/^#[0-9a-fA-F]{6}$/.test(val)) {
           this._config[inp.dataset.cpHex] = val;
@@ -2880,7 +2898,8 @@ class MultiAcCardEditor extends HTMLElement {
 
     // swatch dot
     sr.querySelectorAll('[data-cp-dot]').forEach(dot =>
-      dot.addEventListener('click', () => {
+      dot.addEventListener('click', (e) => {
+        e.stopPropagation();
         this._config[dot.dataset.cpDot] = dot.dataset.color;
         this._fire();
         this._render();
@@ -2917,10 +2936,12 @@ class MultiAcCardEditor extends HTMLElement {
     // wireTextInput — update state mỗi keystroke, chỉ fire khi blur/Enter (tránh mất focus)
     const wireTextInput = (el, updater) => {
       if (!el) return;
-      el.addEventListener('input',  () => updater(el.value));
-      el.addEventListener('change', () => { updater(el.value); this._fire(); });
-      el.addEventListener('blur',   () => { updater(el.value); this._fire(); });
-      el.addEventListener('keydown', e => { if (e.key === 'Enter') el.blur(); });
+      el.addEventListener('input',  (e) => { e.stopPropagation(); updater(el.value); });
+      el.addEventListener('change', (e) => { e.stopPropagation(); updater(el.value); this._fire(); });
+      el.addEventListener('blur',   (e) => { e.stopPropagation(); updater(el.value); this._fire(); });
+      el.addEventListener('keydown', (e) => { e.stopPropagation(); if (e.key === 'Enter') el.blur(); });
+      el.addEventListener('mousedown', (e) => e.stopPropagation());
+      el.addEventListener('touchstart', (e) => e.stopPropagation());
     };
 
     // Owner name input
@@ -2964,6 +2985,7 @@ class MultiAcCardEditor extends HTMLElement {
     // ha-entity-picker: room entities (climate)
     sr.querySelectorAll('ha-entity-picker[data-room]').forEach(picker =>
       picker.addEventListener('value-changed', e => {
+        e.stopPropagation();
         const idx  = parseInt(picker.dataset.room);
         const val  = e.detail.value;
         const ents = (this._config.entities || []).slice();
@@ -2977,6 +2999,7 @@ class MultiAcCardEditor extends HTMLElement {
     // per-room temp/humidity/power pickers
     sr.querySelectorAll('ha-entity-picker[data-room-temp]').forEach(picker =>
       picker.addEventListener('value-changed', e => {
+        e.stopPropagation();
         const idx = parseInt(picker.dataset.roomTemp);
         const val = e.detail.value;
         const ents = (this._config.entities || []).slice();
@@ -2989,6 +3012,7 @@ class MultiAcCardEditor extends HTMLElement {
 
     sr.querySelectorAll('ha-entity-picker[data-room-hum]').forEach(picker =>
       picker.addEventListener('value-changed', e => {
+        e.stopPropagation();
         const idx = parseInt(picker.dataset.roomHum);
         const val = e.detail.value;
         const ents = (this._config.entities || []).slice();
@@ -3001,6 +3025,7 @@ class MultiAcCardEditor extends HTMLElement {
 
     sr.querySelectorAll('ha-entity-picker[data-room-power]').forEach(picker =>
       picker.addEventListener('value-changed', e => {
+        e.stopPropagation();
         const idx = parseInt(picker.dataset.roomPower);
         const val = e.detail.value;
         const ents = (this._config.entities || []).slice();
@@ -3014,6 +3039,7 @@ class MultiAcCardEditor extends HTMLElement {
     // ha-entity-picker: sensor entities
     sr.querySelectorAll('ha-entity-picker[data-key]').forEach(picker =>
       picker.addEventListener('value-changed', e => {
+        e.stopPropagation();
         const k = picker.dataset.key;
         const v = e.detail.value;
         const c = { ...this._config };
@@ -3031,27 +3057,27 @@ class MultiAcCardEditor extends HTMLElement {
       this._render();
     };
     const elAvg = sr.getElementById('feat-show-avg');
-    if (elAvg) elAvg.addEventListener('change', () => setFeature('show_avg_temp', elAvg.checked));
+    if (elAvg) elAvg.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_avg_temp', elAvg.checked); });
     const elWelcome = sr.getElementById('feat-show-welcome');
-    if (elWelcome) elWelcome.addEventListener('change', () => setFeature('show_welcome', elWelcome.checked));
+    if (elWelcome) elWelcome.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_welcome', elWelcome.checked); });
     const elEco = sr.getElementById('feat-show-eco');
-    if (elEco) elEco.addEventListener('change', () => setFeature('show_eco', elEco.checked));
+    if (elEco) elEco.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_eco', elEco.checked); });
     const elAir = sr.getElementById('feat-show-airflow');
-    if (elAir) elAir.addEventListener('change', () => setFeature('show_airflow', elAir.checked));
+    if (elAir) elAir.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_airflow', elAir.checked); });
     const elAirBtn = sr.getElementById('feat-show-airflow-btn');
-    if (elAirBtn) elAirBtn.addEventListener('change', () => setFeature('show_airflow_btn', elAirBtn.checked));
+    if (elAirBtn) elAirBtn.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_airflow_btn', elAirBtn.checked); });
     const elFav = sr.getElementById('feat-show-fav');
-    if (elFav) elFav.addEventListener('change', () => setFeature('show_fav', elFav.checked));
+    if (elFav) elFav.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_fav', elFav.checked); });
     const elClean = sr.getElementById('feat-show-clean');
-    if (elClean) elClean.addEventListener('change', () => setFeature('show_clean', elClean.checked));
+    if (elClean) elClean.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_clean', elClean.checked); });
     const elPm = sr.getElementById('feat-show-pm25');
-    if (elPm) elPm.addEventListener('change', () => setFeature('show_pm25', elPm.checked));
+    if (elPm) elPm.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_pm25', elPm.checked); });
     const elRoomTemp = sr.getElementById('feat-show-room-temp');
-    if (elRoomTemp) elRoomTemp.addEventListener('change', () => setFeature('show_room_temp', elRoomTemp.checked));
+    if (elRoomTemp) elRoomTemp.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_room_temp', elRoomTemp.checked); });
     const elMTemp = sr.getElementById('feat-show-metric-temp');
-    if (elMTemp) elMTemp.addEventListener('change', () => setFeature('show_metrics_temp', elMTemp.checked));
+    if (elMTemp) elMTemp.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_metrics_temp', elMTemp.checked); });
     const elMHum = sr.getElementById('feat-show-metric-humidity');
-    if (elMHum) elMHum.addEventListener('change', () => setFeature('show_metrics_humidity', elMHum.checked));
+    if (elMHum) elMHum.addEventListener('change', (e) => { e.stopPropagation(); setFeature('show_metrics_humidity', elMHum.checked); });
     const elMPow = sr.getElementById('feat-show-metric-power');
     if (elMPow) elMPow.addEventListener('change', () => setFeature('show_metrics_power', elMPow.checked));
     const elModesText = sr.getElementById('feat-show-modes-text');
