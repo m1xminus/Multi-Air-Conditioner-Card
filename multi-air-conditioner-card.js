@@ -2347,7 +2347,7 @@ class MultiAcCardEditor extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this._config = { ...AC_DEFAULT_CONFIG };
     this._hass   = null;
-    this._open   = { lang: true, roomcount: true, rooms: true, sensors: true, timer: false, features: true, hdrBtn: false, icons: false, colors: false, bg: true };
+    this._open   = { lang: false, ac: false, features: false, sensors: false, visual: false };
     this._picker = null;
   }
 
@@ -2585,12 +2585,8 @@ class MultiAcCardEditor extends HTMLElement {
   .ci-dot:hover { transform:scale(1.15); }
 </style>
 <div class="editor">
-  <div class="credit"><strong>Multi Air Conditioner Card</strong>
-      <span style="color:var(--secondary-text-color);font-weight:400;">v1.1 Designed by @doanlong1412 from Vietnam</span>
-    </div>
-
   <!-- 0. Owner name -->
-  <div class="row" style="margin-bottom:4px;">
+  <div class="row" style="margin-bottom:12px;border-bottom:1px solid var(--divider-color);padding-bottom:8px;">
     <label style="font-size:12px;font-weight:600;color:var(--secondary-text-color);letter-spacing:.3px;">${t.edOwnerName}</label>
     <input id="inp-owner-name" type="text" placeholder="Smart Home"
       value="${this._config.owner_name || ''}"
@@ -2598,374 +2594,160 @@ class MultiAcCardEditor extends HTMLElement {
         border:1px solid var(--divider-color);background:var(--card-background-color,#fff);
         color:var(--primary-text-color);font-size:14px;font-family:inherit;box-sizing:border-box;outline:none;">
   </div>
-  <div class="row" style="margin-bottom:8px;">
-    <label>Average temperature sensor</label>
-    <ha-entity-picker data-key="avg_temp_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
-  </div>
 
-  <!-- 1. Language -->
-  <div class="acc-wrap">
-    <div class="acc-head" id="head-lang">
-      <ha-icon icon="mdi:translate"></ha-icon> ${t.edLang}
-      <span class="acc-arrow" id="arrow-lang">${this._open.lang?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-lang" style="display:${this._open.lang?'block':'none'}">
-      <div class="lang-grid">
-        ${Object.entries(AC_TRANSLATIONS).map(([code,tr])=>`
-          <div class="lang-btn ${lang===code?'on':''}" data-lang="${code}">
-            <img src="https://flagcdn.com/20x15/${tr.flag}.png" width="20" height="15" alt="${tr.lang}" style="border-radius:2px;flex-shrink:0;display:block;">
-            ${tr.lang}
-          </div>`).join('')}
+  <div style="display:flex;flex-direction:column;gap:8px;">
+    <!-- CHIP: Language -->
+    <div style="border:1px solid var(--divider-color);border-radius:12px;overflow:hidden;background:var(--secondary-background-color);">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;font-weight:600;font-size:14px;" id="chip-lang">
+        <ha-icon icon="mdi:translate" style="--mdi-icon-size:20px;color:var(--primary-color);"></ha-icon>
+        <span>Language</span>
+        <div style="margin-left:auto;font-size:16px;color:var(--secondary-text-color);transition:transform .2s;" id="arrow-lang">▼</div>
       </div>
-    </div>
-  </div>
-
-  <!-- 3.5 Features -->
-  <div class="acc-wrap">
-    <div class="acc-head" id="head-features">
-      <ha-icon icon="mdi:star-circle"></ha-icon> Features
-      <span class="acc-arrow" id="arrow-features">${this._open.features?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-features" style="display:${this._open.features?'block':'none'}">
-      <div class="row">
-        <label>Show average temperature (header)</label>
-        <input type="checkbox" id="feat-show-avg" ${ (this._config.features && this._config.features.show_avg_temp !== false) ? 'checked' : '' } />
-      </div>
-      <div class="row">
-        <label>Show welcome message</label>
-        <input type="checkbox" id="feat-show-welcome" ${ (this._config.features && this._config.features.show_welcome !== false) ? 'checked' : '' } />
-      </div>
-      <div class="row">
-        <label>Show Eco button</label>
-        <input type="checkbox" id="feat-show-eco" ${ (this._config.features && this._config.features.show_eco !== false) ? 'checked' : '' } />
-      </div>
-      <div class="row">
-        <label>Show air flow (fan speed)</label>
-        <input type="checkbox" id="feat-show-airflow" ${ (this._config.features && this._config.features.show_airflow !== false) ? 'checked' : '' } />
-      </div>
-      <div class="row">
-        <label>Show airflow direction button (swing)</label>
-        <input type="checkbox" id="feat-show-airflow-btn" ${ (this._config.features && this._config.features.show_airflow_btn !== false) ? 'checked' : '' } />
-      </div>
-      <div class="row">
-        <label>Show Fav button</label>
-        <input type="checkbox" id="feat-show-fav" ${ (this._config.features && this._config.features.show_fav !== false) ? 'checked' : '' } />
-      </div>
-      <div class="row">
-        <label>Show Clean button</label>
-        <input type="checkbox" id="feat-show-clean" ${ (this._config.features && this._config.features.show_clean !== false) ? 'checked' : '' } />
-      </div>
-
-      <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Room selector</div>
-      <div class="row">
-        <label>Show fine dust (PM2.5)</label>
-        <input type="checkbox" id="feat-show-pm25" ${ (this._config.features && this._config.features.show_pm25 !== false) ? 'checked' : '' } />
-      </div>
-      <div class="row">
-        <label>Show room temperature (in tabs)</label>
-        <input type="checkbox" id="feat-show-room-temp" ${ (this._config.features && this._config.features.show_room_temp !== false) ? 'checked' : '' } />
-      </div>
-      <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Metrics</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-cool" ${ (this._config.features && this._config.features.modes && this._config.features.modes.cool !== false) ? 'checked' : '' } /> Cool</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-heat" ${ (this._config.features && this._config.features.modes && this._config.features.modes.heat !== false) ? 'checked' : '' } /> Heat</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-dry" ${ (this._config.features && this._config.features.modes && this._config.features.modes.dry !== false) ? 'checked' : '' } /> Dry</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-fan_only" ${ (this._config.features && this._config.features.modes && this._config.features.modes.fan_only !== false) ? 'checked' : '' } /> Fan</label>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-modes-text" ${ (this._config.features && this._config.features.show_modes_text !== false) ? 'checked' : '' } /> Show modes text</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-modes-icon" ${ (this._config.features && this._config.features.show_modes_icon !== false) ? 'checked' : '' } /> Show modes icons</label>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-power-text" ${ (this._config.features && this._config.features.show_power_text !== false) ? 'checked' : '' } /> Show power text</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-power-icon" ${ (this._config.features && this._config.features.show_power_icon !== false) ? 'checked' : '' } /> Show power icon</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-timer-text" ${ (this._config.features && this._config.features.show_timer_text !== false) ? 'checked' : '' } /> Show timer text</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-timer-icon" ${ (this._config.features && this._config.features.show_timer_icon !== false) ? 'checked' : '' } /> Show timer icon</label>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-temp" disabled /> Temp (N/A)</label>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-temp" ${ (this._config.features && this._config.features.show_metrics_temp !== false) ? 'checked' : '' } /> Outdoor temp</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-humidity" ${ (this._config.features && this._config.features.show_metrics_humidity !== false) ? 'checked' : '' } /> Humidity</label>
-        <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-power" ${ (this._config.features && this._config.features.show_metrics_power !== false) ? 'checked' : '' } /> Power</label>
-      </div>
-    </div>
-  </div>
-
-    <!-- 3.6 Header Button -->
-    <div class="acc-wrap">
-      <div class="acc-head" id="head-hdrBtn">
-        <ha-icon icon="mdi:button-cursor"></ha-icon> Header Button
-        <span class="acc-arrow" id="arrow-hdrBtn">${this._open.hdrBtn?'▾':'▸'}</span>
-      </div>
-      <div class="acc-body" id="body-hdrBtn" style="display:${this._open.hdrBtn?'block':'none'}">
-        <div class="row">
-          <label>Show header button</label>
-          <input type="checkbox" id="hdr-btn-show" ${ (hdrBtnCfg.show) ? 'checked' : '' } />
-        </div>
-        <div class="row">
-          <label>Icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="hdr-btn-icon" placeholder="mdi:cog" value="${hdrBtnCfg.icon||''}" />
-            <span id="preview-hdr-btn-icon" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
-        </div>
-        <div class="row">
-          <label>Tap action</label>
-          <select id="hdr-btn-tap-action" style="padding:6px 8px;border-radius:6px;border:1px solid var(--divider-color);background:var(--card-background-color);color:var(--primary-text-color);font-size:13px;">
-            <option value="default" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'default' ? 'selected' : '' }>Default (toggle)</option>
-            <option value="toggle" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'toggle' ? 'selected' : '' }>Toggle</option>
-            <option value="more-info" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'more-info' ? 'selected' : '' }>More info</option>
-            <option value="navigate" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'navigate' ? 'selected' : '' }>Navigate</option>
-            <option value="url" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'url' ? 'selected' : '' }>URL</option>
-            <option value="perform-action" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'perform-action' ? 'selected' : '' }>Perform action</option>
-            <option value="assist" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'assist' ? 'selected' : '' }>Assist</option>
-            <option value="none" ${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'none' ? 'selected' : '' }>Nothing</option>
-          </select>
-        </div>
-        <div id="hdr-btn-tap-extra" style="display:${ (hdrBtnCfg.tap_action && (hdrBtnCfg.tap_action.action === 'navigate' || hdrBtnCfg.tap_action.action === 'url' || hdrBtnCfg.tap_action.action === 'perform-action')) ? 'block' : 'none' };">
-          <div class="row" id="hdr-btn-tap-nav-row" style="display:${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'navigate' ? 'flex' : 'none' }">
-            <label>Navigation path</label>
-            <input class="txt-inp" type="text" id="hdr-btn-tap-nav" placeholder="/lovelace/0" value="${ (hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.navigation_path) || '' }" />
-          </div>
-          <div class="row" id="hdr-btn-tap-url-row" style="display:${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'url' ? 'flex' : 'none' }">
-            <label>URL</label>
-            <input class="txt-inp" type="text" id="hdr-btn-tap-url" placeholder="https://..." value="${ (hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.url_path) || '' }" />
-          </div>
-          <div id="hdr-btn-tap-svc-row" style="display:${ hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.action === 'perform-action' ? 'block' : 'none' }">
-            <div class="row">
-              <label>Action (domain.service)</label>
-              <input class="txt-inp" type="text" id="hdr-btn-tap-svc" placeholder="light.toggle" value="${ (hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.perform_action) || '' }" />
-            </div>
-            <div class="row">
-              <label>Target entity</label>
-              <input class="txt-inp" type="text" id="hdr-btn-tap-svc-target" placeholder="light.living_room" value="${ (hdrBtnCfg.tap_action && hdrBtnCfg.tap_action.target && hdrBtnCfg.tap_action.target.entity_id) || '' }" />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <label>Hold action</label>
-          <select id="hdr-btn-hold-action" style="padding:6px 8px;border-radius:6px;border:1px solid var(--divider-color);background:var(--card-background-color);color:var(--primary-text-color);font-size:13px;">
-            <option value="none" ${ !hdrBtnCfg.hold_action || hdrBtnCfg.hold_action.action === 'none' ? 'selected' : '' }>Nothing</option>
-            <option value="default" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'default' ? 'selected' : '' }>Default (toggle)</option>
-            <option value="toggle" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'toggle' ? 'selected' : '' }>Toggle</option>
-            <option value="more-info" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'more-info' ? 'selected' : '' }>More info</option>
-            <option value="navigate" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'navigate' ? 'selected' : '' }>Navigate</option>
-            <option value="url" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'url' ? 'selected' : '' }>URL</option>
-            <option value="perform-action" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'perform-action' ? 'selected' : '' }>Perform action</option>
-            <option value="assist" ${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'assist' ? 'selected' : '' }>Assist</option>
-          </select>
-        </div>
-        <div id="hdr-btn-hold-extra" style="display:${ (hdrBtnCfg.hold_action && (hdrBtnCfg.hold_action.action === 'navigate' || hdrBtnCfg.hold_action.action === 'url' || hdrBtnCfg.hold_action.action === 'perform-action')) ? 'block' : 'none' };">
-          <div class="row" id="hdr-btn-hold-nav-row" style="display:${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'navigate' ? 'flex' : 'none' }">
-            <label>Navigation path</label>
-            <input class="txt-inp" type="text" id="hdr-btn-hold-nav" placeholder="/lovelace/0" value="${ (hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.navigation_path) || '' }" />
-          </div>
-          <div class="row" id="hdr-btn-hold-url-row" style="display:${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'url' ? 'flex' : 'none' }">
-            <label>URL</label>
-            <input class="txt-inp" type="text" id="hdr-btn-hold-url" placeholder="https://..." value="${ (hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.url_path) || '' }" />
-          </div>
-          <div id="hdr-btn-hold-svc-row" style="display:${ hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.action === 'perform-action' ? 'block' : 'none' }">
-            <div class="row">
-              <label>Action (domain.service)</label>
-              <input class="txt-inp" type="text" id="hdr-btn-hold-svc" placeholder="light.toggle" value="${ (hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.perform_action) || '' }" />
-            </div>
-            <div class="row">
-              <label>Target entity</label>
-              <input class="txt-inp" type="text" id="hdr-btn-hold-svc-target" placeholder="light.living_room" value="${ (hdrBtnCfg.hold_action && hdrBtnCfg.hold_action.target && hdrBtnCfg.hold_action.target.entity_id) || '' }" />
-            </div>
-          </div>
+      <div style="padding:14px 16px;border-top:1px solid var(--divider-color);background:var(--card-background-color,#fff);display:none;" id="body-lang">
+        <div class="lang-grid">
+          ${Object.entries(AC_TRANSLATIONS).map(([code,tr])=>`
+            <div class="lang-btn ${lang===code?'on':''}" data-lang="${code}">
+              <img src="https://flagcdn.com/20x15/${tr.flag}.png" width="20" height="15" alt="${tr.lang}" style="border-radius:2px;flex-shrink:0;display:block;">
+              ${tr.lang}
+            </div>`).join('')}
         </div>
       </div>
     </div>
 
-    <!-- 3. Icons -->
-    <div class="acc-wrap">
-      <div class="acc-head" id="head-icons">
-        <ha-icon icon="mdi:vector-square"></ha-icon> Icons
-        <span class="acc-arrow" id="arrow-icons">${this._open.icons?'▾':'▸'}</span>
+    <!-- CHIP: AC Config (Room Count + Rooms) -->
+    <div style="border:1px solid var(--divider-color);border-radius:12px;overflow:hidden;background:var(--secondary-background-color);">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;font-weight:600;font-size:14px;" id="chip-ac">
+        <ha-icon icon="mdi:thermostat" style="--mdi-icon-size:20px;color:var(--primary-color);"></ha-icon>
+        <span>AC Config</span>
+        <div style="margin-left:auto;font-size:16px;color:var(--secondary-text-color);transition:transform .2s;" id="arrow-ac">▼</div>
       </div>
-      <div class="acc-body" id="body-icons" style="display:${this._open.icons?'block':'none'}">
+      <div style="padding:14px 16px;border-top:1px solid var(--divider-color);background:var(--card-background-color,#fff);display:none;" id="body-ac">
+        <div class="row" style="margin-bottom:16px;">
+          <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:6px;font-weight:600;">Number of Rooms</label>
+          <input type="range" id="room-count-slider" min="1" max="8" value="${roomCount}" style="width:100%;accent-color:var(--primary-color,#03a9f4);cursor:pointer;margin-bottom:8px;">
+          <span style="font-size:12px;color:var(--secondary-text-color);text-align:center;" id="room-count-display">${roomCount} Room${roomCount!==1?'s':''}</span>
+        </div>
+        ${roomRows}
+      </div>
+    </div>
+
+    <!-- CHIP: Features -->
+    <div style="border:1px solid var(--divider-color);border-radius:12px;overflow:hidden;background:var(--secondary-background-color);">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;font-weight:600;font-size:14px;" id="chip-features">
+        <ha-icon icon="mdi:star-circle" style="--mdi-icon-size:20px;color:var(--primary-color);"></ha-icon>
+        <span>Features</span>
+        <div style="margin-left:auto;font-size:16px;color:var(--secondary-text-color);transition:transform .2s;" id="arrow-features">▼</div>
+      </div>
+      <div style="padding:14px 16px;border-top:1px solid var(--divider-color);background:var(--card-background-color,#fff);display:none;" id="body-features">
+        <div style="font-weight:700;color:var(--primary-color);margin-bottom:10px;font-size:13px;">Main Features</div>
         <div class="row">
-          <label>Eco icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-eco" placeholder="mdi:leaf" value="${icons.eco||''}"/>
-            <span id="preview-icon-eco" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-welcome" ${ (this._config.features && this._config.features.show_welcome !== false) ? 'checked' : '' } /> Show welcome message</label>
         </div>
         <div class="row">
-          <label>Fav icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-fav" placeholder="mdi:heart" value="${icons.fav||''}"/>
-            <span id="preview-icon-fav" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-avg" ${ (this._config.features && this._config.features.show_avg_temp !== false) ? 'checked' : '' } /> Show average temperature</label>
         </div>
         <div class="row">
-          <label>Clean icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-clean" placeholder="mdi:broom" value="${icons.clean||''}"/>
-            <span id="preview-icon-clean" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-eco" ${ (this._config.features && this._config.features.show_eco !== false) ? 'checked' : '' } /> Show Eco button</label>
         </div>
         <div class="row">
-          <label>Power icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-power" placeholder="mdi:power" value="${icons.power||''}"/>
-            <span id="preview-icon-power" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-airflow" ${ (this._config.features && this._config.features.show_airflow !== false) ? 'checked' : '' } /> Show air flow</label>
+        </div>
+        <div class="row" style="margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-airflow-btn" ${ (this._config.features && this._config.features.show_airflow_btn !== false) ? 'checked' : '' } /> Show airflow direction</label>
+        </div>
+        
+        <div style="font-weight:700;color:var(--primary-color);margin-bottom:10px;font-size:13px;border-top:1px solid var(--divider-color);padding-top:10px;">Room Selector</div>
+        <div class="row">
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-pm25" ${ (this._config.features && this._config.features.show_pm25 !== false) ? 'checked' : '' } /> Show fine dust (PM2.5)</label>
+        </div>
+        <div class="row" style="margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-room-temp" ${ (this._config.features && this._config.features.show_room_temp !== false) ? 'checked' : '' } /> Show room temperature</label>
+        </div>
+
+        <div style="font-weight:700;color:var(--primary-color);margin-bottom:10px;font-size:13px;border-top:1px solid var(--divider-color);padding-top:10px;">Modes</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-cool" ${ (this._config.features && this._config.features.modes && this._config.features.modes.cool !== false) ? 'checked' : '' } /> Cool</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-heat" ${ (this._config.features && this._config.features.modes && this._config.features.modes.heat !== false) ? 'checked' : '' } /> Heat</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-dry" ${ (this._config.features && this._config.features.modes && this._config.features.modes.dry !== false) ? 'checked' : '' } /> Dry</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-mode-fan_only" ${ (this._config.features && this._config.features.modes && this._config.features.modes.fan_only !== false) ? 'checked' : '' } /> Fan</label>
+        </div>
+
+        <div style="font-weight:700;color:var(--primary-color);margin-bottom:10px;font-size:13px;border-top:1px solid var(--divider-color);padding-top:10px;">Metrics</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-modes-text" ${ (this._config.features && this._config.features.show_modes_text !== false) ? 'checked' : '' } /> Show modes text</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-modes-icon" ${ (this._config.features && this._config.features.show_modes_icon !== false) ? 'checked' : '' } /> Show modes icons</label>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-temp" ${ (this._config.features && this._config.features.show_metrics_temp !== false) ? 'checked' : '' } /> Outdoor temp</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-humidity" ${ (this._config.features && this._config.features.show_metrics_humidity !== false) ? 'checked' : '' } /> Humidity</label>
+          <label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="feat-show-metric-power" ${ (this._config.features && this._config.features.show_metrics_power !== false) ? 'checked' : '' } /> Power</label>
         </div>
         <div class="row">
-          <label>Timer icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-timer" placeholder="mdi:timer" value="${icons.timer||''}"/>
-            <span id="preview-icon-timer" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-power-text" ${ (this._config.features && this._config.features.show_power_text !== false) ? 'checked' : '' } /> Show power text</label>
         </div>
         <div class="row">
-          <label>All-off icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-alloff" placeholder="mdi:power-off" value="${icons.all_off||''}"/>
-            <span id="preview-icon-alloff" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
-        </div>
-        <div style="margin-top:8px;font-weight:700;color:var(--secondary-text-color);">Header & Mode icons</div>
-        <div class="row">
-          <label>Header icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-header" placeholder="mdi:home" value="${icons.header||''}"/>
-            <span id="preview-icon-header" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
-        </div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
-          <div style="flex:1;min-width:160px;">
-            <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;display:block">Cool mode icon</label>
-            <div style="display:flex;align-items:center;gap:8px;"><input class="txt-inp" type="text" id="inp-icon-mode-cool" placeholder="mdi:snowflake" value="${icons.mode_cool||''}"/><span id="preview-icon-mode-cool" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span></div>
-          </div>
-          <div style="flex:1;min-width:160px;">
-            <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;display:block">Heat mode icon</label>
-            <div style="display:flex;align-items:center;gap:8px;"><input class="txt-inp" type="text" id="inp-icon-mode-heat" placeholder="mdi:fire" value="${icons.mode_heat||''}"/><span id="preview-icon-mode-heat" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span></div>
-          </div>
-          <div style="flex:1;min-width:160px;">
-            <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;display:block">Dry mode icon</label>
-            <div style="display:flex;align-items:center;gap:8px;"><input class="txt-inp" type="text" id="inp-icon-mode-dry" placeholder="mdi:water-off" value="${icons.mode_dry||''}"/><span id="preview-icon-mode-dry" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span></div>
-          </div>
-          <div style="flex:1;min-width:160px;">
-            <label style="font-size:12px;color:var(--secondary-text-color);margin-bottom:4px;display:block">Auto/Fan mode icon</label>
-            <div style="display:flex;align-items:center;gap:8px;"><input class="txt-inp" type="text" id="inp-icon-mode-fan_only" placeholder="mdi:autorenew" value="${icons.mode_fan_only||''}"/><span id="preview-icon-mode-fan_only" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span></div>
-          </div>
-        </div>
-        <div style="margin-top:6px;font-weight:700;color:var(--secondary-text-color);">Metrics icons</div>
-        <div class="row">
-          <label>Temperature metric icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-metric-temp" placeholder="mdi:thermometer" value="${icons.metric_temp||''}"/>
-            <span id="preview-icon-metric-temp" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
-        </div>
-        <div class="row">
-          <label>Humidity metric icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-metric-humidity" placeholder="mdi:water-percent" value="${icons.metric_humidity||''}"/>
-            <span id="preview-icon-metric-humidity" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
-        </div>
-        <div class="row">
-          <label>Power metric icon</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input class="txt-inp" type="text" id="inp-icon-metric-power" placeholder="mdi:flash" value="${icons.metric_power||''}"/>
-            <span id="preview-icon-metric-power" style="min-width:28px;text-align:center;color:var(--secondary-text-color);"></span>
-          </div>
+          <label style="display:flex;align-items:center;gap:8px;margin-bottom:0;"><input type="checkbox" id="feat-show-timer-text" ${ (this._config.features && this._config.features.show_timer_text !== false) ? 'checked' : '' } /> Show timer text</label>
         </div>
       </div>
     </div>
 
-    <!-- 2. Số phòng -->
-  <div class="acc-wrap">
-    <div class="acc-head" id="head-roomcount">
-      <ha-icon icon="mdi:home-group"></ha-icon> ${t.edRoomsHeader(roomCount)}
-      <span class="acc-arrow" id="arrow-roomcount">${this._open.roomcount?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-roomcount" style="display:${this._open.roomcount?'block':'none'}">
-      <div class="row">
-        <label style="margin-bottom:8px;">${t.edRoomCountLabel(roomCount)}</label>
-        <div style="display:flex;align-items:center;gap:12px;">
-          <input type="range" id="inp-room-count" min="1" max="8" step="1" value="${roomCount}"
-            style="flex:1;height:4px;cursor:pointer;accent-color:var(--primary-color);">
-          <span id="room-count-display" style="min-width:24px;font-weight:700;font-size:16px;color:var(--primary-color);">${roomCount}</span>
+    <!-- CHIP: Sensors -->
+    <div style="border:1px solid var(--divider-color);border-radius:12px;overflow:hidden;background:var(--secondary-background-color);">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;font-weight:600;font-size:14px;" id="chip-sensors">
+        <ha-icon icon="mdi:broadcast" style="--mdi-icon-size:20px;color:var(--primary-color);"></ha-icon>
+        <span>Sensors</span>
+        <div style="margin-left:auto;font-size:16px;color:var(--secondary-text-color);transition:transform .2s;" id="arrow-sensors">▼</div>
+      </div>
+      <div style="padding:14px 16px;border-top:1px solid var(--divider-color);background:var(--card-background-color,#fff);display:none;" id="body-sensors">
+        <div class="row">
+          <label>Average temperature sensor</label>
+          <ha-entity-picker data-key="avg_temp_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
         </div>
-        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--secondary-text-color);margin-top:4px;">
-          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
+        <div class="row">
+          <label>Fine dust (PM2.5)</label>
+          <ha-entity-picker data-key="pm25_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+        </div>
+        <div class="row">
+          <label>Outdoor temperature</label>
+          <ha-entity-picker data-key="outdoor_temp_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+        </div>
+        <div class="row">
+          <label>Humidity</label>
+          <ha-entity-picker data-key="humidity_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+        </div>
+        <div class="row">
+          <label>Power consumption</label>
+          <ha-entity-picker data-key="power_entity" data-domain="sensor" allow-custom-entity></ha-entity-picker>
+        </div>
+        <div class="row">
+          <label>Timer State Helper (input_text)</label>
+          <ha-entity-picker data-key="timer_state_entity" data-domain="input_text" allow-custom-entity></ha-entity-picker>
+          <span style="font-size:10px;color:var(--secondary-text-color);margin-top:4px;display:block;">Use input_text helper for cross-device timer sync</span>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- 3. Rooms -->
-  <div class="acc-wrap">
-    <div class="acc-head" id="head-rooms">
-      <ha-icon icon="mdi:air-conditioner"></ha-icon> ${t.edRoomsHeader(roomCount)}
-      <span class="acc-arrow" id="arrow-rooms">${this._open.rooms?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-rooms" style="display:${this._open.rooms?'block':'none'}">
-      ${roomRows}
-    </div>
-  </div>
-
-  <!-- 3. Sensors -->
-  <div class="acc-wrap">
-    <div class="acc-head" id="head-sensors">
-      <ha-icon icon="mdi:broadcast"></ha-icon> ${t.edSensors}
-      <span class="acc-arrow" id="arrow-sensors">${this._open.sensors?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-sensors" style="display:${this._open.sensors?'block':'none'}">
-      ${this._entityField('pm25_entity',           t.edPm25,        'sensor')}
-      ${this._entityField('outdoor_temp_entity',   t.edOutdoorTemp, 'sensor')}
-      ${this._entityField('humidity_entity',       t.edHumidity,    'sensor')}
-      ${this._entityField('power_entity',          t.edPower,       'sensor')}
-    </div>
-  </div>
-
-  <!-- 3.5 Timer Sync -->
-  <div class="acc-wrap">
-    <div class="acc-head" id="head-timer">
-      <ha-icon icon="mdi:sync"></ha-icon> Timer Sync across Devices
-      <span class="acc-arrow" id="arrow-timer">${this._open.timer?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-timer" style="display:${this._open.timer?'block':'none'}">
-      <div style="font-size:12px;color:var(--secondary-text-color);margin-bottom:8px;">
-        Optional: Select an <code>input_text</code> helper to sync timers across all devices.
-        Timers set on any device will instantly appear on all others.
+    <!-- CHIP: Visual Settings -->
+    <div style="border:1px solid var(--divider-color);border-radius:12px;overflow:hidden;background:var(--secondary-background-color);">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;font-weight:600;font-size:14px;" id="chip-visual">
+        <ha-icon icon="mdi:palette" style="--mdi-icon-size:20px;color:var(--primary-color);"></ha-icon>
+        <span>Visual Settings</span>
+        <div style="margin-left:auto;font-size:16px;color:var(--secondary-text-color);transition:transform .2s;" id="arrow-visual">▼</div>
       </div>
-      <div class="row">
-        <label>Timer State Helper (input_text)</label>
-        <ha-entity-picker data-key="timer_state_entity" data-domain="input_text" allow-custom-entity></ha-entity-picker>
-        <span style="font-size:10px;color:var(--secondary-text-color);margin-top:4px;display:block;">
-          📌 Leave empty to use local storage only (timers won't sync across devices)
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. Background -->
-  <div class="acc-wrap">
-    <div class="acc-head" id="head-bg">
-      <ha-icon icon="mdi:palette"></ha-icon> ${t.edBg}
-      <span class="acc-arrow" id="arrow-bg">${this._open.bg?'▾':'▸'}</span>
-    </div>
-    <div class="acc-body" id="body-bg" style="display:${this._open.bg?'block':'none'}">
-      <div style="font-size:11px;font-weight:700;color:var(--secondary-text-color);margin-bottom:8px;letter-spacing:.4px;">${t.bgPresets}</div>
-      <div class="bg-grid">
-        ${(()=>{const _op=typeof cfg.bg_opacity==='number'?Math.round(Math.min(100,Math.max(0,cfg.bg_opacity))):75;const _a1=Math.round(_op*2.55).toString(16).padStart(2,'0');const _a2=Math.round(_op*0.65*2.55).toString(16).padStart(2,'0');return AC_BG_PRESETS.map(p=>{const c1=p.c1||'#888',c2=p.c2||'#444';const isC=p.id==='custom';return`<div class="bgs ${bgP===p.id?'on':''}" data-bg="${p.id}" style="${isC?'background:linear-gradient(135deg,#e0e0e0,#bdbdbd);color:#555;text-shadow:none;':'background:linear-gradient(135deg,'+c1+_a1+' 0%,'+c2+_a2+' 100%);'}">${p.label}</div>`;}).join('')})()}
-      </div>
-      ${bgP === 'custom' ? `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        ${this._colorRow('bg_color1', t.color1)}
-        ${this._colorRow('bg_color2', t.color2)}
-      </div>` : ''}
-      <div style="margin-top:12px;">
-        <div style="font-size:11px;font-weight:700;color:var(--secondary-text-color);margin-bottom:6px;letter-spacing:.4px;">${t.bgOpacity}: ${typeof cfg.bg_opacity === 'number' ? cfg.bg_opacity : 75}%</div>
-        <input type="range" id="bg-opacity-slider" min="0" max="100" value="${typeof cfg.bg_opacity === 'number' ? cfg.bg_opacity : 75}" style="width:100%;accent-color:var(--primary-color,#03a9f4);cursor:pointer;">
+      <div style="padding:14px 16px;border-top:1px solid var(--divider-color);background:var(--card-background-color,#fff);display:none;" id="body-visual">
+        <div style="font-size:11px;font-weight:700;color:var(--secondary-text-color);margin-bottom:8px;letter-spacing:.4px;">${t.bgPresets}</div>
+        <div class="bg-grid">
+          ${(()=>{const _op=typeof cfg.bg_opacity==='number'?Math.round(Math.min(100,Math.max(0,cfg.bg_opacity))):75;const _a1=Math.round(_op*2.55).toString(16).padStart(2,'0');const _a2=Math.round(_op*0.65*2.55).toString(16).padStart(2,'0');return AC_BG_PRESETS.map(p=>{const c1=p.c1||'#888',c2=p.c2||'#444';const isC=p.id==='custom';return`<div class="bgs ${bgP===p.id?'on':''}" data-bg="${p.id}" style="${isC?'background:linear-gradient(135deg,#e0e0e0,#bdbdbd);color:#555;text-shadow:none;':'background:linear-gradient(135deg,'+c1+_a1+' 0%,'+c2+_a2+' 100%);'}">${p.label}</div>`;}).join('')})()}
+        </div>
+        ${bgP === 'custom' ? `
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          ${this._colorRow('bg_color1', t.color1)}
+          ${this._colorRow('bg_color2', t.color2)}
+        </div>` : ''}
+        <div style="margin-top:12px;">
+          <div style="font-size:11px;font-weight:700;color:var(--secondary-text-color);margin-bottom:6px;letter-spacing:.4px;">${t.bgOpacity}: ${typeof cfg.bg_opacity === 'number' ? cfg.bg_opacity : 75}%</div>
+          <input type="range" id="bg-opacity-slider" min="0" max="100" value="${typeof cfg.bg_opacity === 'number' ? cfg.bg_opacity : 75}" style="width:100%;accent-color:var(--primary-color,#03a9f4);cursor:pointer;">
+        </div>
       </div>
     </div>
   </div>
@@ -2978,9 +2760,9 @@ class MultiAcCardEditor extends HTMLElement {
   _bindEvents() {
     const sr = this.shadowRoot;
 
-    // accordion
-    ['lang','roomcount','rooms','sensors','timer','features','hdrBtn','icons','bg'].forEach(id => {
-      const hdr = sr.getElementById('head-' + id);
+    // Chip toggles
+    ['lang','ac','features','sensors','visual'].forEach(id => {
+      const hdr = sr.getElementById('chip-' + id);
       if (hdr) hdr.addEventListener('click', () => this._toggleSection(id));
     });
 
