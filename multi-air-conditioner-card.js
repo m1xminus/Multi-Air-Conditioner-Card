@@ -1137,9 +1137,14 @@ class AcControllerCardV2 extends HTMLElement {
       + '|' + (this._attrOf(h, id, 'swing_mode') || '')
       + '|' + (this._attrOf(h, id, 'preset_mode') || '');
 
-    // Add room tab states for badge updates
+    // Add all room states + temps for accurate badge updates
     for (var i = 0; i < ROOMS.length; i++) {
-      stateHash += '|' + (this._stateOf(h, ROOMS[i].id) || '');
+      var rid = ROOMS[i].id;
+      var entCfg = (this._config && this._config.entities && this._config.entities[i]) || {};
+      var cid = entCfg.entity_id || rid;
+      stateHash += '|' + (this._stateOf(h, cid) || '');
+      if (entCfg.temp_entity) stateHash += '|' + (this._stateOf(h, entCfg.temp_entity) || '');
+      else stateHash += '|' + (this._attrOf(h, cid, 'current_temperature') || '');
     }
 
     if (stateHash === this._lastStateHash) return;  // No actual change detected
@@ -1284,6 +1289,23 @@ class AcControllerCardV2 extends HTMLElement {
         self2._startTick(parseInt(idx));
       }
     });
+
+    // Preload all room images so tab switches are instant
+    this._preloadImages();
+  }
+
+  _preloadImages() {
+    if (this._imagesPreloaded) return;
+    this._imagesPreloaded = true;
+    var ents = (this._config && this._config.entities) || [];
+    for (var i = 0; i < ROOMS.length; i++) {
+      var entCfg = ents[i] || {};
+      var src = entCfg.image_url || ROOM_IMAGES[i];
+      if (src) {
+        var img = new Image();
+        img.src = src;
+      }
+    }
   }
 
   _arc(cx, cy, r, a1, a2) {
@@ -1733,9 +1755,7 @@ class AcControllerCardV2 extends HTMLElement {
 + '  <img id="room-photo" class="room-img-el" src="' + (roomCfg.image_url || ROOM_IMAGES[this._activeIdx]) + '" alt="room">'
 + '  <div class="ac-overlay">'
 + '    <span class="ac-led ' + (isOn ? 'led-on' : 'led-off') + '"></span>'
-+ (this._timers[this._activeIdx] 
-    ? '    <span class="ac-overlay-timer">Timer ' + (this._timers[this._activeIdx].mode === 'on' ? 'ON' : 'OFF') + ' in ' + this._fmtRemainHHMM(this._activeIdx) + '</span>'
-    : '    <span class="ac-overlay-txt">' + (isOn ? tr.overlayOn : tr.overlayOff) + '</span>')
++ '    <span class="ac-overlay-txt">' + (isOn ? tr.overlayOn : tr.overlayOff) + '</span>'
 + modeChip
 + '  </div>'
 + '  <div class="img-temp-badge">' + curTempStr + '<span>&#176;C</span></div>'
@@ -2104,6 +2124,13 @@ class AcControllerCardV2 extends HTMLElement {
     if (!t) return;
     if (t.int) clearInterval(t.int);
     self._timerSave();
+
+    // Cache DOM references to avoid querySelector every tick
+    var sr = self.shadowRoot;
+    var cachedTimerCd = sr ? sr.getElementById('timer-cd') : null;
+    var cachedRoomBtn = sr ? sr.querySelector('[data-room="' + roomIdx + '"]') : null;
+    var cachedTabTimer = cachedRoomBtn ? cachedRoomBtn.querySelector('.room-tab-timer') : null;
+
     t.int = setInterval(function() {
       var tr2 = self._timers[roomIdx];
       if (!tr2) { return; }
@@ -2113,67 +2140,52 @@ class AcControllerCardV2 extends HTMLElement {
         clearInterval(tr2.int); tr2.int = null;
         delete self._timers[roomIdx];
         self._timerSave();
+        // Refresh cached refs (DOM may have been rebuilt)
         var sr = self.shadowRoot;
         if (sr) {
           var el = sr.getElementById('timer-cd');
           var btn2 = sr.getElementById('btn-timer');
           if (el)   el.textContent = '';
           if (btn2) btn2.classList.remove('timer-btn--active');
-          // Clear room tab timer display
           var roomBtn = sr.querySelector('[data-room="' + roomIdx + '"]');
           if (roomBtn) {
             var tabTimer = roomBtn.querySelector('.room-tab-timer');
             if (tabTimer) tabTimer.remove();
           }
-          // Clear overlay timer if viewing this room
-          if (self._activeIdx === parseInt(roomIdx)) {
-            var overlayTimer = sr.querySelector('.ac-overlay-timer');
-            if (overlayTimer) {
-              var overlay = overlayTimer.parentElement;
-              overlayTimer.remove();
-              // Add status text back
-              if (overlay && !overlay.querySelector('.ac-overlay-txt')) {
-                var overlayTxt = document.createElement('span');
-                overlayTxt.className = 'ac-overlay-txt';
-                overlayTxt.textContent = 'OFF';
-                overlay.insertBefore(overlayTxt, overlay.querySelector('.ac-mode-chip'));
-              }
-            }
-          }
         }
         var id = ROOMS[roomIdx].id;
         self._call('climate', 'set_hvac_mode', { entity_id: id, hvac_mode: tr2.mode === 'off' ? 'off' : 'cool' });
       } else {
-        // Update timer displays every tick
+        // Use cached refs if still valid, otherwise re-query
         var sr = self.shadowRoot;
         if (!sr) return;
         var displayed = self._fmtRemain(roomIdx);
-        var displayedHHMM = self._fmtRemainHHMM(roomIdx);
 
-        // Always update overlay timer if viewing this room (uses HHMM format)
+        // Update timer button countdown if viewing this room
         if (self._activeIdx === parseInt(roomIdx)) {
-          var el = sr.getElementById('timer-cd');
-          if (el) el.textContent = displayed;
-          var overlayTimer = sr.querySelector('.ac-overlay-timer');
-          if (overlayTimer) {
-            overlayTimer.textContent = 'Timer ' + (tr2.mode === 'on' ? 'ON' : 'OFF') + ' in ' + displayedHHMM;
-          }
+          if (!cachedTimerCd || !cachedTimerCd.isConnected) cachedTimerCd = sr.getElementById('timer-cd');
+          if (cachedTimerCd) cachedTimerCd.textContent = displayed;
         }
 
-        // Update room tab timer (uses short format)
-        var roomBtn = sr.querySelector('[data-room="' + roomIdx + '"]');
-        if (roomBtn) {
-          var tabTimer = roomBtn.querySelector('.room-tab-timer');
-          if (tabTimer) {
-            tabTimer.textContent = displayed;
+        // Update room tab timer
+        if (!cachedRoomBtn || !cachedRoomBtn.isConnected) {
+          cachedRoomBtn = sr.querySelector('[data-room="' + roomIdx + '"]');
+          cachedTabTimer = null; // invalidate child cache
+        }
+        if (cachedRoomBtn) {
+          if (!cachedTabTimer || !cachedTabTimer.isConnected) {
+            cachedTabTimer = cachedRoomBtn.querySelector('.room-tab-timer');
+          }
+          if (cachedTabTimer) {
+            cachedTabTimer.textContent = displayed;
           } else {
-            // Create timer span before the status badge
             var timerSpan = document.createElement('span');
             timerSpan.className = 'room-tab-timer';
             timerSpan.textContent = displayed;
-            var badge = roomBtn.querySelector('.room-status-badge');
-            if (badge) roomBtn.insertBefore(timerSpan, badge);
-            else roomBtn.appendChild(timerSpan);
+            var badge = cachedRoomBtn.querySelector('.room-status-badge');
+            if (badge) cachedRoomBtn.insertBefore(timerSpan, badge);
+            else cachedRoomBtn.appendChild(timerSpan);
+            cachedTabTimer = timerSpan;
           }
         }
       }
@@ -2384,7 +2396,13 @@ class MultiAcCardEditor extends HTMLElement {
 
   set hass(h) {
     this._hass = h;
-    this._syncPickers();
+    // Throttle _syncPickers: only run at most once per 2 seconds
+    if (!this._syncPickersTimer) {
+      this._syncPickersTimer = setTimeout(() => {
+        this._syncPickersTimer = null;
+        this._syncPickers();
+      }, 2000);
+    }
   }
 
   get t() { return AC_TRANSLATIONS[this._config.language || 'vi'] || AC_TRANSLATIONS.vi; }
@@ -2431,7 +2449,8 @@ class MultiAcCardEditor extends HTMLElement {
       });
     };
     apply();
-    requestAnimationFrame(() => requestAnimationFrame(apply));
+    // Single deferred apply instead of double-rAF
+    requestAnimationFrame(apply);
   }
 
   // ── Toggle accordion mà không full re-render (giữ picker state) ────────────
