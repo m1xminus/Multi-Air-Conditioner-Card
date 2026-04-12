@@ -2347,7 +2347,7 @@ class MultiAcCardEditor extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this._config = { ...AC_DEFAULT_CONFIG };
     this._hass   = null;
-    this._open   = { lang: true, roomcount: true, rooms: true, sensors: true, features: true, hdrBtn: false, icons: false, colors: false, bg: true };
+    this._open   = { lang: true, roomcount: true, rooms: true, sensors: true, timer: false, features: true, hdrBtn: false, icons: false, colors: false, bg: true };
     this._picker = null;
   }
 
@@ -2926,6 +2926,27 @@ class MultiAcCardEditor extends HTMLElement {
     </div>
   </div>
 
+  <!-- 3.5 Timer Sync -->
+  <div class="acc-wrap">
+    <div class="acc-head" id="head-timer">
+      <ha-icon icon="mdi:sync"></ha-icon> Timer Sync across Devices
+      <span class="acc-arrow" id="arrow-timer">${this._open.timer?'▾':'▸'}</span>
+    </div>
+    <div class="acc-body" id="body-timer" style="display:${this._open.timer?'block':'none'}">
+      <div style="font-size:12px;color:var(--secondary-text-color);margin-bottom:8px;">
+        Optional: Select an <code>input_text</code> helper to sync timers across all devices.
+        Timers set on any device will instantly appear on all others.
+      </div>
+      <div class="row">
+        <label>Timer State Helper (input_text)</label>
+        <ha-entity-picker data-key="timer_state_entity" data-domain="input_text" allow-custom-entity></ha-entity-picker>
+        <span style="font-size:10px;color:var(--secondary-text-color);margin-top:4px;display:block;">
+          📌 Leave empty to use local storage only (timers won't sync across devices)
+        </span>
+      </div>
+    </div>
+  </div>
+
   <!-- 4. Background -->
   <div class="acc-wrap">
     <div class="acc-head" id="head-bg">
@@ -2958,7 +2979,7 @@ class MultiAcCardEditor extends HTMLElement {
     const sr = this.shadowRoot;
 
     // accordion
-    ['lang','roomcount','rooms','sensors','features','hdrBtn','icons','bg'].forEach(id => {
+    ['lang','roomcount','rooms','sensors','timer','features','hdrBtn','icons','bg'].forEach(id => {
       const hdr = sr.getElementById('head-' + id);
       if (hdr) hdr.addEventListener('click', () => this._toggleSection(id));
     });
