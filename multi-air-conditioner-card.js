@@ -1166,8 +1166,11 @@ class AcControllerCardV2 extends HTMLElement {
     if (!hassObj || !this._config || !this._config.timer_state_entity) return;
     try {
       var entityState = hassObj.states[this._config.timer_state_entity];
-      if (!entityState || !entityState.attributes) return;
-      var haTimers = entityState.attributes.timers;
+      if (!entityState) return;
+      var timerJson = entityState.state;
+      if (!timerJson || timerJson === 'unknown' || timerJson === 'unavailable') return;
+      // Parse JSON from input_text helper
+      var haTimers = JSON.parse(timerJson);
       if (!haTimers || typeof haTimers !== 'object') return;
       var now = Date.now();
       // Update timers from HA, but preserve local modifications if more recent
@@ -2060,14 +2063,14 @@ class AcControllerCardV2 extends HTMLElement {
   _updateTimerEntity(timers) {
     if (!this._hass || !this._config || !this._config.timer_state_entity) return;
     try {
-      // Use input_helper or custom service to store timer data
-      // This assumes a helper entity with a service to update it
-      this._hass.callService('input_helper', 'set_timer_state', {
+      // Update input_text helper with timer JSON
+      var timerJson = JSON.stringify(timers);
+      this._hass.callService('input_text', 'set_value', {
         entity_id: this._config.timer_state_entity,
-        timers: timers
+        value: timerJson
       });
     } catch(e) {
-      // Fallback: try to set via mqtt or REST if available
+      // Silently fail if service unavailable
     }
   }
 
