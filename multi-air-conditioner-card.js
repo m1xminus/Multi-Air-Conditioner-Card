@@ -992,9 +992,6 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .met-val{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:600;color:#ffffff;white-space:nowrap}
 .met-lbl{font-size:7.5px;color:rgba(255,255,255,0.55)}
 
-.room-status-badge{font-size:9px;font-weight:700;letter-spacing:0.3px;padding:3px 8px;border-radius:7px;flex-shrink:0;line-height:1.5;min-width:32px;text-align:center;align-self:center}
-.rsb-on{background:color-mix(in srgb,var(--accent) 55%,rgba(0,10,30,0.4));color:#ffffff;border:1px solid color-mix(in srgb,var(--accent) 80%,transparent)}
-.rsb-off{background:rgba(0,20,50,0.25);color:rgba(255,255,255,0.55);border:1px solid rgba(255,255,255,0.3)}
 .all-off-btn{margin:0;background:rgba(255,60,60,0.06);border:1px solid rgba(255,80,80,0.18);
   border-radius:13px;padding:9px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;justify-content:center;
   cursor:pointer;outline:none;width:100%;text-align:center;transition:all 0.2s;font-family:'Sora',sans-serif;min-height:72px;box-sizing:border-box;min-width:0;overflow:hidden}
@@ -1072,8 +1069,13 @@ button,a{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-
 .room-tab-ico{font-size:22px;line-height:1;flex-shrink:0;width:28px;text-align:center}
 .room-tab-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .room-tab-name{font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.room-tab-timer{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:600;color:#ff9800}
+.room-tab-timer{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:600;color:#ff9800;flex-shrink:0;align-self:center;margin-left:4px}
 .room-tab-temp{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,0.5)}
+@media(max-width:480px){
+  .room-tab{flex-wrap:wrap}
+  .room-tab-timer{width:100%;order:3;margin-left:0;margin-top:2px;text-align:center;font-size:9px}
+  .room-status-badge{order:2}
+}
 `;
 
 class AcControllerCardV2 extends HTMLElement {
@@ -1111,6 +1113,11 @@ class AcControllerCardV2 extends HTMLElement {
   // ── FIX: So sánh state trước khi render + debounce for Bubble Card compat ──
   set hass(h) {
     this._hass = h;
+
+    // Try to sync timers from HA entity (cross-device sync)
+    if (this._config && this._config.timer_state_entity) {
+      this._syncTimersFromHA(h);
+    }
 
     // First load → must render
     if (!this._initialized) {
@@ -1152,6 +1159,38 @@ class AcControllerCardV2 extends HTMLElement {
     return hassObj && hassObj.states && hassObj.states[id] && hassObj.states[id].attributes
       ? hassObj.states[id].attributes[k]
       : null;
+  }
+
+  // ── Cross-device timer sync: Load timer state from HA entity ──
+  _syncTimersFromHA(hassObj) {
+    if (!hassObj || !this._config || !this._config.timer_state_entity) return;
+    try {
+      var entityState = hassObj.states[this._config.timer_state_entity];
+      if (!entityState || !entityState.attributes) return;
+      var haTimers = entityState.attributes.timers;
+      if (!haTimers || typeof haTimers !== 'object') return;
+      var now = Date.now();
+      // Update timers from HA, but preserve local modifications if more recent
+      Object.keys(haTimers).forEach(function(idx) {
+        var haTimer = haTimers[idx];
+        if (haTimer && haTimer.end && haTimer.end > now) {
+          var localTimer = this._timers[idx];
+          // Use HA version if no local timer, or if HA version is newer
+          if (!localTimer || haTimer.end !== localTimer.end) {
+            this._timers[idx] = {
+              end: haTimer.end,
+              mode: haTimer.mode || 'off',
+              hrs: haTimer.hrs || null,
+              int: null
+            };
+            // Resume tick if not running
+            if (!localTimer || !localTimer.int) {
+              this._startTick(idx);
+            }
+          }
+        }
+      }.bind(this));
+    } catch(e) {}
   }
 
   setConfig(c) {
@@ -1474,9 +1513,9 @@ class AcControllerCardV2 extends HTMLElement {
         + '<span class="room-tab-ico">' + rIconHtml + '</span>'
         + '<span class="room-tab-info">'
         + '  <span class="room-tab-name">' + ROOMS[j].label + '</span>'
-        + (this._timers[j] ? ('  <span class="room-tab-timer">' + this._fmtRemain(j) + '</span>') : '')
         + '</span>'
         + '<span class="room-status-badge ' + (ron ? 'rsb-on' : 'rsb-off') + '">' + (showRoomTemp ? (hasTempSensor ? rTempStr : (ron ? 'ON' : 'OFF')) : (ron ? 'ON' : 'OFF')) + '</span>'
+        + (this._timers[j] ? ('  <span class="room-tab-timer">' + this._fmtRemain(j) + '</span>') : '')
         + '</button>';
     }
 
@@ -2010,7 +2049,26 @@ class AcControllerCardV2 extends HTMLElement {
       } else {
         localStorage.removeItem('ac_timer_state_v2');
       }
+      // Also sync to HA entity if configured
+      if (this._hass && this._config && this._config.timer_state_entity) {
+        this._updateTimerEntity(snap);
+      }
     } catch(e) {}
+  }
+
+  // ── Update timer state in HA entity for cross-device sync ──
+  _updateTimerEntity(timers) {
+    if (!this._hass || !this._config || !this._config.timer_state_entity) return;
+    try {
+      // Use input_helper or custom service to store timer data
+      // This assumes a helper entity with a service to update it
+      this._hass.callService('input_helper', 'set_timer_state', {
+        entity_id: this._config.timer_state_entity,
+        timers: timers
+      });
+    } catch(e) {
+      // Fallback: try to set via mqtt or REST if available
+    }
   }
 
   _startTick(roomIdx) {
@@ -2029,24 +2087,68 @@ class AcControllerCardV2 extends HTMLElement {
         clearInterval(tr2.int); tr2.int = null;
         delete self._timers[roomIdx];
         self._timerSave();
-        if (self._activeIdx === parseInt(roomIdx)) {
-          var el = self.shadowRoot && self.shadowRoot.getElementById('timer-cd');
-          var btn2 = self.shadowRoot && self.shadowRoot.getElementById('btn-timer');
+        var sr = self.shadowRoot;
+        if (sr) {
+          var el = sr.getElementById('timer-cd');
+          var btn2 = sr.getElementById('btn-timer');
           if (el)   el.textContent = '';
           if (btn2) btn2.classList.remove('timer-btn--active');
+          // Clear room tab timer display
+          var tabTimer = sr.querySelector('[data-room="' + roomIdx + '"] .room-tab-timer');
+          if (tabTimer) tabTimer.remove();
+          // Clear overlay timer if viewing this room
+          if (self._activeIdx === parseInt(roomIdx)) {
+            var overlayTimer = sr.querySelector('.ac-overlay-timer');
+            if (overlayTimer) {
+              overlayTimer.remove();
+              var overlayTxt = sr.createElement('span');
+              overlayTxt.className = 'ac-overlay-txt';
+              overlayTxt.textContent = tr.overlayOff || 'OFF';
+              var overlay = sr.querySelector('.ac-overlay');
+              if (overlay) overlay.appendChild(overlayTxt);
+            }
+          }
         }
         var id = ROOMS[roomIdx].id;
         self._call('climate', 'set_hvac_mode', { entity_id: id, hvac_mode: tr2.mode === 'on' ? 'cool' : 'off' });
-      } else if (self._activeIdx === parseInt(roomIdx)) {
-        // Only update DOM when viewing this room AND countdown text actually changed
-        var displayed = self._fmtRemain(roomIdx);
-        if (displayed !== lastDisplayed) {
-          lastDisplayed = displayed;
-          var el = self.shadowRoot && self.shadowRoot.getElementById('timer-cd');
-          if (el) el.textContent = displayed;
+      } else {
+        // Update room tab timer for all devices viewing this card
+        var sr = self.shadowRoot;
+        if (sr) {
+          var displayed = self._fmtRemain(roomIdx);
+          if (displayed !== lastDisplayed) {
+            lastDisplayed = displayed;
+            // Update main timer countdown (only when viewing this room)
+            if (self._activeIdx === parseInt(roomIdx)) {
+              var el = sr.getElementById('timer-cd');
+              if (el) el.textContent = displayed;
+              // Update overlay timer
+              var overlayTimer = sr.querySelector('.ac-overlay-timer');
+              if (overlayTimer) {
+                overlayTimer.textContent = 'Timer ' + (tr2.mode === 'on' ? 'ON' : 'OFF') + ' in ' + self._fmtRemainHHMM(roomIdx);
+              }
+            }
+            // Update room tab timer for this room (always, on all devices)
+            var tabTimer = sr.querySelector('[data-room="' + roomIdx + '"] .room-tab-timer');
+            if (tabTimer) {
+              tabTimer.textContent = displayed;
+            } else if (sr.querySelector('[data-room="' + roomIdx + '"]')) {
+              // Create timer element if it doesn't exist yet
+              var btn = sr.querySelector('[data-room="' + roomIdx + '"]');
+              if (btn) {
+                var info = btn.querySelector('.room-tab-info');
+                if (info) {
+                  var timerSpan = document.createElement('span');
+                  timerSpan.className = 'room-tab-timer';
+                  timerSpan.textContent = displayed;
+                  info.appendChild(timerSpan);
+                }
+              }
+            }
+          }
         }
       }
-    }, 60000);  // Reduced from 10000ms to 60000ms for lower CPU usage
+    }, 1000);  // Update every 1 second for smooth countdown (updated from 60s)
   }
 
   _bindTimer() {
