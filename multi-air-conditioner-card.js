@@ -1083,12 +1083,13 @@ class AcControllerCardV2 extends HTMLElement {
     this._clockInt    = null;
     this._initialized = false;
     this._renderRAF   = null;
+    this._lastStateHash = null;  // Cache for detecting real state changes (performance optimization)
     // timers: map roomIdx → { end, mode, hrs, int }
     this._timers           = {};
     this._outsideHandler   = null;
     this._confirmJustOpened = false;
     this._popupJustOpened  = false;
-    // Khôi phục timer từ localStorage sau khi reload trang
+    // Restore timers from localStorage after page reload
     try {
       var saved = localStorage.getItem('ac_timer_state_v2');
       if (saved) {
@@ -1107,37 +1108,32 @@ class AcControllerCardV2 extends HTMLElement {
 
   // ── FIX: So sánh state trước khi render + debounce for Bubble Card compat ──
   set hass(h) {
-    var prev = this._hass;
     this._hass = h;
 
-    // Lần đầu tiên → phải render full
+    // First load → must render
     if (!this._initialized) {
       this._renderFull();
       return;
     }
 
-    // Chỉ re-render khi state của phòng đang chọn thực sự thay đổi
+    // Optimized: Use string hash for state comparison (faster than individual checks)
     var id = ROOMS[this._activeIdx].id;
-    var changed = !prev
-      || this._stateOf(h, id)   !== this._stateOf(prev, id)
-      || this._attrOf(h, id, 'temperature')         !== this._attrOf(prev, id, 'temperature')
-      || this._attrOf(h, id, 'current_temperature') !== this._attrOf(prev, id, 'current_temperature')
-      || this._attrOf(h, id, 'fan_mode')            !== this._attrOf(prev, id, 'fan_mode')
-      || this._attrOf(h, id, 'swing_mode')          !== this._attrOf(prev, id, 'swing_mode')
-      || this._attrOf(h, id, 'preset_mode')         !== this._attrOf(prev, id, 'preset_mode');
+    var stateHash = (this._stateOf(h, id) || '')
+      + '|' + (this._attrOf(h, id, 'temperature') || '')
+      + '|' + (this._attrOf(h, id, 'current_temperature') || '')
+      + '|' + (this._attrOf(h, id, 'fan_mode') || '')
+      + '|' + (this._attrOf(h, id, 'swing_mode') || '')
+      + '|' + (this._attrOf(h, id, 'preset_mode') || '');
 
-    // Kiểm tra thêm badge ON/OFF của tất cả phòng (cho room tabs)
-    if (!changed) {
-      for (var i = 0; i < ROOMS.length; i++) {
-        if (this._stateOf(h, ROOMS[i].id) !== this._stateOf(prev, ROOMS[i].id)) {
-          changed = true;
-          break;
-        }
-      }
+    // Add room tab states for badge updates
+    for (var i = 0; i < ROOMS.length; i++) {
+      stateHash += '|' + (this._stateOf(h, ROOMS[i].id) || '');
     }
 
-    if (!changed) return;
-    // Debounce: batch rapid hass updates into a single render frame
+    if (stateHash === this._lastStateHash) return;  // No actual change detected
+    this._lastStateHash = stateHash;
+
+    // Debounce: batch rapid updates into single frame
     if (this._renderRAF) cancelAnimationFrame(this._renderRAF);
     var self = this;
     this._renderRAF = requestAnimationFrame(function() {
@@ -1452,15 +1448,19 @@ class AcControllerCardV2 extends HTMLElement {
         ron = sst !== 'unknown' && sst !== 'unavailable' && sst !== null && sst !== '';
       }
 
-      var rTemp = 0;
-      if (hasTempSensor) rTemp = parseFloat(this._hass.states[entCfg.temp_entity].state || 0);
-      else rTemp = parseFloat(this._a(climateId, 'current_temperature') || 0);
+      // Only parse room temperature if it will actually be displayed
       var rTempStr = '--';
-      if (hasTempSensor) {
-        rTempStr = rTemp > 0 ? (Math.round(rTemp * 10) / 10).toFixed(1) + '°' : '--';
-      } else {
-        rTempStr = rTemp > 0 ? Math.round(rTemp) + '°' : '--';
+      if (showRoomTemp) {
+        var rTemp = 0;
+        if (hasTempSensor) rTemp = parseFloat(this._hass.states[entCfg.temp_entity].state || 0);
+        else rTemp = parseFloat(this._a(climateId, 'current_temperature') || 0);
+        if (hasTempSensor) {
+          rTempStr = rTemp > 0 ? (Math.round(rTemp * 10) / 10).toFixed(1) + '°' : '--';
+        } else {
+          rTempStr = rTemp > 0 ? Math.round(rTemp) + '°' : '--';
+        }
       }
+      
       var isActive = j === this._activeIdx;
       var tabClass = 'room-tab'
         + (isActive && ron  ? ' room-tab--active room-tab--on'  : '')
@@ -1527,40 +1527,55 @@ class AcControllerCardV2 extends HTMLElement {
       + (this._timers[this._activeIdx] ? ('<span class="timer-cd" id="timer-cd">' + this._fmtRemain(this._activeIdx) + '</span>') : '')
       + '</button>';
 
-    // Đọc giá trị cảm biến từ config
+    // Optimized: Only load sensor data if the feature is actually enabled
     var cfg = this._config || {};
-    var pm25Val = cfg.pm25_entity && this._hass && this._hass.states[cfg.pm25_entity]
-      ? parseFloat(this._hass.states[cfg.pm25_entity].state) || '--'
-      : '--';
-    // Average temperature sensor (header)
-    var avgTempRaw = cfg.avg_temp_entity && this._hass && this._hass.states[cfg.avg_temp_entity]
-      ? parseFloat(this._hass.states[cfg.avg_temp_entity].state) : NaN;
-    var avgTempVal = !isNaN(avgTempRaw) ? (Math.round(avgTempRaw * 10) / 10).toFixed(1) + '°' : '--°';
-    // Outdoor / displayed temp: prefer per-room temp sensor (already in curTemp), fall back to curTemp
+    
+    // PM2.5 data - only load if showPm25 is enabled
+    var pm25Val = '--';
+    if (showPm25 && cfg.pm25_entity && this._hass && this._hass.states[cfg.pm25_entity]) {
+      pm25Val = parseFloat(this._hass.states[cfg.pm25_entity].state) || '--';
+    }
+    
+    // Average temperature sensor (header) - only load if showAvg is enabled
+    var avgTempVal = '--°';
+    if (showAvg && cfg.avg_temp_entity && this._hass && this._hass.states[cfg.avg_temp_entity]) {
+      var avgTempRaw = parseFloat(this._hass.states[cfg.avg_temp_entity].state);
+      avgTempVal = !isNaN(avgTempRaw) ? (Math.round(avgTempRaw * 10) / 10).toFixed(1) + '°' : '--°';
+    }
+    
+    // Outdoor temperature metric - only load if showMetricTemp is enabled
     var outdoorTempVal = '--°';
-    if (cfg.outdoor_temp_entity && this._hass && this._hass.states[cfg.outdoor_temp_entity]) {
-      var ot = parseFloat(this._hass.states[cfg.outdoor_temp_entity].state || 0);
-      outdoorTempVal = ot > 0 ? (Math.round(ot * 10) / 10).toFixed(1) + '°' : '--°';
-    } else if (roomCfg.temp_entity && this._hass && this._hass.states[roomCfg.temp_entity]) {
-      outdoorTempVal = curTemp > 0 ? (Math.round(curTemp * 10) / 10).toFixed(1) + '°' : '--°';
-    } else {
-      outdoorTempVal = curTemp > 0 ? Math.round(curTemp) + '°' : '--°';
+    if (showMetricTemp) {
+      if (cfg.outdoor_temp_entity && this._hass && this._hass.states[cfg.outdoor_temp_entity]) {
+        var ot = parseFloat(this._hass.states[cfg.outdoor_temp_entity].state || 0);
+        outdoorTempVal = ot > 0 ? (Math.round(ot * 10) / 10).toFixed(1) + '°' : '--°';
+      } else if (roomCfg.temp_entity && this._hass && this._hass.states[roomCfg.temp_entity]) {
+        outdoorTempVal = curTemp > 0 ? (Math.round(curTemp * 10) / 10).toFixed(1) + '°' : '--°';
+      } else {
+        outdoorTempVal = curTemp > 0 ? Math.round(curTemp) + '°' : '--°';
+      }
     }
-    // Humidity: prefer per-room humidity sensor, else room attributes
+    
+    // Humidity metric - only load if showMetricHumidity is enabled
     var humidityVal = '--%';
-    if (roomCfg.humidity_entity && this._hass && this._hass.states[roomCfg.humidity_entity]) {
-      var hv = parseFloat(this._hass.states[roomCfg.humidity_entity].state || 0);
-      humidityVal = hv > 0 ? (Math.round(hv * 10) / 10).toFixed(1) + '%' : '--%';
-    } else {
-      var roomHumidity = parseFloat(this._a(room.id, 'current_humidity') || this._a(room.id, 'humidity') || 0);
-      humidityVal = roomHumidity > 0 ? Math.round(roomHumidity) + '%' : '--%';
+    if (showMetricHumidity) {
+      if (roomCfg.humidity_entity && this._hass && this._hass.states[roomCfg.humidity_entity]) {
+        var hv = parseFloat(this._hass.states[roomCfg.humidity_entity].state || 0);
+        humidityVal = hv > 0 ? (Math.round(hv * 10) / 10).toFixed(1) + '%' : '--%';
+      } else {
+        var roomHumidity = parseFloat(this._a(room.id, 'current_humidity') || this._a(room.id, 'humidity') || 0);
+        humidityVal = roomHumidity > 0 ? Math.round(roomHumidity) + '%' : '--%';
+      }
     }
-    // Power: prefer per-room power sensor, else global
+    
+    // Power metric - only load if showMetricPower is enabled
     var powerVal = '--';
-    if (roomCfg.power_entity && this._hass && this._hass.states[roomCfg.power_entity]) {
-      powerVal = parseFloat(this._hass.states[roomCfg.power_entity].state).toFixed(1) + ' kW';
-    } else if (cfg.power_entity && this._hass && this._hass.states[cfg.power_entity]) {
-      powerVal = parseFloat(this._hass.states[cfg.power_entity].state).toFixed(1) + ' kW';
+    if (showMetricPower) {
+      if (roomCfg.power_entity && this._hass && this._hass.states[roomCfg.power_entity]) {
+        powerVal = parseFloat(this._hass.states[roomCfg.power_entity].state).toFixed(1) + ' kW';
+      } else if (cfg.power_entity && this._hass && this._hass.states[cfg.power_entity]) {
+        powerVal = parseFloat(this._hass.states[cfg.power_entity].state).toFixed(1) + ' kW';
+      }
     }
 
     // build header pieces
@@ -1938,10 +1953,17 @@ class AcControllerCardV2 extends HTMLElement {
   // ── FIX: Clock chỉ tạo 1 interval, không bao giờ chạy lại nếu đang chạy rồi
   _startClock() {
     var self = this;
-    if (this._clockInt) return; // đã có rồi → không tạo thêm
+    if (this._clockInt) return;
+    var lastMinute = -1;
     this._clockInt = setInterval(function() {
-      var el = self.shadowRoot && self.shadowRoot.getElementById('clock-display');
-      if (el) el.textContent = new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
+      var now = new Date();
+      var mins = now.getHours() * 60 + now.getMinutes();
+      // Only update DOM when minute actually changed (not every 30s)
+      if (mins !== lastMinute) {
+        lastMinute = mins;
+        var el = self.shadowRoot && self.shadowRoot.getElementById('clock-display');
+        if (el) el.textContent = now.toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'});
+      }
     }, 30000);
   }
 
@@ -1980,37 +2002,34 @@ class AcControllerCardV2 extends HTMLElement {
     if (!t) return;
     if (t.int) clearInterval(t.int);
     self._timerSave();
+    var lastDisplayed = null;  // Cache last displayed value to avoid DOM thrashing
     t.int = setInterval(function() {
       var tr2 = self._timers[roomIdx];
       if (!tr2) { return; }
       var rem = tr2.end - Date.now();
-      // Chỉ cập nhật UI nếu đang xem đúng phòng này
-      if (self._activeIdx === parseInt(roomIdx)) {
-        var el = self.shadowRoot && self.shadowRoot.getElementById('timer-cd');
-        var btn2 = self.shadowRoot && self.shadowRoot.getElementById('btn-timer');
-        if (rem <= 0) {
-          clearInterval(tr2.int); tr2.int = null;
-          delete self._timers[roomIdx];
-          self._timerSave();
+      if (rem <= 0) {
+        // Timer finished → execute action and cleanup
+        clearInterval(tr2.int); tr2.int = null;
+        delete self._timers[roomIdx];
+        self._timerSave();
+        if (self._activeIdx === parseInt(roomIdx)) {
+          var el = self.shadowRoot && self.shadowRoot.getElementById('timer-cd');
+          var btn2 = self.shadowRoot && self.shadowRoot.getElementById('btn-timer');
           if (el)   el.textContent = '';
           if (btn2) btn2.classList.remove('timer-btn--active');
-          // Thực hiện bật/tắt đúng phòng
-          var id = ROOMS[roomIdx].id;
-          self._call('climate', 'set_hvac_mode', { entity_id: id, hvac_mode: tr2.mode === 'on' ? 'cool' : 'off' });
-        } else {
-          if (el) el.textContent = self._fmtRemain(roomIdx);
         }
-      } else {
-        // Phòng đang chạy timer nhưng không được xem → chỉ xử lý hết giờ
-        if (rem <= 0) {
-          clearInterval(tr2.int); tr2.int = null;
-          delete self._timers[roomIdx];
-          self._timerSave();
-          var id2 = ROOMS[roomIdx].id;
-          self._call('climate', 'set_hvac_mode', { entity_id: id2, hvac_mode: tr2.mode === 'on' ? 'cool' : 'off' });
+        var id = ROOMS[roomIdx].id;
+        self._call('climate', 'set_hvac_mode', { entity_id: id, hvac_mode: tr2.mode === 'on' ? 'cool' : 'off' });
+      } else if (self._activeIdx === parseInt(roomIdx)) {
+        // Only update DOM when viewing this room AND countdown text actually changed
+        var displayed = self._fmtRemain(roomIdx);
+        if (displayed !== lastDisplayed) {
+          lastDisplayed = displayed;
+          var el = self.shadowRoot && self.shadowRoot.getElementById('timer-cd');
+          if (el) el.textContent = displayed;
         }
       }
-    }, 10000);
+    }, 60000);  // Reduced from 10000ms to 60000ms for lower CPU usage
   }
 
   _bindTimer() {
@@ -2169,13 +2188,31 @@ class AcControllerCardV2 extends HTMLElement {
   }
 
   disconnectedCallback() {
-    if (this._clockInt) { clearInterval(this._clockInt); this._clockInt = null; }
-    // Dừng tất cả interval của các phòng
+    // Stop clock interval
+    if (this._clockInt) {
+      clearInterval(this._clockInt);
+      this._clockInt = null;
+    }
+    // Stop all timer intervals
     var self = this;
     Object.keys(this._timers).forEach(function(idx) {
       var t = self._timers[idx];
-      if (t && t.int) { clearInterval(t.int); t.int = null; }
+      if (t && t.int) {
+        clearInterval(t.int);
+        t.int = null;
+      }
     });
+    // Clean up outside event handlers
+    if (this._outsideHandler) {
+      document.removeEventListener('click', this._outsideHandler, true);
+      document.removeEventListener('touchend', this._outsideHandler, true);
+      this._outsideHandler = null;
+    }
+    // Cancel pending render frames
+    if (this._renderRAF) {
+      cancelAnimationFrame(this._renderRAF);
+      this._renderRAF = null;
+    }
   }
 }
 
