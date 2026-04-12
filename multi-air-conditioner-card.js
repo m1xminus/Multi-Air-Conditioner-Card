@@ -2138,16 +2138,16 @@ class AcControllerCardV2 extends HTMLElement {
                 overlayTimer.textContent = 'Timer ' + (tr2.mode === 'on' ? 'ON' : 'OFF') + ' in ' + self._fmtRemainHHMM(roomIdx);
               }
             }
-            // Update room tab timer for this room (always, on all devices)
+            // Update room tab timer for this room (always update)
             var tabTimer = sr.querySelector('[data-room="' + roomIdx + '"] .room-tab-timer');
             if (tabTimer) {
               tabTimer.textContent = displayed;
-            } else if (sr.querySelector('[data-room="' + roomIdx + '"]')) {
-              // Create timer element if it doesn't exist yet
+            } else {
+              // Create timer element if it doesn't exist (fallback)
               var btn = sr.querySelector('[data-room="' + roomIdx + '"]');
               if (btn) {
                 var info = btn.querySelector('.room-tab-info');
-                if (info) {
+                if (info && !info.querySelector('.room-tab-timer')) {
                   var timerSpan = document.createElement('span');
                   timerSpan.className = 'room-tab-timer';
                   timerSpan.textContent = displayed;
@@ -2155,15 +2155,29 @@ class AcControllerCardV2 extends HTMLElement {
                 }
               }
             }
-            // Force re-render when timer display updates (under 1min transitions to seconds)
-            // This ensures the room tab stays current when switching rooms
-            if (rem < 120000) {  // Within 2 minutes, periodically re-render to ensure UI stays fresh
-              self._render();
+            // Also update room status badge (ON/OFF) when AC state changes during timer countdown
+            var roomBtn = sr.querySelector('[data-room="' + roomIdx + '"]');
+            if (roomBtn) {
+              var statusBadge = roomBtn.querySelector('.room-status-badge');
+              var id = ROOMS[roomIdx].id;
+              if (statusBadge && self._hass) {
+                var acState = self._s(id);  // Get current AC state
+                var isOn = acState !== 'off';
+                var tempStr = self._a(id, 'current_temperature');
+                var displayVal = isOn ? (tempStr ? (Math.round(parseFloat(tempStr) * 10) / 10).toFixed(1) + '°' : 'ON') : 'OFF';
+                statusBadge.textContent = displayVal;
+                statusBadge.className = 'room-status-badge ' + (isOn ? 'rsb-on' : 'rsb-off');
+                // Update room tab class (active state)
+                roomBtn.className = 'room-tab' 
+                  + (self._activeIdx === roomIdx && isOn ? ' room-tab--active room-tab--on' : '')
+                  + (self._activeIdx === roomIdx && !isOn ? ' room-tab--active room-tab--off' : '')
+                  + (self._activeIdx !== roomIdx && isOn ? ' room-tab--running' : '');
+              }
             }
           }
         }
       }
-    }, 500);  // Update every 500ms for smooth countdown and immediate updates
+    }, 1000);  // Update every 1 second for smooth countdown
   }
 
   _bindTimer() {
